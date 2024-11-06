@@ -105,6 +105,7 @@ class MainWindow(QMainWindow):
         self.comboBox_historial_usuario.currentIndexChanged.connect(self.actualizar_tabla_comboBox)
         self.fecha_historial.editingFinished.connect(self.actualizar_tabla_fecha)
         self.fecha_seleccionada = False
+        self.btn_regenerar_Todo.clicked.connect(self.resetear_filtros_y_mostrar_todo)
 
 
 
@@ -321,7 +322,7 @@ class MainWindow(QMainWindow):
 
     def abrir_seleccionar_butacas(self):
         if self.funciones_detalladas and 0 <= self.indice_pelicula < len(self.funciones_detalladas):
-            id_funcion = self.funciones_detalladas[self.indice_pelicula]['id_funcion']  # Asegúrate de que este campo contenga el ID correcto
+            id_funcion = self.funciones_detalladas[self.indice_pelicula]['id_funcion']  
             self.seleccionar_butacas = Cine(id_funcion)
             self.seleccionar_butacas.show()
         
@@ -415,6 +416,22 @@ class MainWindow(QMainWindow):
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de historial.')
+
+    def resetear_filtros_y_mostrar_todo(self):
+        """Resetea los filtros y muestra todos los registros en la tabla de historial."""
+        try:
+            # Selecciona "Todos los usuarios" en el comboBox
+            self.comboBox_historial_usuario.setCurrentIndex(0)  # Seleccionar la primera opción
+
+            # Desactivar el filtro de fecha
+            self.fecha_seleccionada = False
+
+            # Cargar todos los registros en la tabla
+            self.cargar_Historial_en_tabla()
+            
+        except Exception as e:
+            log(e, "error")
+            QMessageBox.critical(self, 'Error', 'No se pudo regenerar la tabla de historial.')
 
 
     
@@ -557,7 +574,7 @@ class MainWindow(QMainWindow):
 
 
     def estadistica_pelicula(self): 
-        # Cantidad de Peliculas
+        # Cantidad de Películas
         peliculas = self.db.obtener_peliculas()
         total_peliculas = len(peliculas)
         
@@ -584,6 +601,7 @@ class MainWindow(QMainWindow):
         
         # Mostrar el mensaje en un QMessageBox
         QMessageBox.information(self, "Estadísticas de Películas", mensaje)
+
 
 
 
@@ -657,4 +675,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

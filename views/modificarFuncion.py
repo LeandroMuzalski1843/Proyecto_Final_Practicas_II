@@ -5,6 +5,7 @@ from PyQt5.QtCore import QDate
 from database.conexion import Database
 from error.logger import log
 from views.session import UserSession
+from PyQt5.QtCore import QDateTime
 
 class ModificarFuncion(QtWidgets.QWidget):
     def __init__(self):
@@ -64,6 +65,8 @@ class ModificarFuncion(QtWidgets.QWidget):
             descripcion = f"Función: {funcion[0]} - Fecha y Hora: {funcion[2]} - Sala: {funcion[3]}"
             self.comboBox_funciones.addItem(descripcion, funcion[0])
 
+
+
     def cargar_datos_funcion(self):
         """Carga los datos de la función seleccionada en los campos correspondientes."""
         funcion_id = self.comboBox_funciones.currentData()  # Obtener ID de la función seleccionada
@@ -74,6 +77,12 @@ class ModificarFuncion(QtWidgets.QWidget):
             self.comboBox_sala.setCurrentIndex(0)
             self.Fecha.setDate(QDate.currentDate())
             self.comboBox_Hora.clear()
+            self.Fecha.setEnabled(True)
+            self.comboBox_pelicula.setEnabled(True)
+            self.comboBox_sala.setEnabled(True)
+            self.comboBox_Hora.setEnabled(True)
+            self.Precio.setEnabled(True)
+            self.btn_aceptar.setEnabled(True)
             return
 
         # Obtener detalles de la función seleccionada por ID
@@ -94,6 +103,28 @@ class ModificarFuncion(QtWidgets.QWidget):
             self.Fecha.setDate(fecha_hora.date())
             self.comboBox_Hora.setCurrentText(fecha_hora.time().strftime("%H:%M"))
             self.Precio.setValue(precio)
+
+            # Comprobar si la función ya pasó y deshabilitar todos los campos y botones si es así
+            fecha_hora_funcion = QDateTime(fecha_hora)
+            fecha_actual = QDateTime.currentDateTime()
+            if fecha_hora_funcion < fecha_actual:
+                # Bloquear todos los campos y botones
+                self.Fecha.setEnabled(False)
+                self.comboBox_pelicula.setEnabled(False)
+                self.comboBox_sala.setEnabled(False)
+                self.comboBox_Hora.setEnabled(False)
+                self.Precio.setEnabled(False)
+                self.btn_aceptar.setEnabled(False)
+                QMessageBox.information(self, "Información", "La función ya ha pasado y no se puede modificar.")
+            else:
+                # Habilitar todos los campos y botones si la función aún no ha pasado
+                self.Fecha.setEnabled(True)
+                self.comboBox_pelicula.setEnabled(True)
+                self.comboBox_sala.setEnabled(True)
+                self.comboBox_Hora.setEnabled(True)
+                self.Precio.setEnabled(True)
+                self.btn_aceptar.setEnabled(True)
+
 
     def actualizar_horas(self):
         """Actualiza las horas disponibles según la sala seleccionada."""
