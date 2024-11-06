@@ -21,6 +21,8 @@ from views.modificarFuncion import ModificarFuncion
 from datetime import datetime
 from views.seleccionarButacas import Cine
 from PyQt5.QtGui import QColor
+from PyQt5.QtCore import QDate
+
 
 
 
@@ -91,21 +93,47 @@ class MainWindow(QMainWindow):
         self.btn_modificar_pelicula.clicked.connect(self.abrir_modificar_pelicula)
         self.btn_estadisticas_pelicula.clicked.connect(self.estadistica_pelicula)
 
-        #Configuracion botones pagina Funciones
+
+        #Configuracion botones pagina funciones
+        self.filtro_fecha_activado = False  # Configuración inicial del filtro de fecha
+
+        # Configuración inicial de botones y fechas
         self.btn_agregar_funcion.clicked.connect(self.abrir_agregar_funcion)
         self.btn_eliminar_funcion.clicked.connect(self.abrir_eliminar_funcion)
         self.btn_modificar_funcion.clicked.connect(self.abrir_modificar_funcion)
         self.btn_actualizar.clicked.connect(self.actualizar_cartelera)
         self.btn_comprar.clicked.connect(self.abrir_seleccionar_butacas)
         self.btn_resumen_funcion.clicked.connect(self.mostrar_resumen_funcion_seleccionada)
+        self.btn_mostrar_todo_funcion.clicked.connect(self.mostrar_todas_las_funciones)
+        self.comboBox_idfunciones.currentTextChanged.connect(self.cargar_Funciones_en_tabla)
+        self.btn_actualizar_funcion.clicked.connect(self.mostrar_todas_las_funciones)
+
+        # Configuración inicial de la tabla, ComboBox y fechas por defecto
+        try:
+            self.mostrar_todas_las_funciones()  # Mostrar todas las funciones al iniciar
+            self.cargar_id_funciones_en_comboBox()  # Cargar IDs en el comboBox al iniciar
+        except Exception as e:
+            log(e, "error")
+
+        # Configurar fechas de filtro por defecto a hoy
+        hoy = QDate.currentDate()
         
+        self.fecha_filtro_inicio_f.setCalendarPopup(True)
+        self.fecha_filtro_inicio_f.setDate(hoy)
+        self.fecha_filtro_fin_f.setCalendarPopup(True)
+        self.fecha_filtro_fin_f.setDate(hoy)
+
+        # Conectar señales de cambio de fecha para activar filtro solo si cambian
+        self.fecha_filtro_inicio_f.dateChanged.connect(self.activar_filtro_fecha)
+        self.fecha_filtro_fin_f.dateChanged.connect(self.activar_filtro_fecha)
+        
+                        
         #Configuracion botones pagina Historial
         self.fecha_historial.setCalendarPopup(True)
         self.fecha_historial.setDate(datetime.today())
         self.comboBox_historial_usuario.currentIndexChanged.connect(self.actualizar_tabla_comboBox)
         self.fecha_historial.editingFinished.connect(self.actualizar_tabla_fecha)
         self.fecha_seleccionada = False
-        self.btn_regenerar_Todo.clicked.connect(self.resetear_filtros_y_mostrar_todo)
 
 
 
@@ -136,7 +164,7 @@ class MainWindow(QMainWindow):
         # Llenar la tabla de historial al iniciar
         self.cargar_Historial_en_tabla()
         # Llenar la tabla de funciones al iniciar
-        self.cargar_Funciones_en_tabla()
+        
         #Actualizar Cartelera
         self.actualizar_cartelera()
         
@@ -150,7 +178,7 @@ class MainWindow(QMainWindow):
         # Conectar el botón de actualizar con el método cargar_Historial_en_tabla
         self.btn_actualizarH.clicked.connect(self.cargar_Historial_en_tabla)
         # Conectar el botón de actualizar con el método cargar_Funciones_en_tabla
-        self.btn_actualizar_funcion.clicked.connect(self.cargar_Funciones_en_tabla)
+
 
 
 
@@ -322,7 +350,7 @@ class MainWindow(QMainWindow):
 
     def abrir_seleccionar_butacas(self):
         if self.funciones_detalladas and 0 <= self.indice_pelicula < len(self.funciones_detalladas):
-            id_funcion = self.funciones_detalladas[self.indice_pelicula]['id_funcion']  
+            id_funcion = self.funciones_detalladas[self.indice_pelicula]['id_funcion']  # Asegúrate de que este campo contenga el ID correcto
             self.seleccionar_butacas = Cine(id_funcion)
             self.seleccionar_butacas.show()
         
@@ -417,55 +445,106 @@ class MainWindow(QMainWindow):
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de historial.')
 
-    def resetear_filtros_y_mostrar_todo(self):
-        """Resetea los filtros y muestra todos los registros en la tabla de historial."""
-        try:
-            # Selecciona "Todos los usuarios" en el comboBox
-            self.comboBox_historial_usuario.setCurrentIndex(0)  # Seleccionar la primera opción
-
-            # Desactivar el filtro de fecha
-            self.fecha_seleccionada = False
-
-            # Cargar todos los registros en la tabla
-            self.cargar_Historial_en_tabla()
-            
-        except Exception as e:
-            log(e, "error")
-            QMessageBox.critical(self, 'Error', 'No se pudo regenerar la tabla de historial.')
-
 
     
     #==============================================================================================================
     # Configuracion Pagina Funciones
 
-    def cargar_Funciones_en_tabla(self):
-        """Carga las funciones de la base de datos y las muestra en tableWidget_funciones con colores según el porcentaje de butacas vendidas."""
+    
+    
+    def cargar_id_funciones_en_comboBox(self):
+        """Carga todos los IDs de funciones en el comboBox_idfunciones."""
+        try:
+            funciones = self.db.obtener_funciones()  # Obtener todas las funciones
 
+            self.comboBox_idfunciones.clear()
+            self.comboBox_idfunciones.addItem("Todas las funciones", None)  # Opción de selección general
+
+            for funcion in funciones:
+                id_funcion = funcion[0]
+                self.comboBox_idfunciones.addItem(str(id_funcion), id_funcion)
+
+        except Exception as e:
+            log(e, "error")
+            QMessageBox.critical(self, 'Error', 'No se pudo cargar los IDs de funciones en el comboBox.')
+
+    def actualizar_tabla_comboBox(self):
+        """Actualiza la tabla según la selección del comboBox de funciones."""
+        self.cargar_Funciones_en_tabla()
+
+    def actualizar_tabla_fecha(self):
+        """Actualiza la tabla al confirmar la selección de una fecha."""
+        self.cargar_Funciones_en_tabla()
+
+    def activar_filtro_fecha(self):
+        """Activa el filtro de fecha cuando se cambia una fecha de filtro."""
+        self.filtro_fecha_activado = True
+        self.cargar_Funciones_en_tabla()
+
+    def cargar_Funciones_en_tabla(self):
+        """Carga las funciones en la tabla aplicando filtros de ID y fechas solo si están activados."""
+        try:
+            # Verificar si la conexión a la base de datos está activa
+            if not self.db:
+                return
+
+            funciones = self.db.obtener_funciones()  # Obtener funciones desde la base de datos
+
+            # Filtrar por ID si hay uno seleccionado
+            id_funcion_seleccionado = self.comboBox_idfunciones.currentData()
+            if id_funcion_seleccionado:
+                funciones = [funcion for funcion in funciones if funcion[0] == id_funcion_seleccionado]
+
+            # Aplicar filtro de fecha solo si el filtro de fecha está activado
+            if getattr(self, 'filtro_fecha_activado', False):  # Asegura que esté definido
+                fecha_inicio = self.fecha_filtro_inicio_f.date().toPyDate()
+                fecha_fin = self.fecha_filtro_fin_f.date().toPyDate()
+                funciones = [funcion for funcion in funciones if fecha_inicio <= funcion[2].date() <= fecha_fin]
+
+            self.tableWidget_funciones.setRowCount(0)  # Limpiar tabla antes de cargar datos
+
+            # Insertar funciones con colores
+            for row_number, row_data in enumerate(funciones):
+                self.tableWidget_funciones.insertRow(row_number)
+
+                id_funcion = row_data[0]
+                asientos_reservados = self.db.obtener_asientos_reservados(id_funcion)
+                total_butacas = 30  # Puedes modificar este valor
+                butacas_vendidas = len(asientos_reservados)
+                porcentaje_vendido = (butacas_vendidas / total_butacas) * 100
+
+                # Seleccionar color
+                color = QColor("red") if porcentaje_vendido <= 40 else QColor("orange") if porcentaje_vendido <= 60 else QColor("lightgreen") if porcentaje_vendido <= 80 else QColor("darkgreen")
+
+                for column_number, data in enumerate(row_data):
+                    item = QTableWidgetItem(str(data))
+                    item.setBackground(color)
+                    self.tableWidget_funciones.setItem(row_number, column_number, item)
+
+        except Exception as e:
+            # Muestra el error solo si no es la carga inicial
+            if getattr(self, 'filtro_fecha_activado', False) or id_funcion_seleccionado:
+                log(e, "error")
+                QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
+
+    def mostrar_todas_las_funciones(self):
+        """Muestra todas las funciones en la tabla sin aplicar filtros."""
         try:
             funciones = self.db.obtener_funciones()
+
             self.tableWidget_funciones.setRowCount(0)
 
             for row_number, row_data in enumerate(funciones):
                 self.tableWidget_funciones.insertRow(row_number)
 
-                # Obtener el ID de la función para calcular las butacas vendidas
                 id_funcion = row_data[0]
                 asientos_reservados = self.db.obtener_asientos_reservados(id_funcion)
-                total_butacas = 30  # Puedes cambiarlo para obtener el valor de la base de datos si es dinámico
+                total_butacas = 30
                 butacas_vendidas = len(asientos_reservados)
                 porcentaje_vendido = (butacas_vendidas / total_butacas) * 100
 
-                # Determinar el color según el porcentaje de butacas vendidas
-                if 0 <= porcentaje_vendido <= 40:
-                    color = QColor("red")
-                elif 41 <= porcentaje_vendido <= 60:
-                    color = QColor("orange")
-                elif 61 <= porcentaje_vendido <= 80:
-                    color = QColor("lightgreen")
-                else:  # Más del 80%
-                    color = QColor("darkgreen")
+                color = QColor("red") if porcentaje_vendido <= 40 else QColor("orange") if porcentaje_vendido <= 60 else QColor("lightgreen") if porcentaje_vendido <= 80 else QColor("darkgreen")
 
-                # Crear los elementos de la tabla y aplicar el color de fondo a toda la fila
                 for column_number, data in enumerate(row_data):
                     item = QTableWidgetItem(str(data))
                     item.setBackground(color)
@@ -473,51 +552,34 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             log(e, "error")
-            QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
+            QMessageBox.critical(self, 'Error', 'No se pudo mostrar todas las funciones en la tabla.')
 
     def mostrar_resumen_funcion_seleccionada(self):
-        """Muestra el resumen de la función seleccionada en la tabla cuando se presiona el botón."""
-
-        # Verificar si hay una fila seleccionada
+        """Muestra el resumen de la función seleccionada en la tabla."""
         selected_items = self.tableWidget_funciones.selectedItems()
         if not selected_items:
             QMessageBox.warning(self, "Advertencia", "Por favor, selecciona una función en la tabla primero.")
             return
 
-        # Obtener el ID de la función de la primera columna de la fila seleccionada
-        selected_row = selected_items[0].row()  # Obtener el índice de la fila seleccionada
-        id_funcion = self.tableWidget_funciones.item(selected_row, 0).text()  # Suponiendo que el ID está en la primera columna
-        id_funcion = int(id_funcion)  # Convertir a entero
-
-        # Llamar a la función para mostrar la información de la función
+        selected_row = selected_items[0].row()
+        id_funcion = int(self.tableWidget_funciones.item(selected_row, 0).text())
         self.mostrar_informacion_funcion(id_funcion)
 
     def mostrar_informacion_funcion(self, funcion_id):
-        """Muestra un QMessageBox con la información de una función específica, incluyendo su ID.
-        El porcentaje de ocupación se muestra solo si la función ya ha terminado."""
-
+        """Muestra un QMessageBox con la información de una función específica, incluyendo su ID."""
         try:
-            # Obtener asientos reservados
             asientos_reservados = self.db.obtener_asientos_reservados(funcion_id)
             butacas_vendidas = len(asientos_reservados)
             
-            # Obtener información de la función
-            funcion_info = self.db.obtener_funcion_por_id(funcion_id)  # Usa la función que ya tienes implementada
+            funcion_info = self.db.obtener_funcion_por_id(funcion_id)
             if funcion_info:
-                id_sala = funcion_info[3]  # Asumiendo que el cuarto valor es IdSala
-                precio_funcion = funcion_info[4]  # Asumiendo que el quinto valor es Precio
-                fecha_hora_funcion = funcion_info[2]  # Asumiendo que el tercer valor es Fecha_hora
+                id_sala, precio_funcion, fecha_hora_funcion = funcion_info[3], funcion_info[4], funcion_info[2]
                 
-                sala_info = self.db.obtener_sala_por_id(id_sala)  # Deberás implementar obtener_sala_por_id
+                sala_info = self.db.obtener_sala_por_id(id_sala)
                 total_butacas = sala_info['NumeroButacas']
-                
-                # Calcular butacas restantes
                 butacas_restantes = total_butacas - butacas_vendidas
-                
-                # Calcular dinero recaudado
                 dinero_recaudado = precio_funcion * butacas_vendidas
 
-                # Crear mensaje incluyendo el ID de la función
                 mensaje = (
                     f"ID de la función: {funcion_id}\n"
                     f"Butacas vendidas: {butacas_vendidas}\n"
@@ -525,14 +587,10 @@ class MainWindow(QMainWindow):
                     f"Dinero recaudado: ${dinero_recaudado:.2f}\n"
                 )
 
-                # Comparar la fecha y hora de la función con la actual
-                fecha_hora_actual = datetime.now()
-                if fecha_hora_funcion < fecha_hora_actual:
-                    # Calcular porcentaje de ocupación solo si la función ya ha terminado
+                if fecha_hora_funcion < datetime.now():
                     porcentaje_ocupacion = (butacas_vendidas / total_butacas) * 100 if total_butacas > 0 else 0
                     mensaje += f"Porcentaje de ocupación: {porcentaje_ocupacion:.2f}%"
 
-                # Mostrar QMessageBox
                 QMessageBox.information(self, "Información de la función", mensaje)
             else:
                 QMessageBox.warning(self, "Advertencia", "No se encontró información para la función seleccionada.")
@@ -540,7 +598,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', f'No se pudo obtener la información de la función: {e}')
-
+    
 
 
     
@@ -574,7 +632,7 @@ class MainWindow(QMainWindow):
 
 
     def estadistica_pelicula(self): 
-        # Cantidad de Películas
+        # Cantidad de Peliculas
         peliculas = self.db.obtener_peliculas()
         total_peliculas = len(peliculas)
         
@@ -601,7 +659,6 @@ class MainWindow(QMainWindow):
         
         # Mostrar el mensaje en un QMessageBox
         QMessageBox.information(self, "Estadísticas de Películas", mensaje)
-
 
 
 
@@ -675,3 +732,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

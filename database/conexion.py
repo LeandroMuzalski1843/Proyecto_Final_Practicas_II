@@ -426,6 +426,33 @@ class Database:
         finally:
             self.desconeccion()
 
+    def obtener_funciones_filtradas(self, id_funcion=None, fecha_inicio=None, fecha_fin=None):
+        """Obtiene las funciones filtradas por ID y rango de fechas."""
+        try:
+            self.conneccion()
+            query = "SELECT * FROM funciones WHERE 1=1"
+            params = []
+
+            if id_funcion:
+                query += " AND IdFunciones = %s"
+                params.append(id_funcion)
+
+            if fecha_inicio:
+                query += " AND Fecha_hora >= %s"
+                params.append(fecha_inicio)
+
+            if fecha_fin:
+                query += " AND Fecha_hora <= %s"
+                params.append(fecha_fin)
+
+            self.cursor.execute(query, params)
+            return self.cursor.fetchall()
+        except Error as e:
+            log(e, "error")
+            raise Exception(f"Error durante la consulta de funciones: {e}")
+        finally:
+            self.desconeccion()
+
 
     def eliminar_funcion(self, funcion_id):
         """Elimina una función de la base de datos por su ID."""

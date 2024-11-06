@@ -401,3 +401,22 @@
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "Error durante la consulta: 1932 (42S02): Table 'proyecto_final.usuarios' doesn't exist in engine", "severity": "ERROR", "timestamp": "2024-11-06T10:57:50Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "Error durante la consulta: 1932 (42S02): Table 'proyecto_final.usuarios' doesn't exist in engine", "severity": "ERROR", "timestamp": "2024-11-06T10:57:50Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "Error durante la consulta: 1932 (42S02): Table 'proyecto_final.usuarios' doesn't exist in engine", "severity": "ERROR", "timestamp": "2024-11-06T10:57:50Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'fecha_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T11:17:09Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'mover_ventana'", "severity": "ERROR", "timestamp": "2024-11-06T11:24:22Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'fecha_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T11:26:24Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'fecha_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T11:26:38Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'fecha_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T11:27:49Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'fecha_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T11:33:38Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'mostrar_todas_las_funciones'", "severity": "ERROR", "timestamp": "2024-11-06T11:37:27Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'mostrar_todas_las_funciones'", "severity": "ERROR", "timestamp": "2024-11-06T11:39:38Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'mostrar_todas_las_funciones'", "severity": "ERROR", "timestamp": "2024-11-06T11:45:16Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'feche_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T11:50:58Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'feche_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T11:51:45Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'feche_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T12:03:17Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'filtro_fecha_activado'", "severity": "ERROR", "timestamp": "2024-11-06T12:08:31Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'feche_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T12:08:36Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'feche_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T12:08:36Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'filtro_fecha_activado'", "severity": "ERROR", "timestamp": "2024-11-06T12:09:17Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'filtro_fecha_activado'", "severity": "ERROR", "timestamp": "2024-11-06T12:10:52Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'filtro_fecha_activado'", "severity": "ERROR", "timestamp": "2024-11-06T12:12:42Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'feche_filtro_fin_f'", "severity": "ERROR", "timestamp": "2024-11-06T12:18:51Z"}
