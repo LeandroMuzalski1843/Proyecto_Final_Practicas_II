@@ -632,7 +632,7 @@ QPushButton:hover {
              <number>0</number>
             </property>
             <property name="currentIndex">
-             <number>5</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="page">
              <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -1388,57 +1388,27 @@ QPushButton:hover {
                   <widget class="QTableWidget" name="tableWidget_pelis">
                    <column>
                     <property name="text">
-                     <string>IdPelicula</string>
+                     <string>Nombre</string>
                     </property>
                    </column>
                    <column>
                     <property name="text">
-                     <string>Nombre_Pelicula</string>
+                     <string>Fecha de Inicio</string>
                     </property>
                    </column>
                    <column>
                     <property name="text">
-                     <string>Resumen</string>
+                     <string>Fecha de Fin</string>
                     </property>
                    </column>
                    <column>
                     <property name="text">
-                     <string>Imagen</string>
+                     <string>Duración</string>
                     </property>
                    </column>
                    <column>
                     <property name="text">
-                     <string>Pais_Origen</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Fecha_Estreno_Mundial</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Fecha_Inicio</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Fecha_Fin</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Duracion</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Clasificacion</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Generos</string>
+                     <string>Clasifiacion</string>
                     </property>
                    </column>
                   </widget>
@@ -1549,9 +1519,9 @@ QPushButton:hover {
                   </spacer>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="btn_estadisticas_pelicula">
+                  <widget class="QPushButton" name="btn_informacion_pelicula">
                    <property name="text">
-                    <string>Estadisticas</string>
+                    <string>Informacion</string>
                    </property>
                   </widget>
                  </item>

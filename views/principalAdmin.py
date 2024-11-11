@@ -91,7 +91,7 @@ class MainWindow(QMainWindow):
         self.btn_agregar_pelicula.clicked.connect(self.abrir_agregar_pelicula)
         self.btn_eliminar_pelicula.clicked.connect(self.abrir_eliminar_pelicula)
         self.btn_modificar_pelicula.clicked.connect(self.abrir_modificar_pelicula)
-        self.btn_estadisticas_pelicula.clicked.connect(self.estadistica_pelicula)
+        self.btn_informacion_pelicula.clicked.connect(self.mostrar_informacion_pelicula)
 
 
         #Configuracion botones pagina funciones
@@ -606,59 +606,117 @@ class MainWindow(QMainWindow):
     # Configuracion Pagina Pelis
 
     def cargar_peliculas_en_tabla(self):
-        """Carga las películas de la base de datos y las muestra en `tableWidget_pelis`."""
-
         try:
             peliculas = self.db.obtener_peliculas()  # Obtiene todas las películas
             self.tableWidget_pelis.setRowCount(0)
 
+            # Filas de la tabla: NombrePelicula, FechaInicio, FechaFin, Duracion, Clasificacion
             for row_number, pelicula in enumerate(peliculas):
-                id_pelicula = pelicula[0]  # El ID de la película está en la primera columna
-                generos = self.db.obtener_generos_pelicula(id_pelicula)  # Consulta los géneros
-                generos_str = ", ".join(generos)  # Convierte la lista de géneros a una cadena
+                # Asigna cada campo de la base de datos a una columna específica
+                id_pelicula = pelicula[0]  # ID de la película
+                nombre = pelicula[1]
+                fecha_inicio = pelicula[6]
+                fecha_fin = pelicula[7]
+                duracion = pelicula[8]
+                clasificacion = pelicula[9]
 
-                # Extendemos la tupla con los géneros concatenados
-                pelicula_con_generos = pelicula + (generos_str,)
-
-                # Insertamos los datos en la tabla
+                # Insertamos los datos en la tabla, sin incluir el ID en la columna visible
                 self.tableWidget_pelis.insertRow(row_number)
-                for column_number, data in enumerate(pelicula_con_generos):
-                    self.tableWidget_pelis.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                self.tableWidget_pelis.setItem(row_number, 0, QTableWidgetItem(str(nombre)))
+                self.tableWidget_pelis.setItem(row_number, 1, QTableWidgetItem(str(fecha_inicio)))
+                self.tableWidget_pelis.setItem(row_number, 2, QTableWidgetItem(str(fecha_fin)))
+                self.tableWidget_pelis.setItem(row_number, 3, QTableWidgetItem(str(duracion)))
+                self.tableWidget_pelis.setItem(row_number, 4, QTableWidgetItem(str(clasificacion)))
+
+                # Almacenar el ID de la película como "UserRole" en el primer elemento de la fila
+                self.tableWidget_pelis.item(row_number, 0).setData(Qt.UserRole, id_pelicula)
+
+            # Ajusta el ancho de las columnas al contenido
+            self.tableWidget_pelis.resizeColumnsToContents()
 
         except Exception as e:
             log(e, "error")
-            QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de películas.')
-    
 
 
-    def estadistica_pelicula(self): 
-        # Cantidad de Peliculas
-        peliculas = self.db.obtener_peliculas()
-        total_peliculas = len(peliculas)
+
+
+    # def estadistica_pelicula(self): 
+    #     # Cantidad de Peliculas
+    #     peliculas = self.db.obtener_peliculas()
+    #     total_peliculas = len(peliculas)
         
-        # Top 10 de películas más vistas
-        peliculas_mas_vistas = self.db.obtener_peliculas_mas_vistas()
-        peliculas_vistas_texto = "\n".join(
-            [f"Película: {pelicula['NombrePelicula']} (ID: {pelicula['IdPelicula']}), Ventas: {pelicula['CantidadVentas']}" 
-            for pelicula in peliculas_mas_vistas]
-        )
+    #     # Top 10 de películas más vistas
+    #     peliculas_mas_vistas = self.db.obtener_peliculas_mas_vistas()
+    #     peliculas_vistas_texto = "\n".join(
+    #         [f"Película: {pelicula['NombrePelicula']} (ID: {pelicula['IdPelicula']}), Ventas: {pelicula['CantidadVentas']}" 
+    #         for pelicula in peliculas_mas_vistas]
+    #     )
         
-        # Top 5 géneros más rentables
-        generos_mas_rentables = self.db.obtener_generos_mas_rentables()
-        generos_rentables_texto = "\n".join(
-            [f"Género: {genero['Genero']}, Ingresos Totales: ${genero['IngresosTotales']}" 
-            for genero in generos_mas_rentables]
-        )
+    #     # Top 5 géneros más rentables
+    #     generos_mas_rentables = self.db.obtener_generos_mas_rentables()
+    #     generos_rentables_texto = "\n".join(
+    #         [f"Género: {genero['Genero']}, Ingresos Totales: ${genero['IngresosTotales']}" 
+    #         for genero in generos_mas_rentables]
+    #     )
         
-        # Crear el mensaje completo
+    #     # Crear el mensaje completo
+    #     mensaje = (
+    #         f"Total de películas: {total_peliculas}\n\n"
+    #         f"Top 10 de películas más vistas:\n{peliculas_vistas_texto}\n\n"
+    #         f"Top 5 géneros más rentables:\n{generos_rentables_texto}"
+    #     )
+        
+    #     # Mostrar el mensaje en un QMessageBox
+    #     QMessageBox.information(self, "Estadísticas de Películas", mensaje)
+
+
+    def obtener_pelicula_seleccionada(self):
+        selected_row = self.tableWidget_pelis.currentRow()
+        
+        if selected_row == -1:
+            return None
+
+        # Recuperar el ID almacenado en UserRole en la primera columna de la fila seleccionada
+        pelicula_id_item = self.tableWidget_pelis.item(selected_row, 0)
+        pelicula_id = pelicula_id_item.data(Qt.UserRole)
+        
+        return pelicula_id
+
+
+
+    def mostrar_informacion_pelicula(self):
+        # Verificar si hay una película seleccionada
+        pelicula_id = self.obtener_pelicula_seleccionada()
+
+        if pelicula_id is None:
+            QMessageBox.warning(self, "Advertencia", "Debe seleccionar una película.")
+            return
+
+        # Obtener los datos de la película
+        datos_pelicula = self.db.obtener_datos_pelicula(pelicula_id)
+        if datos_pelicula is None:
+            QMessageBox.critical(self, "Error", "No se pudo obtener la información de la película.")
+            return
+
+        # Obtener los géneros de la película
+        generos = self.db.obtener_generos_pelicula(pelicula_id)
+        generos_texto = ", ".join(generos) if generos else "Sin géneros"
+
+        # Preparar el mensaje de la información de la película con el formato solicitado
         mensaje = (
-            f"Total de películas: {total_peliculas}\n\n"
-            f"Top 10 de películas más vistas:\n{peliculas_vistas_texto}\n\n"
-            f"Top 5 géneros más rentables:\n{generos_rentables_texto}"
+            f"- Nombre:\n      {datos_pelicula['nombre']}\n"
+            f"- Descripción:\n      {datos_pelicula['resumen']}\n"
+            f"- País de Origen:\n      {datos_pelicula['pais_origen']}\n"
+            f"- Fecha de Estreno:\n      {datos_pelicula['fecha_estreno']}\n"
+            f"- Fecha de Inicio:\n      {datos_pelicula['fecha_inicio']}\n"
+            f"- Fecha de Fin:\n      {datos_pelicula['fecha_fin']}\n"
+            f"- Duración:\n      {datos_pelicula['duracion']} minutos\n"
+            f"- Clasificación:\n      {datos_pelicula['clasificacion']}\n"
+            f"- Géneros:\n      {generos_texto}\n"
         )
-        
+
         # Mostrar el mensaje en un QMessageBox
-        QMessageBox.information(self, "Estadísticas de Películas", mensaje)
+        QMessageBox.information(self, "Información de la Película", mensaje)
 
 
 
