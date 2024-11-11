@@ -22,8 +22,8 @@ class Cine(QMainWindow):
     def __init__(self, id_funcion, parent=None):
         super(Cine, self).__init__(parent)
         self.id_funcion = id_funcion
-        self.accion="Vendio una Entrada/s"
-        self.db = Database()  
+        self.accion = "Vendio una Entrada/s"
+        self.db = Database()
         
         # Cargar los asientos reservados desde la base de datos
         asientos_reservados = self.db.obtener_asientos_reservados(self.id_funcion)
@@ -80,8 +80,12 @@ class Cine(QMainWindow):
                     checkbox = QCheckBox(f"Asiento {asiento_numero + 1}")
                     checkbox.setFont(QFont("Arial", 12))
 
-                    # Deshabilitar si el asiento ya está reservado
-                    checkbox.setEnabled(self.asientos_disponibles[asiento_numero])
+                    # Si el asiento ya está reservado, lo marcamos y lo deshabilitamos
+                    if not self.asientos_disponibles[asiento_numero]:
+                        checkbox.setChecked(True)
+                        checkbox.setEnabled(False)
+                    else:
+                        checkbox.setEnabled(True)
 
                     # Crear un QLabel para mostrar la imagen del asiento (ClickableLabel)
                     label_asiento = ClickableLabel(self)
@@ -126,18 +130,20 @@ class Cine(QMainWindow):
             return
 
         # Llama a la función para guardar los asientos en la base de datos
-
         try:
-            sesion= UserSession()
+            sesion = UserSession()
             id_user = sesion.get_user_id()
-            self.db.guardar_asientos(self.id_funcion, id_user, asientos=[a + 1 for a in asientos_a_comprar])  
+            self.db.guardar_asientos(self.id_funcion, id_user, asientos=[a + 1 for a in asientos_a_comprar])
             QMessageBox.information(self, "Éxito", f"Has reservado los asientos: {', '.join([str(a + 1) for a in asientos_a_comprar])}.")
-            self.db.registrar_historial_usuario(id_user,self.accion)
-            self.close()
-            # Actualizar la lista de asientos disponibles
-            # for asiento in asientos_a_comprar:
-            #     self.asientos_disponibles[asiento] = False
-            # self.actualizar_asientos()
+            self.db.registrar_historial_usuario(id_user, self.accion)
+
+            # Marcar y deshabilitar los checkboxes correspondientes a los asientos reservados
+            for asiento in asientos_a_comprar:
+                self.asientos_checkboxes[asiento].setChecked(True)
+                self.asientos_checkboxes[asiento].setEnabled(False)
+                self.asientos_disponibles[asiento] = False  # Actualizar el estado de disponibilidad
+                self.close()
+
         except Exception as e:
             QMessageBox.critical(self, "Error", str(e))
 

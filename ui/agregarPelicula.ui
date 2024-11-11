@@ -294,6 +294,9 @@
                 <height>25</height>
                </size>
               </property>
+              <property name="maximum">
+               <number>9999999</number>
+              </property>
              </widget>
             </item>
            </layout>
