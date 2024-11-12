@@ -169,6 +169,8 @@ class MainWindow(QMainWindow):
         self.actualizar_cartelera()
         
         self.cargar_usuarios_en_comboBox()
+        
+        self.estadistica_pelicula()
 
         
         # Conectar el botón de actualizar con el método cargar_usuarios_en_tabla
@@ -549,7 +551,7 @@ class MainWindow(QMainWindow):
                     item = QTableWidgetItem(str(data))
                     item.setBackground(color)
                     self.tableWidget_funciones.setItem(row_number, column_number, item)
-
+            self.estadistica_pelicula()
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo mostrar todas las funciones en la tabla.')
@@ -633,6 +635,7 @@ class MainWindow(QMainWindow):
 
             # Ajusta el ancho de las columnas al contenido
             self.tableWidget_pelis.resizeColumnsToContents()
+            self.estadistica_pelicula()
 
         except Exception as e:
             log(e, "error")
@@ -640,34 +643,39 @@ class MainWindow(QMainWindow):
 
 
 
-    # def estadistica_pelicula(self): 
-    #     # Cantidad de Peliculas
-    #     peliculas = self.db.obtener_peliculas()
-    #     total_peliculas = len(peliculas)
+    def estadistica_pelicula(self): 
+        # Cantidad de Peliculas
+        peliculas = self.db.obtener_peliculas()
+        total_peliculas = len(peliculas)
         
-    #     # Top 10 de películas más vistas
-    #     peliculas_mas_vistas = self.db.obtener_peliculas_mas_vistas()
-    #     peliculas_vistas_texto = "\n".join(
-    #         [f"Película: {pelicula['NombrePelicula']} (ID: {pelicula['IdPelicula']}), Ventas: {pelicula['CantidadVentas']}" 
-    #         for pelicula in peliculas_mas_vistas]
-    #     )
+        # Top 10 de películas más vistas
+        peliculas_mas_vistas = self.db.obtener_peliculas_mas_vistas()
+        peliculas_vistas_texto = "\n".join(
+            [f"{pelicula['NombrePelicula']} (ID: {pelicula['IdPelicula']}), Ventas: {pelicula['CantidadVentas']}" 
+            for pelicula in peliculas_mas_vistas]
+        )
         
-    #     # Top 5 géneros más rentables
-    #     generos_mas_rentables = self.db.obtener_generos_mas_rentables()
-    #     generos_rentables_texto = "\n".join(
-    #         [f"Género: {genero['Genero']}, Ingresos Totales: ${genero['IngresosTotales']}" 
-    #         for genero in generos_mas_rentables]
-    #     )
+        # Top 5 géneros más rentables
+        generos_mas_rentables = self.db.obtener_generos_mas_rentables()
+        generos_rentables_texto = "\n".join(
+            [f"{genero['Genero']}, Ingresos Totales: ${genero['IngresosTotales']}" 
+            for genero in generos_mas_rentables]
+        )
         
-    #     # Crear el mensaje completo
-    #     mensaje = (
-    #         f"Total de películas: {total_peliculas}\n\n"
-    #         f"Top 10 de películas más vistas:\n{peliculas_vistas_texto}\n\n"
-    #         f"Top 5 géneros más rentables:\n{generos_rentables_texto}"
-    #     )
-        
-    #     # Mostrar el mensaje en un QMessageBox
-    #     QMessageBox.information(self, "Estadísticas de Películas", mensaje)
+        # Crear el mensaje completo
+        mensaje1 = f"{total_peliculas}\n\n"
+        mensaje2 = f"\n{peliculas_vistas_texto}\n\n"
+        mensaje3 = f"\n{generos_rentables_texto}"
+
+        # Mostrar Mensajes
+        self.total_peliculas.setText(mensaje1)  # LineEdit
+        self.textEdit_top10_peliculas.setText(mensaje2)  # TextEdit
+        self.textEdit_top5_generos.setText(mensaje3)  # TextEdit
+
+        # Bloquear edición en TextEdit
+        self.textEdit_top10_peliculas.setReadOnly(True)
+        self.textEdit_top5_generos.setReadOnly(True)
+
 
 
     def obtener_pelicula_seleccionada(self):

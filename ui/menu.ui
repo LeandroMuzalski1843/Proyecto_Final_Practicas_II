@@ -632,7 +632,7 @@ QPushButton:hover {
              <number>0</number>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>5</number>
             </property>
             <widget class="QWidget" name="page">
              <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -1750,19 +1750,129 @@ QPushButton:hover {
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QTabWidget" name="tabWidget">
+                  <widget class="QTabWidget" name="Peliculas">
                    <property name="currentIndex">
                     <number>1</number>
                    </property>
                    <widget class="QWidget" name="tab">
                     <attribute name="title">
-                     <string>Page</string>
+                     <string>Funciones</string>
                     </attribute>
                    </widget>
                    <widget class="QWidget" name="tab_2">
                     <attribute name="title">
-                     <string>Tab 2</string>
+                     <string>Peliculas</string>
                     </attribute>
+                    <layout class="QHBoxLayout" name="horizontalLayout_17">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QWidget" name="widget_16" native="true"/>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="widget_17" native="true">
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="sizeIncrement">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <layout class="QVBoxLayout" name="verticalLayout_18">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QLabel" name="label_7">
+                          <property name="styleSheet">
+                           <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                          </property>
+                          <property name="text">
+                           <string>Total de Peliculas:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLineEdit" name="total_peliculas"/>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_5">
+                          <property name="font">
+                           <font>
+                            <family>MS Shell Dlg 2</family>
+                            <pointsize>18</pointsize>
+                            <weight>9</weight>
+                            <italic>false</italic>
+                            <bold>false</bold>
+                           </font>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                          </property>
+                          <property name="text">
+                           <string>Top 10 Peliculas más Vistas:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QTextEdit" name="textEdit_top10_peliculas"/>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_6">
+                          <property name="font">
+                           <font>
+                            <family>MS Shell Dlg 2</family>
+                            <pointsize>17</pointsize>
+                            <weight>9</weight>
+                            <italic>false</italic>
+                            <bold>false</bold>
+                           </font>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true">font: 75 17pt &quot;MS Shell Dlg 2&quot;;</string>
+                          </property>
+                          <property name="text">
+                           <string>Top 5 Generos más Redituables:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QTextEdit" name="textEdit_top5_generos"/>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                   </widget>
                  </item>
