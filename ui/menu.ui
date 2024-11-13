@@ -1780,7 +1780,148 @@ QPushButton:hover {
                       <number>0</number>
                      </property>
                      <item>
-                      <widget class="QWidget" name="widget_16" native="true"/>
+                      <widget class="QWidget" name="widget_16" native="true">
+                       <layout class="QHBoxLayout" name="horizontalLayout_18">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QWidget" name="widget_19" native="true">
+                          <layout class="QVBoxLayout" name="verticalLayout_19">
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_19">
+                             <property name="spacing">
+                              <number>0</number>
+                             </property>
+                             <item>
+                              <widget class="QLineEdit" name="lineEdit_3"/>
+                             </item>
+                             <item>
+                              <widget class="QPushButton" name="pushButton">
+                               <property name="text">
+                                <string>Filtrar</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                           <item>
+                            <widget class="QTableWidget" name="tabla_estadistica_peli">
+                             <column>
+                              <property name="text">
+                               <string>N° de ID</string>
+                              </property>
+                             </column>
+                             <column>
+                              <property name="text">
+                               <string>Nombre de la Pelicula</string>
+                              </property>
+                             </column>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QPushButton" name="pushButton_2">
+                             <property name="text">
+                              <string>Aceptar</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLabel" name="label_8">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                               <pointsize>18</pointsize>
+                               <weight>9</weight>
+                               <italic>false</italic>
+                               <bold>false</bold>
+                              </font>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                             </property>
+                             <property name="text">
+                              <string>Porcentaje de Asistencia:</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="lineEdit_porcentaje_asistencia"/>
+                           </item>
+                           <item>
+                            <widget class="QLabel" name="label_9">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                               <pointsize>18</pointsize>
+                               <weight>9</weight>
+                               <italic>false</italic>
+                               <bold>false</bold>
+                              </font>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                             </property>
+                             <property name="text">
+                              <string>Horario más Exitoso</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="lineEdit_horario_mas_exitoso"/>
+                           </item>
+                           <item>
+                            <widget class="QLabel" name="label_10">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                               <pointsize>18</pointsize>
+                               <weight>9</weight>
+                               <italic>false</italic>
+                               <bold>false</bold>
+                              </font>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                             </property>
+                             <property name="text">
+                              <string>Recaudación Historica</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="lineEdit_recaudadcion_historica"/>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QWidget" name="widget_18" native="true">
+                          <property name="maximumSize">
+                           <size>
+                            <width>10</width>
+                            <height>16777215</height>
+                           </size>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true"> background-color: #aa55ff;</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
                      </item>
                      <item>
                       <widget class="QWidget" name="widget_17" native="true">

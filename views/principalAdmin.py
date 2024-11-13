@@ -69,7 +69,6 @@ class MainWindow(QMainWindow):
 
         #Saludo de bienvenida
         session = UserSession()
-        print(session)
         saludo = session.username if session.username else "Usuario"  # Valor por defecto "Usuario"
 
         # Acortar el nombre si es demasiado largo (máximo 10 caracteres)
@@ -171,6 +170,7 @@ class MainWindow(QMainWindow):
         self.cargar_usuarios_en_comboBox()
         
         self.estadistica_pelicula()
+        self.estadisticas_individual()
 
         
         # Conectar el botón de actualizar con el método cargar_usuarios_en_tabla
@@ -198,7 +198,6 @@ class MainWindow(QMainWindow):
         if funciones_futuras:
             self.funciones_detalladas = []  # Lista para almacenar cada función individualmente
             peliculas_bd = self.db.obtener_peliculas()
-            print("Películas en BD:", peliculas_bd)
 
             for funcion in funciones_futuras:
                 id_funcion = funcion[0]  # Asegúrate de que el ID de la función sea el primer elemento
@@ -366,7 +365,6 @@ class MainWindow(QMainWindow):
         
             try:
                 usuarios = self.db.obtener_usuarios()
-                print(usuarios)
                 self.tableWidget_usuarios.setRowCount(0)
                 for row_number, row_data in enumerate(usuarios):
                     self.tableWidget_usuarios.insertRow(row_number)
@@ -675,6 +673,32 @@ class MainWindow(QMainWindow):
         # Bloquear edición en TextEdit
         self.textEdit_top10_peliculas.setReadOnly(True)
         self.textEdit_top5_generos.setReadOnly(True)
+        self.estadisticas_individual()
+    
+    def estadisticas_individual(self):
+        try:
+            peliculas = self.db.obtener_peliculas()  # Obtiene todas las películas
+            self.tabla_estadistica_peli.setRowCount(0)
+
+            # Filas de la tabla: NombrePelicula, FechaInicio, FechaFin, Duracion, Clasificacion
+            for row_number, pelicula in enumerate(peliculas):
+                # Asigna cada campo de la base de datos a una columna específica
+                id_pelicula = pelicula[0]  
+                nombre = pelicula[1]
+
+
+                # Insertamos los datos en la tabla, sin incluir el ID en la columna visible
+                self.tabla_estadistica_peli.insertRow(row_number)
+                self.tabla_estadistica_peli.setItem(row_number, 0, QTableWidgetItem(str(id_pelicula)))
+                self.tabla_estadistica_peli.setItem(row_number, 1, QTableWidgetItem(str(nombre)))
+
+
+            # Ajusta el ancho de las columnas al contenido
+            self.tabla_estadistica_peli.resizeColumnsToContents()
+            self.estadistica_pelicula()
+
+        except Exception as e:
+            log(e, "error")
 
 
 
