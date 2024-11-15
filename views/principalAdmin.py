@@ -355,22 +355,38 @@ class MainWindow(QMainWindow):
         
 
     #==============================================================================================================
-    # Configuracion Pagina Usuarios
-    
-        
+    # Configuracion Pagina Usuarios 
     def cargar_usuarios_en_tabla(self):
-            """Carga los usuarios de la base de datos y los muestra en tableWidget_usuarios."""
-        
-            try:
-                usuarios = self.db.obtener_usuarios()
-                self.tableWidget_usuarios.setRowCount(0)
-                for row_number, row_data in enumerate(usuarios):
-                    self.tableWidget_usuarios.insertRow(row_number)
-                    for column_number, data in enumerate(row_data):
-                        self.tableWidget_usuarios.setItem(row_number, column_number, QTableWidgetItem(str(data)))
-            except Exception as e:
-                log(e, "error")
-                QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de usuarios.')
+        """Carga los usuarios de la base de datos y muestra solo NombreUsuario, Grupo, FechaCreacion y FechaModificacion en tableWidget_usuarios, adaptando el contenido al tamaño de la tabla."""
+
+        try:
+            usuarios = self.db.obtener_usuarios()
+            self.tableWidget_usuarios.setRowCount(0)
+            
+            for row_number, row_data in enumerate(usuarios):
+                self.tableWidget_usuarios.insertRow(row_number)
+
+                # Asignar solo los datos de las columnas deseadas
+                nombre_usuario = row_data[1]       # NombreUsuario (índice 1)
+                grupo = row_data[3]                # Grupo (índice 3)
+                fecha_creacion = row_data[4]       # FechaCreacion (índice 4)
+                fecha_modificacion = row_data[5]   # FechaModificacion (índice 5)
+
+                # Insertar los datos en la tabla
+                self.tableWidget_usuarios.setItem(row_number, 0, QTableWidgetItem(str(nombre_usuario)))
+                self.tableWidget_usuarios.setItem(row_number, 1, QTableWidgetItem(str(grupo)))
+                self.tableWidget_usuarios.setItem(row_number, 2, QTableWidgetItem(str(fecha_creacion)))
+                self.tableWidget_usuarios.setItem(row_number, 3, QTableWidgetItem(str(fecha_modificacion)))
+
+            # Ajustar el tamaño de las columnas y filas al contenido
+            self.tableWidget_usuarios.resizeColumnsToContents()
+            self.tableWidget_usuarios.resizeRowsToContents()
+
+        except Exception as e:
+            log(e, "error")
+            QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de usuarios.')
+
+
     #==============================================================================================================
     # Configuracion Pagina Historial
     
@@ -405,7 +421,7 @@ class MainWindow(QMainWindow):
         self.cargar_Historial_en_tabla()
 
     def cargar_Historial_en_tabla(self):
-        """Carga y filtra los registros del historial según la selección del comboBox y la fecha."""
+        """Carga y filtra los registros del historial según la selección del comboBox y la fecha, y ajusta el contenido de la tabla."""
         try:
             historial = self.db.obtener_historial()  # Obtener todos los registros del historial
 
@@ -424,7 +440,7 @@ class MainWindow(QMainWindow):
             # Ordenar el historial en orden descendente por la fecha y hora (índice 2)
             historial_ordenado = sorted(historial, key=lambda x: x[2], reverse=True)
 
-            self.tableWidget_historial.setRowCount(0)
+            self.tableWidget_historial.setRowCount(0)  # Limpiar la tabla
 
             for row_number, row_data in enumerate(historial_ordenado):
                 id_usuario = row_data[1]  # Asumiendo que el ID del usuario está en la segunda columna (índice 1)
@@ -439,10 +455,13 @@ class MainWindow(QMainWindow):
                 self.tableWidget_historial.setItem(row_number, 1, QTableWidgetItem(str(fecha_hora)))
                 self.tableWidget_historial.setItem(row_number, 2, QTableWidgetItem(str(accion)))
 
+            # Ajustar el ancho de las columnas y la altura de las filas al contenido
+            self.tableWidget_historial.resizeColumnsToContents()
+            self.tableWidget_historial.resizeRowsToContents()
+
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de historial.')
-
 
     
     #==============================================================================================================

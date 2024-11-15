@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>843</width>
+    <width>785</width>
     <height>628</height>
    </rect>
   </property>
@@ -632,7 +632,7 @@ QPushButton:hover {
              <number>0</number>
             </property>
             <property name="currentIndex">
-             <number>5</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page">
              <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -993,10 +993,10 @@ QPushButton:hover {
               </property>
               <item>
                <widget class="QWidget" name="widget_2" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_10">
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
                  <item>
                   <widget class="QWidget" name="widget" native="true">
-                   <layout class="QVBoxLayout" name="verticalLayout_4">
+                   <layout class="QVBoxLayout" name="verticalLayout_10">
                     <item>
                      <widget class="QLabel" name="label_3">
                       <property name="text">
@@ -1022,37 +1022,22 @@ QPushButton:hover {
                      <widget class="QTableWidget" name="tableWidget_usuarios">
                       <column>
                        <property name="text">
-                        <string>IdUsuario</string>
+                        <string>New Column</string>
                        </property>
                       </column>
                       <column>
                        <property name="text">
-                        <string>NombreUsuario</string>
+                        <string>Nombre</string>
                        </property>
                       </column>
                       <column>
                        <property name="text">
-                        <string>Contraseña</string>
+                        <string>Fecha de Creación</string>
                        </property>
                       </column>
                       <column>
                        <property name="text">
-                        <string>Grupo</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string>Fecha_Creacion</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string>Fecha_Modificacion</string>
-                       </property>
-                      </column>
-                      <column>
-                       <property name="text">
-                        <string>Utimo_Acceso</string>
+                        <string>Fecha de Modificación</string>
                        </property>
                       </column>
                      </widget>
@@ -1064,7 +1049,20 @@ QPushButton:hover {
                   <widget class="QWidget" name="widget_9" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_5">
                     <item>
-                     <layout class="QHBoxLayout" name="horizontalLayout_9">
+                     <layout class="QVBoxLayout" name="verticalLayout_4">
+                      <item>
+                       <spacer name="verticalSpacer_15">
+                        <property name="orientation">
+                         <enum>Qt::Vertical</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>20</width>
+                          <height>40</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
                       <item>
                        <widget class="QPushButton" name="bt_agregar_usuario">
                         <property name="text">
@@ -1073,14 +1071,14 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item>
-                       <spacer name="horizontalSpacer_2">
+                       <spacer name="verticalSpacer_7">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
-                          <width>40</width>
-                          <height>20</height>
+                          <width>20</width>
+                          <height>40</height>
                          </size>
                         </property>
                        </spacer>
@@ -1093,14 +1091,14 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item>
-                       <spacer name="horizontalSpacer_3">
+                       <spacer name="verticalSpacer_13">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
-                          <width>40</width>
-                          <height>20</height>
+                          <width>20</width>
+                          <height>40</height>
                          </size>
                         </property>
                        </spacer>
@@ -1113,14 +1111,14 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item>
-                       <spacer name="horizontalSpacer_4">
+                       <spacer name="verticalSpacer_14">
                         <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
+                         <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeHint" stdset="0">
                          <size>
-                          <width>40</width>
-                          <height>20</height>
+                          <width>20</width>
+                          <height>40</height>
                          </size>
                         </property>
                        </spacer>
