@@ -1806,10 +1806,10 @@ QPushButton:hover {
                               <number>0</number>
                              </property>
                              <item>
-                              <widget class="QLineEdit" name="lineEdit_3"/>
+                              <widget class="QLineEdit" name="filtro_nombre_estadistica"/>
                              </item>
                              <item>
-                              <widget class="QPushButton" name="pushButton">
+                              <widget class="QPushButton" name="btn_filtrar">
                                <property name="text">
                                 <string>Filtrar</string>
                                </property>
