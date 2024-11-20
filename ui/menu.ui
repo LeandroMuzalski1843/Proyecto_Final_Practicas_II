@@ -632,7 +632,7 @@ QPushButton:hover {
              <number>0</number>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>5</number>
             </property>
             <widget class="QWidget" name="page">
              <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -1830,7 +1830,7 @@ QPushButton:hover {
                             </widget>
                            </item>
                            <item>
-                            <widget class="QPushButton" name="pushButton_2">
+                            <widget class="QPushButton" name="btn_calcular_peliculas">
                              <property name="text">
                               <string>Aceptar</string>
                              </property>

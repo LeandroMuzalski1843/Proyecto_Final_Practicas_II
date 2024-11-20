@@ -234,6 +234,96 @@ class Database:
         finally:
             self.desconeccion()
     
+    def obtener_recaudacion_total(self, id_pelicula):
+        try:
+            self.conneccion()
+            query = """
+                SELECT COALESCE(COUNT(v.NumeroButaca) * f.Precio, 0) AS RecaudacionTotal
+                FROM ventaboletos v
+                JOIN funciones f ON v.IdFuncion = f.IdFunciones
+                WHERE f.IdPelicula = %s
+            """
+            self.cursor.execute(query, (id_pelicula,))
+            resultado = self.cursor.fetchone()
+            return resultado[0] if resultado else 0
+        except Exception as e:
+            print(f"Error al obtener la recaudación total: {str(e)}")
+            return 0
+        finally:
+            self.desconeccion()
+
+
+    def obtener_horario_mas_exitoso(self, id_pelicula):
+        try:
+            self.conneccion()
+            query = """
+                SELECT f.IdSala, v.IdFuncion, COUNT(v.NumeroButaca) AS TotalVendidos
+                FROM funciones f
+                JOIN ventaboletos v ON f.IdFunciones = v.IdFuncion
+                WHERE f.IdPelicula = %s
+                GROUP BY f.IdSala, v.IdFuncion
+                ORDER BY TotalVendidos DESC
+                LIMIT 1
+            """
+            self.cursor.execute(query, (id_pelicula,))
+            resultado = self.cursor.fetchone()
+
+            if resultado:
+                id_sala, id_funcion, max_boletos = resultado
+
+                # Asumiendo horarios predefinidos por sala
+                horarios_sala = {
+                    1: ["10:00", "13:00", "16:00"],  # Sala 1
+                    2: ["11:00", "14:00", "17:00"]   # Sala 2
+                }
+                horario = horarios_sala.get(id_sala, ["Horario desconocido"])[id_funcion % 3]
+                return horario, max_boletos
+
+            return "Horario desconocido", 0
+        except Exception as e:
+            print(f"Error al obtener el horario más exitoso: {str(e)}")
+            return "Horario desconocido", 0
+        finally:
+            self.desconeccion()
+
+    def calcular_porcentaje_asistencia(self, id_pelicula):
+        try:
+            self.conneccion()
+            # Modificar el query para sumar la capacidad total y los boletos vendidos en todas las funciones
+            query = """
+                SELECT 
+                    COALESCE(SUM(v.TotalVendidos), 0) AS TotalVendidos,
+                    COALESCE(SUM(s.NumeroButacas), 0) AS CapacidadTotal
+                FROM (
+                    SELECT 
+                        f.IdFunciones,
+                        COUNT(v.NumeroButaca) AS TotalVendidos
+                    FROM funciones f
+                    LEFT JOIN ventaboletos v ON f.IdFunciones = v.IdFuncion
+                    WHERE f.IdPelicula = %s
+                    GROUP BY f.IdFunciones
+                ) v
+                JOIN funciones f ON v.IdFunciones = f.IdFunciones
+                JOIN salas s ON f.IdSala = s.IdSalas
+            """
+            self.cursor.execute(query, (id_pelicula,))
+            resultado = self.cursor.fetchone()
+
+            if resultado:
+                total_vendidos, capacidad_total = resultado
+                print(f"Total vendidos: {total_vendidos}, Capacidad total: {capacidad_total}")
+                if capacidad_total > 0:
+                    porcentaje = (total_vendidos / capacidad_total) * 100
+                    print(f"Porcentaje calculado: {porcentaje}")
+                    return porcentaje, capacidad_total, total_vendidos
+
+            return 0, 0, 0
+        except Exception as e:
+            print(f"Error al calcular el porcentaje de asistencia: {str(e)}")
+            return 0, 0, 0
+        finally:
+            self.desconeccion()
+
     def obtener_generos(self):
         """Obtiene todos los géneros de la base de datos."""
         try:

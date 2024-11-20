@@ -91,6 +91,7 @@ class MainWindow(QMainWindow):
         self.btn_eliminar_pelicula.clicked.connect(self.abrir_eliminar_pelicula)
         self.btn_modificar_pelicula.clicked.connect(self.abrir_modificar_pelicula)
         self.btn_informacion_pelicula.clicked.connect(self.mostrar_informacion_pelicula)
+        self.btn_calcular_peliculas.clicked.connect(self.calcular_estadisticas_pelicula)
 
 
         #Configuracion botones pagina funciones
@@ -680,43 +681,67 @@ class MainWindow(QMainWindow):
             log(e, "error")
 
 
+    def actualizar_estadisticas(self, id_pelicula):
+        try:
+            # Obtener datos desde la base de datos considerando todas las funciones
+            porcentaje_asistencia, capacidad_total, total_vendidos = self.db.calcular_porcentaje_asistencia(id_pelicula)
+
+            # Imprimir resultados para depuración
+            print(f"ID Película: {id_pelicula}")
+            print(f"Capacidad Total: {capacidad_total}, Total Vendidos: {total_vendidos}")
+
+            # Actualizar los elementos de la interfaz con los datos calculados
+            self.lineEdit_porcentaje_asistencia.setText(f"{porcentaje_asistencia:.2f}%")
+            self.lineEdit_capacidad_total.setText(str(capacidad_total))
+            self.lineEdit_total_vendidos.setText(str(total_vendidos))
+
+            print(f"Porcentaje calculado: {porcentaje_asistencia:.2f}%")
+        except Exception as e:
+            print(f"Error al actualizar estadísticas: {e}")
+
 
 
     def estadistica_pelicula(self): 
-        # Cantidad de Peliculas
-        peliculas = self.db.obtener_peliculas()
-        total_peliculas = len(peliculas)
-        
-        # Top 10 de películas más vistas
-        peliculas_mas_vistas = self.db.obtener_peliculas_mas_vistas()
-        peliculas_vistas_texto = "\n".join(
-            [f"{pelicula['NombrePelicula']} (ID: {pelicula['IdPelicula']}), Ventas: {pelicula['CantidadVentas']}" 
-            for pelicula in peliculas_mas_vistas]
-        )
-        
-        # Top 5 géneros más rentables
-        generos_mas_rentables = self.db.obtener_generos_mas_rentables()
-        generos_rentables_texto = "\n".join(
-            [f"{genero['Genero']}, Ingresos Totales: ${genero['IngresosTotales']}" 
-            for genero in generos_mas_rentables]
-        )
-        
-        # Crear el mensaje completo
-        mensaje1 = f"{total_peliculas}\n\n"
-        mensaje2 = f"\n{peliculas_vistas_texto}\n\n"
-        mensaje3 = f"\n{generos_rentables_texto}"
+        """Carga estadísticas generales de las películas."""
+        try:
+            # Cantidad de Películas
+            peliculas = self.db.obtener_peliculas()
+            total_peliculas = len(peliculas)
+            
+            # Top 10 de películas más vistas
+            peliculas_mas_vistas = self.db.obtener_peliculas_mas_vistas()
+            peliculas_vistas_texto = "\n".join(
+                [f"{pelicula['NombrePelicula']} (ID: {pelicula['IdPelicula']}), Ventas: {pelicula['CantidadVentas']}" 
+                for pelicula in peliculas_mas_vistas]
+            )
+            
+            # Top 5 géneros más rentables
+            generos_mas_rentables = self.db.obtener_generos_mas_rentables()
+            generos_rentables_texto = "\n".join(
+                [f"{genero['Genero']}, Ingresos Totales: ${genero['IngresosTotales']}" 
+                for genero in generos_mas_rentables]
+            )
+            
+            # Crear el mensaje completo
+            mensaje1 = f"{total_peliculas}\n\n"
+            mensaje2 = f"\n{peliculas_vistas_texto}\n\n"
+            mensaje3 = f"\n{generos_rentables_texto}"
 
-        # Mostrar Mensajes
-        self.total_peliculas.setText(mensaje1)  # LineEdit
-        self.textEdit_top10_peliculas.setText(mensaje2)  # TextEdit
-        self.textEdit_top5_generos.setText(mensaje3)  # TextEdit
+            # Mostrar mensajes
+            self.total_peliculas.setText(mensaje1)  # LineEdit
+            self.textEdit_top10_peliculas.setText(mensaje2)  # TextEdit
+            self.textEdit_top5_generos.setText(mensaje3)  # TextEdit
+            
+            # Bloquear edición en TextEdit
+            self.textEdit_top10_peliculas.setReadOnly(True)
+            self.textEdit_top5_generos.setReadOnly(True)
 
-        # Bloquear edición en TextEdit
-        self.textEdit_top10_peliculas.setReadOnly(True)
-        self.textEdit_top5_generos.setReadOnly(True)
-        self.estadisticas_individual()
+            # Cargar estadísticas individuales
+            self.estadisticas_individual()
 
-    
+        except Exception as e:
+            print(f"Ocurrió un error al cargar estadísticas generales: {str(e)}")
+
     def estadisticas_individual(self):
         """Carga las estadísticas de todas las películas en la tabla."""
         try:
@@ -725,12 +750,60 @@ class MainWindow(QMainWindow):
             for row_number, pelicula in enumerate(peliculas):
                 id_pelicula = pelicula[0]  
                 nombre = pelicula[1]
+
+                # Insertar filas en la tabla
                 self.tabla_estadistica_peli.insertRow(row_number)
-                self.tabla_estadistica_peli.setItem(row_number, 0, QTableWidgetItem(str(id_pelicula)))
+                item = QTableWidgetItem(str(id_pelicula))
+                item.setData(Qt.UserRole, id_pelicula)  # Guardar ID en UserRole
+                self.tabla_estadistica_peli.setItem(row_number, 0, item)
                 self.tabla_estadistica_peli.setItem(row_number, 1, QTableWidgetItem(str(nombre)))
+            
             self.tabla_estadistica_peli.resizeColumnsToContents()
+
         except Exception as e:
-            log(e, "error")
+            print(f"Ocurrió un error al cargar estadísticas individuales: {str(e)}")
+
+    def calcular_estadisticas_pelicula(self):
+        try:
+            row = self.tabla_estadistica_peli.currentRow()
+            if row == -1:
+                print("Por favor, seleccione una película.")
+                return
+            
+            item = self.tabla_estadistica_peli.item(row, 0)
+            if not item:
+                print("Error: No se pudo obtener el ID de la película.")
+                return
+            
+            id_pelicula = item.data(Qt.UserRole)
+            if not id_pelicula:
+                print("Error: ID de película no encontrado en UserRole.")
+                return
+
+            print(f"ID película seleccionada: {id_pelicula}")
+
+            # Consultar datos en la base de datos
+            porcentaje_asistencia, _, _ = self.db.calcular_porcentaje_asistencia(id_pelicula)
+            horario_mas_exitoso, max_butacas = self.db.obtener_horario_mas_exitoso(id_pelicula)
+            recaudacion_total = self.db.obtener_recaudacion_total(id_pelicula)
+
+            porcentaje = f"{porcentaje_asistencia:.2f}%" if porcentaje_asistencia > 0 else "0.00%"
+            horario = (
+                f"{horario_mas_exitoso} (Butacas llenas: {max_butacas})"
+                if max_butacas > 0
+                else "No disponible"
+            )
+            recaudacion = f"${recaudacion_total:.2f}" if recaudacion_total > 0 else "$0.00"
+
+            # Actualizar campos en la interfaz
+            self.lineEdit_porcentaje_asistencia.setText(porcentaje)
+            self.lineEdit_horario_mas_exitoso.setText(horario)
+            self.lineEdit_recaudadcion_historica.setText(recaudacion)
+
+        except Exception as e:
+            print(f"Ocurrió un error al calcular las estadísticas: {str(e)}")
+
+
 
 
     def filtrar_peliculas(self):
