@@ -161,6 +161,27 @@ class Database:
         finally:
             self.desconeccion()
     
+    def obtener_funciones_con_nombre_peliculas(self):
+        """Obtiene las funciones con los nombres de las películas, incluyendo funciones sin película asociada."""
+        try:
+            self.conneccion()
+            consulta = """
+                SELECT 
+                    f.IdFunciones, 
+                    COALESCE(p.NombrePelicula, 'Película eliminada') AS NombrePelicula, 
+                    f.Fecha_hora 
+                FROM funciones f
+                LEFT JOIN peliculas p ON f.IdPelicula = p.IdPelicula
+            """
+            self.cursor.execute(consulta)
+            return self.cursor.fetchall()
+        except Error as e:
+            log(e, "error")
+            raise Exception(f"Error al obtener funciones con nombres de películas: {e}")
+        finally:
+            self.desconeccion()
+
+
 
     def insertar_pelicula(self, nombre, resumen, pais_origen, fecha_estreno, duracion, clasificacion, imagen_ruta, fecha_inicio, fecha_fin):
         """Inserta una nueva película en la base de datos y retorna el ID de la película."""

@@ -103,11 +103,10 @@ class MainWindow(QMainWindow):
         self.btn_modificar_funcion.clicked.connect(self.abrir_modificar_funcion)
         self.btn_actualizar.clicked.connect(self.actualizar_cartelera)
         self.btn_comprar.clicked.connect(self.abrir_seleccionar_butacas)
-        self.btn_resumen_funcion.clicked.connect(self.mostrar_resumen_funcion_seleccionada)
+        self.btn_mostrar_funciones.clicked.connect(self.mostrar_resumen_funcion_seleccionada)
         self.btn_mostrar_todo_funcion.clicked.connect(self.mostrar_todas_las_funciones)
         self.comboBox_idfunciones.currentTextChanged.connect(self.cargar_Funciones_en_tabla)
         self.btn_actualizar_funcion.clicked.connect(self.mostrar_todas_las_funciones)
-
         # Configuración inicial de la tabla, ComboBox y fechas por defecto
         try:
             self.mostrar_todas_las_funciones()  # Mostrar todas las funciones al iniciar
@@ -170,7 +169,7 @@ class MainWindow(QMainWindow):
         self.cargar_usuarios_en_comboBox()
         self.estadistica_pelicula()
         self.estadisticas_individual()
-
+        self.cargar_funciones_tabla_estadisticas()
         
         # Conectar el botón de actualizar con el método cargar_usuarios_en_tabla
         self.btn_actualizarUsuario.clicked.connect(self.cargar_usuarios_en_tabla)
@@ -468,8 +467,6 @@ class MainWindow(QMainWindow):
     #==============================================================================================================
     # Configuracion Pagina Funciones
 
-    
-    
     def cargar_id_funciones_en_comboBox(self):
         """Carga todos los IDs de funciones en el comboBox_idfunciones."""
         try:
@@ -594,28 +591,116 @@ class MainWindow(QMainWindow):
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo mostrar todas las funciones en la tabla.')
 
+    
+
+    #==============================================================================================================
+    # Configuracion Estadisticas Funciones
+
+    def cargar_funciones_tabla_estadisticas(self):
+        """Carga las funciones en la tabla de estadísticas de funciones."""
+        try:
+            if not self.db:
+                print("No se encontró la conexión a la base de datos.")
+                return
+
+            funciones = self.db.obtener_funciones_con_nombre_peliculas()  # Datos de la BD
+
+            if not funciones:
+                print("No se encontraron funciones para cargar.")
+                QMessageBox.warning(self, "Advertencia", "No hay funciones disponibles para mostrar.")
+                return
+
+            # Limpiar la tabla
+            self.tableWidget_estadisticas_funciones.setRowCount(0)
+
+            # Insertar datos en la tabla
+            for row_number, row_data in enumerate(funciones):
+                print(f"Procesando fila {row_number}: {row_data}")  # Depuración
+
+                self.tableWidget_estadisticas_funciones.insertRow(row_number)
+
+                try:
+                    # Validar que los datos tengan al menos 3 elementos
+                    if len(row_data) < 3:
+                        print(f"Datos incompletos en la fila {row_number}: {row_data}")
+                        continue
+
+                    id_funcion = row_data[0]  # ID de la función
+                    nombre_pelicula = row_data[1]
+                    fecha_hora = row_data[2]
+
+                    # Validar que el ID no esté vacío
+                    if not id_funcion:
+                        print(f"ID vacío en la fila {row_number}: {row_data}")
+                        continue
+
+                    # Insertar datos en las columnas correspondientes
+                    item_nombre_pelicula = QTableWidgetItem(str(nombre_pelicula))
+                    item_fecha_hora = QTableWidgetItem(str(fecha_hora))
+                    item_id_funcion = QTableWidgetItem()  # Ocultar este dato en la tabla
+
+                    # Guardar el ID como dato interno usando UserRole
+                    item_nombre_pelicula.setData(Qt.UserRole, id_funcion)
+
+                    # Añadir a la tabla
+                    self.tableWidget_estadisticas_funciones.setItem(row_number, 0, item_nombre_pelicula)
+                    self.tableWidget_estadisticas_funciones.setItem(row_number, 1, item_fecha_hora)
+                    self.tableWidget_estadisticas_funciones.setItem(row_number, 2, item_id_funcion)
+
+                    print(f"ID {id_funcion} almacenado correctamente.")  # Depuración
+
+                except Exception as e:
+                    print(f"Error procesando la fila {row_number}: {e}")
+                    continue
+
+            # Ocultar la columna del ID de la función para que no sea visible
+            self.tableWidget_estadisticas_funciones.setColumnHidden(2, True)
+
+            # Ajustar el ancho de las columnas al contenido
+            self.tableWidget_estadisticas_funciones.resizeColumnsToContents()
+
+        except Exception as e:
+            log(e, "error")
+            QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
+
     def mostrar_resumen_funcion_seleccionada(self):
         """Muestra el resumen de la función seleccionada en la tabla."""
-        selected_items = self.tableWidget_funciones.selectedItems()
-        if not selected_items:
-            QMessageBox.warning(self, "Advertencia", "Por favor, selecciona una función en la tabla primero.")
-            return
+        try:
+            selected_items = self.tableWidget_estadisticas_funciones.selectedItems()
+            if not selected_items:
+                QMessageBox.warning(self, "Advertencia", "Por favor, selecciona una función en la tabla primero.")
+                return
 
-        selected_row = selected_items[0].row()
-        id_funcion = self.tableWidget_funciones.item(selected_row, 0).data(Qt.UserRole)  # Recuperar el ID desde UserRole
-        self.mostrar_informacion_funcion(id_funcion)
+            selected_row = selected_items[0].row()
+            # Recuperar el ID desde el UserRole de la primera columna
+            id_funcion = self.tableWidget_estadisticas_funciones.item(selected_row, 0).data(Qt.UserRole)
+
+            if not id_funcion:
+                QMessageBox.warning(self, "Advertencia", "No se pudo obtener el ID de la función seleccionada.")
+                return
+
+            print(f"ID de la función seleccionada: {id_funcion}")  # Depuración
+            self.mostrar_informacion_funcion(int(id_funcion))  # Asegurarse de que sea entero
+
+        except Exception as e:
+            log(e, "error")
+            QMessageBox.critical(self, "Error", f"Ocurrió un error al intentar mostrar la función seleccionada: {e}")
 
     def mostrar_informacion_funcion(self, funcion_id):
         """Muestra un QMessageBox con la información de una función específica, incluyendo su ID."""
         try:
             asientos_reservados = self.db.obtener_asientos_reservados(funcion_id)
             butacas_vendidas = len(asientos_reservados)
-            
+
             funcion_info = self.db.obtener_funcion_por_id(funcion_id)
             if funcion_info:
                 id_sala, precio_funcion, fecha_hora_funcion = funcion_info[3], funcion_info[4], funcion_info[2]
-                
+
                 sala_info = self.db.obtener_sala_por_id(id_sala)
+                if not sala_info:
+                    QMessageBox.warning(self, "Advertencia", "No se encontró información de la sala asociada.")
+                    return
+
                 total_butacas = sala_info['NumeroButacas']
                 butacas_restantes = total_butacas - butacas_vendidas
                 dinero_recaudado = precio_funcion * butacas_vendidas
@@ -631,7 +716,7 @@ class MainWindow(QMainWindow):
                     porcentaje_ocupacion = (butacas_vendidas / total_butacas) * 100 if total_butacas > 0 else 0
                     mensaje += f"Porcentaje de ocupación: {porcentaje_ocupacion:.2f}%"
 
-                QMessageBox.information(self, "Información de la función", mensaje)
+                self.textEdit_info_funciones.setText(mensaje)
             else:
                 QMessageBox.warning(self, "Advertencia", "No se encontró información para la función seleccionada.")
 
@@ -640,10 +725,11 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, 'Error', f'No se pudo obtener la información de la función: {e}')
 
 
-    
 
 
-    
+
+
+
     #==============================================================================================================
     # Configuracion Pagina Pelis
 
@@ -680,6 +766,41 @@ class MainWindow(QMainWindow):
         except Exception as e:
             log(e, "error")
 
+    def mostrar_informacion_pelicula(self):
+        # Verificar si hay una película seleccionada
+        pelicula_id = self.obtener_pelicula_seleccionada()
+
+        if pelicula_id is None:
+            QMessageBox.warning(self, "Advertencia", "Debe seleccionar una película.")
+            return
+
+        # Obtener los datos de la película
+        datos_pelicula = self.db.obtener_datos_pelicula(pelicula_id)
+        if datos_pelicula is None:
+            QMessageBox.critical(self, "Error", "No se pudo obtener la información de la película.")
+            return
+
+        # Obtener los géneros de la película
+        generos = self.db.obtener_generos_pelicula(pelicula_id)
+        generos_texto = ", ".join(generos) if generos else "Sin géneros"
+
+        # Preparar el mensaje de la información de la película con el formato solicitado
+        mensaje = (
+            f"- Nombre:\n      {datos_pelicula['nombre']}\n"
+            f"- Descripción:\n      {datos_pelicula['resumen']}\n"
+            f"- País de Origen:\n      {datos_pelicula['pais_origen']}\n"
+            f"- Fecha de Estreno:\n      {datos_pelicula['fecha_estreno']}\n"
+            f"- Fecha de Inicio:\n      {datos_pelicula['fecha_inicio']}\n"
+            f"- Fecha de Fin:\n      {datos_pelicula['fecha_fin']}\n"
+            f"- Duración:\n      {datos_pelicula['duracion']} minutos\n"
+            f"- Clasificación:\n      {datos_pelicula['clasificacion']}\n"
+            f"- Géneros:\n      {generos_texto}\n"
+        )
+
+        # Mostrar el mensaje en un QMessageBox
+        QMessageBox.information(self, "Información de la Película", mensaje)
+    #==============================================================================================================
+    # Configuracion Estadisticas Pelis
 
     def actualizar_estadisticas(self, id_pelicula):
         try:
@@ -698,8 +819,6 @@ class MainWindow(QMainWindow):
             print(f"Porcentaje calculado: {porcentaje_asistencia:.2f}%")
         except Exception as e:
             print(f"Error al actualizar estadísticas: {e}")
-
-
 
     def estadistica_pelicula(self): 
         """Carga estadísticas generales de las películas."""
@@ -803,9 +922,6 @@ class MainWindow(QMainWindow):
         except Exception as e:
             print(f"Ocurrió un error al calcular las estadísticas: {str(e)}")
 
-
-
-
     def filtrar_peliculas(self):
         """Filtra las películas por nombre basado en el texto ingresado en filtro_nombre_estadistica."""
         try:
@@ -842,8 +958,6 @@ class MainWindow(QMainWindow):
         except Exception as e:
             log(e, "error")
 
-
-
     def obtener_pelicula_seleccionada(self):
         selected_row = self.tableWidget_pelis.currentRow()
         
@@ -856,45 +970,6 @@ class MainWindow(QMainWindow):
         
         return pelicula_id
 
-
-
-    def mostrar_informacion_pelicula(self):
-        # Verificar si hay una película seleccionada
-        pelicula_id = self.obtener_pelicula_seleccionada()
-
-        if pelicula_id is None:
-            QMessageBox.warning(self, "Advertencia", "Debe seleccionar una película.")
-            return
-
-        # Obtener los datos de la película
-        datos_pelicula = self.db.obtener_datos_pelicula(pelicula_id)
-        if datos_pelicula is None:
-            QMessageBox.critical(self, "Error", "No se pudo obtener la información de la película.")
-            return
-
-        # Obtener los géneros de la película
-        generos = self.db.obtener_generos_pelicula(pelicula_id)
-        generos_texto = ", ".join(generos) if generos else "Sin géneros"
-
-        # Preparar el mensaje de la información de la película con el formato solicitado
-        mensaje = (
-            f"- Nombre:\n      {datos_pelicula['nombre']}\n"
-            f"- Descripción:\n      {datos_pelicula['resumen']}\n"
-            f"- País de Origen:\n      {datos_pelicula['pais_origen']}\n"
-            f"- Fecha de Estreno:\n      {datos_pelicula['fecha_estreno']}\n"
-            f"- Fecha de Inicio:\n      {datos_pelicula['fecha_inicio']}\n"
-            f"- Fecha de Fin:\n      {datos_pelicula['fecha_fin']}\n"
-            f"- Duración:\n      {datos_pelicula['duracion']} minutos\n"
-            f"- Clasificación:\n      {datos_pelicula['clasificacion']}\n"
-            f"- Géneros:\n      {generos_texto}\n"
-        )
-
-        # Mostrar el mensaje en un QMessageBox
-        QMessageBox.information(self, "Información de la Película", mensaje)
-
-
-
-    
 
     
     #==============================================================================================================

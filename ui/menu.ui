@@ -1022,12 +1022,12 @@ QPushButton:hover {
                      <widget class="QTableWidget" name="tableWidget_usuarios">
                       <column>
                        <property name="text">
-                        <string>New Column</string>
+                        <string>Nombre</string>
                        </property>
                       </column>
                       <column>
                        <property name="text">
-                        <string>Nombre</string>
+                        <string>Rol</string>
                        </property>
                       </column>
                       <column>
@@ -1750,12 +1750,128 @@ QPushButton:hover {
                  <item>
                   <widget class="QTabWidget" name="Peliculas">
                    <property name="currentIndex">
-                    <number>1</number>
+                    <number>0</number>
                    </property>
                    <widget class="QWidget" name="tab">
                     <attribute name="title">
                      <string>Funciones</string>
                     </attribute>
+                    <layout class="QHBoxLayout" name="horizontalLayout_20">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QWidget" name="widget_20" native="true">
+                       <layout class="QVBoxLayout" name="verticalLayout_20">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <layout class="QHBoxLayout" name="horizontalLayout_21">
+                          <item>
+                           <widget class="QDateEdit" name="filtro_fecha_funcion"/>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="btn_todo_funciones">
+                            <property name="maximumSize">
+                             <size>
+                              <width>90</width>
+                              <height>16777215</height>
+                             </size>
+                            </property>
+                            <property name="text">
+                             <string>Todo</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
+                        <item>
+                         <widget class="QTableWidget" name="tableWidget_estadisticas_funciones">
+                          <column>
+                           <property name="text">
+                            <string>Nombre Pelicula</string>
+                           </property>
+                          </column>
+                          <column>
+                           <property name="text">
+                            <string>Fecha y Hora</string>
+                           </property>
+                          </column>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="btn_mostrar_funciones">
+                          <property name="text">
+                           <string>Mostrar</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="widget_21" native="true">
+                       <property name="minimumSize">
+                        <size>
+                         <width>300</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <layout class="QVBoxLayout" name="verticalLayout_21">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QTextEdit" name="textEdit_info_funciones"/>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="btn_actualizar_estadisticas_f">
+                          <property name="text">
+                           <string>Actualizar</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
                    <widget class="QWidget" name="tab_2">
                     <attribute name="title">
