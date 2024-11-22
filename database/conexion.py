@@ -639,7 +639,26 @@ class Database:
         finally:
             self.desconeccion()
     
-    
+    def obtener_recaudacion_por_dia(self):
+        """Obtiene la recaudación total por día."""
+        try:
+            self.conneccion()
+            query = """
+                SELECT DATE(f.Fecha_hora) AS Fecha, SUM(f.Precio) AS Recaudacion
+                FROM funciones f
+                INNER JOIN ventaboletos v ON f.IdFunciones = v.IdFuncion
+                GROUP BY DATE(f.Fecha_hora)
+                ORDER BY Fecha ASC
+            """
+            self.cursor.execute(query)
+            return self.cursor.fetchall()  # Retorna una lista de tuplas [(fecha, recaudación), ...]
+        except Error as e:
+            log(e, "error")
+            raise Exception(f"Error al obtener la recaudación por día: {e}")
+        finally:
+            self.desconeccion()
+
+
     def obtener_Ventas_idFuncion(self, funcion_id):
         """Obtiene todas las ventas de la base de datos relacionadas con un ID de función específico."""
         try:

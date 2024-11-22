@@ -22,7 +22,8 @@ from datetime import datetime
 from views.seleccionarButacas import Cine
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QDate
-
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import matplotlib.pyplot as plt
 
 
 
@@ -179,6 +180,7 @@ class MainWindow(QMainWindow):
         self.btn_actualizarH.clicked.connect(self.cargar_Historial_en_tabla)
         # Conectar el botón de actualizar con el método cargar_Funciones_en_tabla
 
+        self.grafico_funciones(self.layout_grafico)
 
 
 
@@ -724,8 +726,42 @@ class MainWindow(QMainWindow):
             log(e, "error")
             QMessageBox.critical(self, 'Error', f'No se pudo obtener la información de la función: {e}')
 
+    
 
+    def grafico_funciones(self, layout):
+        """
+        Genera un gráfico de barras con la recaudación total por día y lo agrega al layout especificado.
 
+        :param layout: Layout de PyQt donde se agregará el gráfico.
+        """
+        datos = self.db.obtener_recaudacion_por_dia()
+
+        # Verificar si hay datos
+        if not datos:
+            print("No hay datos disponibles para la recaudación.")
+            return
+
+        # Separar fechas y recaudaciones
+        fechas = [dato[0].strftime('%Y-%m-%d') for dato in datos]
+        recaudaciones = [dato[1] for dato in datos]
+
+        # Crear la figura 
+        fig, ax = plt.subplots(dpi=100, figsize=(3.8, 2.5), tight_layout=True, facecolor='white')
+
+        # Crear el gráfico de barras
+        ax.bar(fechas, recaudaciones, color='blue')
+        ax.set_title('Recaudación Total por Día', fontsize=8)
+        ax.set_xlabel('Fecha', fontsize=7)
+        ax.set_ylabel('Recaudación ($)', fontsize=7)
+        ax.tick_params(axis='x', labelsize=6, rotation=45)
+        ax.tick_params(axis='y', labelsize=6)
+
+        # Ajustar márgenes
+        plt.subplots_adjust(bottom=0.35)
+
+        # Crear el canvas de matplotlib y agregarlo al layout
+        canvas = FigureCanvas(fig)
+        layout.addWidget(canvas)
 
 
 
@@ -843,7 +879,7 @@ class MainWindow(QMainWindow):
             
             # Crear el mensaje completo
             mensaje1 = f"{total_peliculas}\n\n"
-            mensaje2 = f"\n{peliculas_vistas_texto}\n\n"
+            mensaje2 = f"{peliculas_vistas_texto}\n\n"
             mensaje3 = f"\n{generos_rentables_texto}"
 
             # Mostrar mensajes
