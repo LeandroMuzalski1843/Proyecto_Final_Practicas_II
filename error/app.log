@@ -576,3 +576,4 @@
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "type object 'datetime.datetime' has no attribute 'datetime'", "severity": "ERROR", "timestamp": "2024-11-22T13:25:01Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'cargar_Historial_en_tabla'", "severity": "ERROR", "timestamp": "2024-11-22T13:32:13Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'filtrar_por_usuario'", "severity": "ERROR", "timestamp": "2024-11-24T17:19:10Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'depurar_seleccion'", "severity": "ERROR", "timestamp": "2024-11-24T18:41:35Z"}

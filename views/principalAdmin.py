@@ -140,7 +140,6 @@ class MainWindow(QMainWindow):
 
 
 
-        
 
         # Control de los botones de la barra de títulos (minimizar, maximizar/restaurar, cerrar)
         self.bt_minimizar.clicked.connect(self.control_bt_minimizar)		
@@ -192,6 +191,9 @@ class MainWindow(QMainWindow):
 
 
         self.grafico_funciones(self.layout_grafico)
+        
+
+
 
 
 
@@ -470,21 +472,21 @@ class MainWindow(QMainWindow):
 
             # Filtro por usuario seleccionado
             id_usuario_seleccionado = self.comboBox_historial_usuario.currentData()
-            print(f"ID usuario seleccionado: {id_usuario_seleccionado}")
+            # print(f"ID usuario seleccionado: {id_usuario_seleccionado}")
             if id_usuario_seleccionado is not None:
                 historial = [registro for registro in historial if registro[1] == id_usuario_seleccionado]
-            print(f"Historial filtrado por usuario: {historial}")
+            # print(f"Historial filtrado por usuario: {historial}")
 
             # Filtro por fecha seleccionada
             if self.filtro_fecha_activado:
                 fecha_seleccionada = self.fecha_historial.date().toPyDate()
-                print(f"Fecha seleccionada: {fecha_seleccionada}")
+                # print(f"Fecha seleccionada: {fecha_seleccionada}")
                 historial = [registro for registro in historial if registro[2].date() == fecha_seleccionada]
-            print(f"Historial filtrado por fecha: {historial}")
+            # print(f"Historial filtrado por fecha: {historial}")
 
             # Ordenar por fecha en orden descendente
             historial_ordenado = sorted(historial, key=lambda x: x[2], reverse=True)
-            print(f"Historial ordenado final: {historial_ordenado}")
+            # print(f"Historial ordenado final: {historial_ordenado}")
 
             # Limpiar y cargar los datos en la tabla
             self.tableWidget_historial.setRowCount(0)
@@ -512,7 +514,6 @@ class MainWindow(QMainWindow):
     def actualizar_comboBox(self):
         """Actualiza la tabla según la selección del comboBox."""
         self.cargar_datos_historial()
-
 
     def filtrar_por_usuario(self):
         """Filtra los registros del historial según el usuario seleccionado."""
@@ -830,6 +831,8 @@ class MainWindow(QMainWindow):
 
 
 
+
+
     #==============================================================================================================
     # Configuracion Pagina Pelis
 
@@ -944,7 +947,7 @@ class MainWindow(QMainWindow):
             # Crear el mensaje completo
             mensaje1 = f"{total_peliculas}\n\n"
             mensaje2 = f"{peliculas_vistas_texto}\n\n"
-            mensaje3 = f"\n{generos_rentables_texto}"
+            mensaje3 = f"{generos_rentables_texto}"
 
             # Mostrar mensajes
             self.total_peliculas.setText(mensaje1)  # LineEdit
@@ -965,47 +968,60 @@ class MainWindow(QMainWindow):
         """Carga las estadísticas de todas las películas en la tabla."""
         try:
             peliculas = self.db.obtener_peliculas()
-            self.tabla_estadistica_peli.setRowCount(0)
-            for row_number, pelicula in enumerate(peliculas):
-                id_pelicula = pelicula[0]  
-                nombre = pelicula[1]
+            self.tabla_estadistica_peli.setRowCount(0)  # Limpia la tabla antes de insertar datos
 
-                # Insertar filas en la tabla
+            for row_number, pelicula in enumerate(peliculas):
+                id_pelicula = pelicula[0]  # ID de la película
+                nombre = pelicula[1]       # Nombre de la película
+
+                # Insertar una nueva fila en la tabla
                 self.tabla_estadistica_peli.insertRow(row_number)
-                item = QTableWidgetItem(str(id_pelicula))
-                item.setData(Qt.UserRole, id_pelicula)  # Guardar ID en UserRole
-                self.tabla_estadistica_peli.setItem(row_number, 0, item)
-                self.tabla_estadistica_peli.setItem(row_number, 1, QTableWidgetItem(str(nombre)))
-            
+
+                # Crear un QTableWidgetItem para la columna de ID
+                item_id = QTableWidgetItem(str(id_pelicula))
+                item_id.setData(Qt.UserRole, id_pelicula)  # Almacena el ID en UserRole
+                self.tabla_estadistica_peli.setItem(row_number, 0, item_id)
+
+                # Crear un QTableWidgetItem para el nombre de la película
+                item_nombre = QTableWidgetItem(str(nombre))
+                self.tabla_estadistica_peli.setItem(row_number, 1, item_nombre)
+
+                # Verificar que el ID esté correctamente almacenado
+                almacenado_id = self.tabla_estadistica_peli.item(row_number, 0).data(Qt.UserRole)
+
+            # Ajustar el ancho de las columnas al contenido
             self.tabla_estadistica_peli.resizeColumnsToContents()
 
         except Exception as e:
             print(f"Ocurrió un error al cargar estadísticas individuales: {str(e)}")
 
+
     def calcular_estadisticas_pelicula(self):
+        """Calcula y actualiza las estadísticas de la película seleccionada en la tabla."""
         try:
+            # Obtener la fila seleccionada
             row = self.tabla_estadistica_peli.currentRow()
+
             if row == -1:
-                print("Por favor, seleccione una película.")
                 return
-            
+
+            # Validar que la celda contenga un elemento válido
             item = self.tabla_estadistica_peli.item(row, 0)
             if not item:
-                print("Error: No se pudo obtener el ID de la película.")
                 return
-            
+
+            # Recuperar el ID de la película desde el UserRole
             id_pelicula = item.data(Qt.UserRole)
+
             if not id_pelicula:
-                print("Error: ID de película no encontrado en UserRole.")
                 return
 
-            print(f"ID película seleccionada: {id_pelicula}")
-
-            # Consultar datos en la base de datos
+            # Realizar consultas y cálculos
             porcentaje_asistencia, _, _ = self.db.calcular_porcentaje_asistencia(id_pelicula)
             horario_mas_exitoso, max_butacas = self.db.obtener_horario_mas_exitoso(id_pelicula)
             recaudacion_total = self.db.obtener_recaudacion_total(id_pelicula)
 
+            # Formatear los resultados
             porcentaje = f"{porcentaje_asistencia:.2f}%" if porcentaje_asistencia > 0 else "0.00%"
             horario = (
                 f"{horario_mas_exitoso} (Butacas llenas: {max_butacas})"
@@ -1014,7 +1030,7 @@ class MainWindow(QMainWindow):
             )
             recaudacion = f"${recaudacion_total:.2f}" if recaudacion_total > 0 else "$0.00"
 
-            # Actualizar campos en la interfaz
+            # Actualizar los campos de la interfaz
             self.lineEdit_porcentaje_asistencia.setText(porcentaje)
             self.lineEdit_horario_mas_exitoso.setText(horario)
             self.lineEdit_recaudadcion_historica.setText(recaudacion)
@@ -1022,53 +1038,78 @@ class MainWindow(QMainWindow):
         except Exception as e:
             print(f"Ocurrió un error al calcular las estadísticas: {str(e)}")
 
+
     def filtrar_peliculas(self):
         """Filtra las películas por nombre basado en el texto ingresado en filtro_nombre_estadistica."""
         try:
-            # Obtiene el texto de filtro
+            # Obtener el texto del filtro
             texto_filtro = self.filtro_nombre_estadistica.text().strip().lower()
-            
-            # Si el filtro está vacío, llama a estadisticas_individual para cargar todas las películas
+
+            # Si no hay texto en el filtro, recargar todas las películas
             if not texto_filtro:
                 self.estadisticas_individual()
                 return
-            
-            # Obtiene todas las películas
+
+            # Obtener todas las películas
             peliculas = self.db.obtener_peliculas()
-            
-            # Limpia la tabla
+
+            # Limpiar la tabla
             self.tabla_estadistica_peli.setRowCount(0)
 
-            # Recorre las películas y solo inserta las que coinciden con el filtro
-            row_number = 0  # Controla el índice de las filas en la tabla filtrada
+            # Recorre las películas y filtra las que coinciden con el texto
+            row_number = 0
             for pelicula in peliculas:
                 id_pelicula = pelicula[0]
                 nombre = pelicula[1]
 
-                # Aplica el filtro: verifica si el nombre contiene el texto de filtro
+                # Verificar si el nombre contiene el texto del filtro
                 if texto_filtro in nombre.lower():
                     self.tabla_estadistica_peli.insertRow(row_number)
-                    self.tabla_estadistica_peli.setItem(row_number, 0, QTableWidgetItem(str(id_pelicula)))
-                    self.tabla_estadistica_peli.setItem(row_number, 1, QTableWidgetItem(nombre))
-                    row_number += 1  # Incrementa solo si una película fue añadida
 
-            # Ajusta el ancho de las columnas al contenido
+                    # Crear los items para cada celda
+                    item_id = QTableWidgetItem(str(id_pelicula))
+                    item_id.setData(Qt.UserRole, id_pelicula)  # Almacenar el ID en UserRole
+                    self.tabla_estadistica_peli.setItem(row_number, 0, item_id)
+
+                    item_nombre = QTableWidgetItem(nombre)
+                    self.tabla_estadistica_peli.setItem(row_number, 1, item_nombre)
+
+                    row_number += 1
+
+            # Ajustar el ancho de las columnas al contenido
             self.tabla_estadistica_peli.resizeColumnsToContents()
 
         except Exception as e:
-            log(e, "error")
+            print(f"Ocurrió un error al filtrar las películas: {str(e)}")
 
     def obtener_pelicula_seleccionada(self):
-        selected_row = self.tableWidget_pelis.currentRow()
-        
-        if selected_row == -1:
-            return None
+        """
+        Obtiene el ID de la película seleccionada en la tabla `tableWidget_pelis`.
+        """
+        try:
+            # Obtener la fila seleccionada
+            selected_row = self.tableWidget_pelis.currentRow()
 
-        # Recuperar el ID almacenado en UserRole en la primera columna de la fila seleccionada
-        pelicula_id_item = self.tableWidget_pelis.item(selected_row, 0)
-        pelicula_id = pelicula_id_item.data(Qt.UserRole)
-        
-        return pelicula_id
+            if selected_row == -1:
+                return None
+
+            # Recuperar el elemento de la columna correspondiente (ID de la película)
+            pelicula_id_item = self.tableWidget_pelis.item(selected_row, 0)
+            
+            if not pelicula_id_item:
+                return None
+
+            # Recuperar el ID desde UserRole
+            pelicula_id = pelicula_id_item.data(Qt.UserRole)
+            
+            if not pelicula_id:
+                return None
+
+            return pelicula_id
+
+        except Exception as e:
+            print(f"Ocurrió un error al obtener la película seleccionada: {str(e)}")
+            return None
 
 
     
