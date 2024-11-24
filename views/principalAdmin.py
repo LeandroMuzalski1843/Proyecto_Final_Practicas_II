@@ -131,7 +131,7 @@ class MainWindow(QMainWindow):
         #Configuracion botones pagina Historial
         self.fecha_historial.setCalendarPopup(True)
         self.fecha_historial.setDate(datetime.today())
-        self.comboBox_historial_usuario.currentIndexChanged.connect(self.actualizar_tabla_comboBox)
+        self.comboBox_historial_usuario.currentIndexChanged.connect(self.actualizar_comboBox)
         self.fecha_historial.editingFinished.connect(self.actualizar_tabla_fecha)
         self.fecha_seleccionada = False
         self.btn_filtrar.clicked.connect(self.filtrar_peliculas)
@@ -163,7 +163,7 @@ class MainWindow(QMainWindow):
         # Llenar la tabla de Pelis al iniciar
         self.cargar_peliculas_en_tabla()
         # Llenar la tabla de historial al iniciar
-        self.cargar_Historial_en_tabla()
+        self.cargar_datos_historial()
         # Llenar la tabla de funciones al iniciar
         #Actualizar Cartelera
         self.actualizar_cartelera()
@@ -172,13 +172,24 @@ class MainWindow(QMainWindow):
         self.estadisticas_individual()
         self.cargar_funciones_tabla_estadisticas()
         
+        
+        
+        
         # Conectar el botón de actualizar con el método cargar_usuarios_en_tabla
         self.btn_actualizarUsuario.clicked.connect(self.cargar_usuarios_en_tabla)
         # Conectar el botón de actualizar con el método cargar_pelis_en_tabla
         self.btn_actualizar_pelicula.clicked.connect(self.cargar_peliculas_en_tabla)
-        # Conectar el botón de actualizar con el método cargar_Historial_en_tabla
-        self.btn_actualizarH.clicked.connect(self.cargar_Historial_en_tabla)
+        # Conectar el botón de actualizar con el método cargar_datos_historial
+        self.btn_regenerar_Todo.clicked.connect(self.mostrar_todos_los_datos_historial)
         # Conectar el botón de actualizar con el método cargar_Funciones_en_tabla
+        self.btn_actualizarH.clicked.connect(self.cargar_datos_historial)
+
+        self.comboBox_historial_usuario.currentIndexChanged.connect(self.filtrar_por_usuario)
+        self.fecha_historial.dateChanged.connect(self.filtrar_por_fecha)
+
+
+
+
 
         self.grafico_funciones(self.layout_grafico)
 
@@ -264,7 +275,7 @@ class MainWindow(QMainWindow):
 
             # Construir el texto descriptivo
             detalles = (
-                f"Descripción: {funcion_actual['descripcion']}\n"
+                # f"Descripción: {funcion_actual['descripcion']}\n"
                 f"Fecha y Hora: {funcion_actual['fecha_hora']}\n"
                 f"Sala: {funcion_actual['sala']}\n"
                 f"Precio: ${funcion_actual['precio']}"
@@ -413,57 +424,112 @@ class MainWindow(QMainWindow):
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar los usuarios en el comboBox.')
 
-    def actualizar_tabla_comboBox(self):
-        """Actualiza la tabla según la selección del comboBox."""
-        self.cargar_Historial_en_tabla()
-
-    def actualizar_tabla_fecha(self):
-        """Actualiza la tabla solo cuando se confirma la selección de una fecha."""
-        self.fecha_seleccionada = True
-        self.cargar_Historial_en_tabla()
-
-    def cargar_Historial_en_tabla(self):
-        """Carga y filtra los registros del historial según la selección del comboBox y la fecha, y ajusta el contenido de la tabla."""
+    def mostrar_todos_los_datos_historial(self):
+        """Muestra todos los registros del historial sin filtros."""
         try:
-            historial = self.db.obtener_historial()  # Obtener todos los registros del historial
+            # Desactivar el filtro de fecha si estaba activado
+            self.filtro_fecha_activado = False
 
-            # Obtener el usuario seleccionado del comboBox
-            id_usuario_seleccionado = self.comboBox_historial_usuario.currentData()
+            # Reiniciar el comboBox a "Todos los usuarios"
+            self.comboBox_historial_usuario.setCurrentIndex(0)
 
-            # Aplicar filtro por usuario si se seleccionó uno específico
-            if id_usuario_seleccionado:
-                historial = [registro for registro in historial if registro[1] == id_usuario_seleccionado]
+            # Cargar todos los registros sin filtro
+            historial = self.db.obtener_historial()
 
-            # Solo filtrar por la fecha si la fecha fue seleccionada manualmente
-            if self.fecha_seleccionada:
-                fecha_seleccionada = self.fecha_historial.date().toPyDate()
-                historial = [registro for registro in historial if registro[2].date() == fecha_seleccionada]
-
-            # Ordenar el historial en orden descendente por la fecha y hora (índice 2)
+            # Ordenar por fecha en orden descendente
             historial_ordenado = sorted(historial, key=lambda x: x[2], reverse=True)
 
-            self.tableWidget_historial.setRowCount(0)  # Limpiar la tabla
-
+            # Limpiar y cargar los datos en la tabla
+            self.tableWidget_historial.setRowCount(0)
             for row_number, row_data in enumerate(historial_ordenado):
-                id_usuario = row_data[1]  # Asumiendo que el ID del usuario está en la segunda columna (índice 1)
-                usuario = self.db.obtener_usuario_por_id(id_usuario)  # Obtener los datos del usuario por ID
+                id_usuario = row_data[1]
+                usuario = self.db.obtener_usuario_por_id(id_usuario)
+                nombre_usuario = usuario[1] if usuario else "Desconocido"
+                fecha_hora = row_data[2]
+                accion = row_data[3]
 
-                nombre_usuario = usuario[1] if usuario else "Desconocido"  # Asumiendo que el nombre del usuario está en el índice 1
-                fecha_hora = row_data[2]  # Fecha y hora en el índice 2
-                accion = row_data[3]  # Acción en el índice 3
-
+                # Insertar fila en la tabla
                 self.tableWidget_historial.insertRow(row_number)
-                self.tableWidget_historial.setItem(row_number, 0, QTableWidgetItem(str(nombre_usuario)))
+                self.tableWidget_historial.setItem(row_number, 0, QTableWidgetItem(nombre_usuario))
                 self.tableWidget_historial.setItem(row_number, 1, QTableWidgetItem(str(fecha_hora)))
-                self.tableWidget_historial.setItem(row_number, 2, QTableWidgetItem(str(accion)))
+                self.tableWidget_historial.setItem(row_number, 2, QTableWidgetItem(accion))
 
-            # Ajustar el ancho de las columnas y la altura de las filas al contenido
+            # Ajustar las columnas y filas
+            self.tableWidget_historial.resizeColumnsToContents()
+            self.tableWidget_historial.resizeRowsToContents()
+
+        except Exception as e:
+            log(e, "error")
+            QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de historial sin filtros.')
+
+    def cargar_datos_historial(self):
+        """Carga y filtra los registros del historial según el comboBox y la fecha."""
+        try:
+            # Obtener todos los registros del historial
+            historial = self.db.obtener_historial()
+
+            # Filtro por usuario seleccionado
+            id_usuario_seleccionado = self.comboBox_historial_usuario.currentData()
+            print(f"ID usuario seleccionado: {id_usuario_seleccionado}")
+            if id_usuario_seleccionado is not None:
+                historial = [registro for registro in historial if registro[1] == id_usuario_seleccionado]
+            print(f"Historial filtrado por usuario: {historial}")
+
+            # Filtro por fecha seleccionada
+            if self.filtro_fecha_activado:
+                fecha_seleccionada = self.fecha_historial.date().toPyDate()
+                print(f"Fecha seleccionada: {fecha_seleccionada}")
+                historial = [registro for registro in historial if registro[2].date() == fecha_seleccionada]
+            print(f"Historial filtrado por fecha: {historial}")
+
+            # Ordenar por fecha en orden descendente
+            historial_ordenado = sorted(historial, key=lambda x: x[2], reverse=True)
+            print(f"Historial ordenado final: {historial_ordenado}")
+
+            # Limpiar y cargar los datos en la tabla
+            self.tableWidget_historial.setRowCount(0)
+            for row_number, row_data in enumerate(historial_ordenado):
+                id_usuario = row_data[1]
+                usuario = self.db.obtener_usuario_por_id(id_usuario)
+                nombre_usuario = usuario[1] if usuario else "Desconocido"
+                fecha_hora = row_data[2]
+                accion = row_data[3]
+
+                # Insertar fila en la tabla
+                self.tableWidget_historial.insertRow(row_number)
+                self.tableWidget_historial.setItem(row_number, 0, QTableWidgetItem(nombre_usuario))
+                self.tableWidget_historial.setItem(row_number, 1, QTableWidgetItem(str(fecha_hora)))
+                self.tableWidget_historial.setItem(row_number, 2, QTableWidgetItem(accion))
+
+            # Ajustar las columnas y filas
             self.tableWidget_historial.resizeColumnsToContents()
             self.tableWidget_historial.resizeRowsToContents()
 
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de historial.')
+    
+    def actualizar_comboBox(self):
+        """Actualiza la tabla según la selección del comboBox."""
+        self.cargar_datos_historial()
+
+
+    def filtrar_por_usuario(self):
+        """Filtra los registros del historial según el usuario seleccionado."""
+        print("Método filtrar_por_usuario llamado")
+        self.cargar_datos_historial()
+
+    def filtrar_por_fecha(self):
+        """Filtra los registros del historial según la fecha seleccionada."""
+        print("Método filtrar_por_fecha llamado")
+        self.filtro_fecha_activado = True
+        self.cargar_datos_historial()
+
+
+
+
+
+
 
     
     #==============================================================================================================
@@ -725,8 +791,6 @@ class MainWindow(QMainWindow):
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', f'No se pudo obtener la información de la función: {e}')
-
-    
 
     def grafico_funciones(self, layout):
         """

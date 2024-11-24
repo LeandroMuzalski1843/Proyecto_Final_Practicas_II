@@ -573,3 +573,6 @@
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "1111 (HY000): Invalid use of group function", "severity": "ERROR", "timestamp": "2024-11-22T11:39:43Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "Error al obtener la recaudaci\u00f3n por d\u00eda: 1111 (HY000): Invalid use of group function", "severity": "ERROR", "timestamp": "2024-11-22T11:39:43Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "Error al obtener la recaudaci\u00f3n por d\u00eda: 1111 (HY000): Invalid use of group function", "severity": "ERROR", "timestamp": "2024-11-22T11:39:43Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "type object 'datetime.datetime' has no attribute 'datetime'", "severity": "ERROR", "timestamp": "2024-11-22T13:25:01Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'cargar_Historial_en_tabla'", "severity": "ERROR", "timestamp": "2024-11-22T13:32:13Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'filtrar_por_usuario'", "severity": "ERROR", "timestamp": "2024-11-24T17:19:10Z"}
