@@ -87,6 +87,22 @@ class MainWindow(QMainWindow):
         self.btn_eliminar_usuario.clicked.connect(self.abrir_eliminar_usuarios)
         self.btn_modificar_usuario.clicked.connect(self.abrir_modificar_usuario)
 
+        # Conectar eventos para los filtros
+        self.nombre_filtro_usuario.textChanged.connect(self.aplicar_filtros)
+        self.fecha_creacion_filtro_usuario.dateChanged.connect(self.aplicar_filtros)
+
+
+        self.comboBox_filtro_usuario.currentIndexChanged.connect(self.aplicar_filtros)
+
+        self.fecha_creacion_filtro_usuario.setCalendarPopup(True)
+        self.fecha_creacion_filtro_usuario.setDisplayFormat("dd/MM/yyyy")  
+        self.fecha_creacion_filtro_usuario.setDate(QDate.currentDate())
+
+        # Cargar datos iniciales
+        self.cargar_usuarios_en_tabla()
+        self.cargar_rol_filtro()
+
+
         #Configuracion botones pagina Peliculas
         self.btn_agregar_pelicula.clicked.connect(self.abrir_agregar_pelicula)
         self.btn_eliminar_pelicula.clicked.connect(self.abrir_eliminar_pelicula)
@@ -390,35 +406,107 @@ class MainWindow(QMainWindow):
 
     #==============================================================================================================
     # Configuracion Pagina Usuarios 
-    def cargar_usuarios_en_tabla(self):
-        """Carga los usuarios de la base de datos y muestra solo NombreUsuario, Grupo, FechaCreacion y FechaModificacion en tableWidget_usuarios, adaptando el contenido al tamaño de la tabla."""
 
+    def cargar_usuarios_en_tabla(self, filtros=None):
+        """
+        Carga los usuarios de la base de datos con filtros opcionales.
+        Cada filtro se aplica de forma independiente.
+        """
         try:
+            # Obtener todos los usuarios de la base de datos
             usuarios = self.db.obtener_usuarios()
+
+            # Aplicar filtros, pero de manera independiente
+            if filtros:
+                # Filtro por nombre (si no está vacío)
+                if "nombre" in filtros and filtros["nombre"]:
+                    usuarios = [u for u in usuarios if filtros["nombre"].lower() in u[1].lower()]
+
+                # Filtro por grupo (rol), si está definido
+                if "grupo" in filtros and filtros["grupo"]:
+                    usuarios = [u for u in usuarios if u[3] == filtros["grupo"]]
+
+                # Filtro por fecha de creación
+                if "fecha_creacion" in filtros and filtros["fecha_creacion"]:
+                    usuarios = [u for u in usuarios if str(u[4]).startswith(filtros["fecha_creacion"])]
+
+            # Limpiar la tabla
             self.tableWidget_usuarios.setRowCount(0)
-            
+
+            # Llenar la tabla con los datos filtrados
             for row_number, row_data in enumerate(usuarios):
                 self.tableWidget_usuarios.insertRow(row_number)
 
-                # Asignar solo los datos de las columnas deseadas
-                nombre_usuario = row_data[1]       # NombreUsuario (índice 1)
-                grupo = row_data[3]                # Grupo (índice 3)
-                fecha_creacion = row_data[4]       # FechaCreacion (índice 4)
-                fecha_modificacion = row_data[5]   # FechaModificacion (índice 5)
+                nombre_usuario = row_data[1]       # NombreUsuario
+                grupo = row_data[3]                # Grupo
+                fecha_creacion = row_data[4]       # FechaCreacion
+                fecha_modificacion = row_data[5]   # FechaModificacion
 
-                # Insertar los datos en la tabla
+                # Insertar datos en la tabla
                 self.tableWidget_usuarios.setItem(row_number, 0, QTableWidgetItem(str(nombre_usuario)))
                 self.tableWidget_usuarios.setItem(row_number, 1, QTableWidgetItem(str(grupo)))
                 self.tableWidget_usuarios.setItem(row_number, 2, QTableWidgetItem(str(fecha_creacion)))
                 self.tableWidget_usuarios.setItem(row_number, 3, QTableWidgetItem(str(fecha_modificacion)))
 
-            # Ajustar el tamaño de las columnas y filas al contenido
+            # Ajustar el tamaño de las columnas
             self.tableWidget_usuarios.resizeColumnsToContents()
             self.tableWidget_usuarios.resizeRowsToContents()
 
         except Exception as e:
-            log(e, "error")
-            QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de usuarios.')
+            QMessageBox.critical(self, 'Error', f'Error al cargar usuarios: {str(e)}')
+
+
+
+
+    def cargar_rol_filtro(self):
+        """
+        Carga la lista de roles únicos en el combo box de filtro.
+        """
+        try:
+            # Obtener todos los usuarios
+            usuarios = self.db.obtener_usuarios()
+
+            # Limpiar y configurar el comboBox
+            self.comboBox_filtro_usuario.clear()
+            self.comboBox_filtro_usuario.addItem("Seleccionar Categoría")  # Opción predeterminada
+
+            # Extraer roles únicos y añadirlos al comboBox
+            roles_unicos = {usuario[3] for usuario in usuarios}  # Columna de roles
+            for rol in sorted(roles_unicos):
+                self.comboBox_filtro_usuario.addItem(rol)
+        except Exception as e:
+            QMessageBox.critical(self, 'Error', f'No se pudo cargar la lista de roles. Error: {str(e)}')
+
+    def aplicar_filtros(self):
+        """
+        Aplica los filtros de nombre, fecha de creación y rol en la tabla.
+        Cada filtro se procesa por separado.
+        """
+        # Obtener el texto del comboBox
+        grupo = self.comboBox_filtro_usuario.currentText()
+
+        # Si el comboBox está en la opción predeterminada, no filtrar por grupo
+        if grupo == "Todas las Categorias":
+            grupo = None
+
+        # Obtener la fecha de creación en el formato correcto
+        fecha_creacion = self.fecha_creacion_filtro_usuario.date().toString("yyyy-MM-dd") \
+            if self.fecha_creacion_filtro_usuario.date().isValid() else None
+
+        # Crear el diccionario de filtros
+        filtros = {
+            "nombre": self.nombre_filtro_usuario.text().strip(),
+            "fecha_creacion": fecha_creacion,  # Fecha formateada
+            "grupo": grupo,  # Usar el valor seleccionado del comboBox
+        }
+
+        # Recargar la tabla con los filtros aplicados
+        self.cargar_usuarios_en_tabla(filtros=filtros)
+
+
+
+
+
 
 
     #==============================================================================================================

@@ -632,7 +632,7 @@ QPushButton:hover {
              <number>0</number>
             </property>
             <property name="currentIndex">
-             <number>5</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page">
              <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -959,13 +959,6 @@ QPushButton:hover {
                    </property>
                   </spacer>
                  </item>
-                 <item>
-                  <widget class="QPushButton" name="btn_resumen_funcion">
-                   <property name="text">
-                    <string>Resumen</string>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </widget>
               </item>
@@ -1006,15 +999,40 @@ QPushButton:hover {
                     </item>
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_3">
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
                       <item>
-                       <widget class="QLineEdit" name="lineEdit"/>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButton_5">
-                        <property name="text">
-                         <string>Buscar</string>
+                       <widget class="QLineEdit" name="nombre_filtro_usuario">
+                        <property name="maximumSize">
+                         <size>
+                          <width>150</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="placeholderText">
+                         <string>Nombre del Usuario</string>
                         </property>
                        </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButton">
+                        <property name="maximumSize">
+                         <size>
+                          <width>50</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>kk</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QDateEdit" name="fecha_creacion_filtro_usuario"/>
+                      </item>
+                      <item>
+                       <widget class="QComboBox" name="comboBox_filtro_usuario"/>
                       </item>
                      </layout>
                     </item>
@@ -1050,6 +1068,13 @@ QPushButton:hover {
                    <layout class="QVBoxLayout" name="verticalLayout_5">
                     <item>
                      <layout class="QVBoxLayout" name="verticalLayout_4">
+                      <item>
+                       <widget class="QPushButton" name="btn_todo_filtro_usuario">
+                        <property name="text">
+                         <string>Todo</string>
+                        </property>
+                       </widget>
+                      </item>
                       <item>
                        <spacer name="verticalSpacer_15">
                         <property name="orientation">
@@ -1984,7 +2009,11 @@ p, li { white-space: pre-wrap; }
                               <number>0</number>
                              </property>
                              <item>
-                              <widget class="QLineEdit" name="filtro_nombre_estadistica"/>
+                              <widget class="QLineEdit" name="filtro_nombre_estadistica">
+                               <property name="placeholderText">
+                                <string>Nombre de la Pelicula</string>
+                               </property>
+                              </widget>
                              </item>
                              <item>
                               <widget class="QPushButton" name="btn_filtrar">
