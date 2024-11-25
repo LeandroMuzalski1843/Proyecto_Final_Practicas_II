@@ -537,32 +537,40 @@ class Database:
         finally:
             self.desconeccion()
 
-    def obtener_funciones_filtradas(self, id_funcion=None, fecha_inicio=None, fecha_fin=None):
-        """Obtiene las funciones filtradas por ID y rango de fechas."""
+    def obtener_funciones_filtradas(self, fecha_inicio=None, fecha_fin=None):
+        """Obtiene las funciones filtradas por rango de fechas."""
         try:
             self.conneccion()
-            query = "SELECT * FROM funciones WHERE 1=1"
+            query = """
+                SELECT f.IdFunciones, 
+                    COALESCE(p.NombrePelicula, 'Película eliminada') AS NombrePelicula, 
+                    f.Fecha_hora 
+                FROM funciones f
+                LEFT JOIN peliculas p ON f.IdPelicula = p.IdPelicula
+                WHERE 1=1
+            """
             params = []
 
-            if id_funcion:
-                query += " AND IdFunciones = %s"
-                params.append(id_funcion)
-
+            # Agregar filtros de fechas si están definidos
             if fecha_inicio:
-                query += " AND Fecha_hora >= %s"
+                query += " AND DATE(f.Fecha_hora) >= %s"
                 params.append(fecha_inicio)
 
             if fecha_fin:
-                query += " AND Fecha_hora <= %s"
+                query += " AND DATE(f.Fecha_hora) <= %s"
                 params.append(fecha_fin)
 
+            query += " ORDER BY f.Fecha_hora ASC"
             self.cursor.execute(query, params)
             return self.cursor.fetchall()
         except Error as e:
             log(e, "error")
-            raise Exception(f"Error durante la consulta de funciones: {e}")
+            raise Exception(f"Error durante la consulta de funciones filtradas: {e}")
         finally:
             self.desconeccion()
+
+
+
 
 
     def eliminar_funcion(self, funcion_id):

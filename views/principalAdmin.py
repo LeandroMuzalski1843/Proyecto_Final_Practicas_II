@@ -104,7 +104,6 @@ class MainWindow(QMainWindow):
         self.btn_modificar_funcion.clicked.connect(self.abrir_modificar_funcion)
         self.btn_actualizar.clicked.connect(self.actualizar_cartelera)
         self.btn_comprar.clicked.connect(self.abrir_seleccionar_butacas)
-        self.btn_mostrar_funciones.clicked.connect(self.mostrar_resumen_funcion_seleccionada)
         self.btn_mostrar_todo_funcion.clicked.connect(self.mostrar_todas_las_funciones)
         self.comboBox_idfunciones.currentTextChanged.connect(self.cargar_Funciones_en_tabla)
         self.btn_actualizar_funcion.clicked.connect(self.mostrar_todas_las_funciones)
@@ -126,6 +125,10 @@ class MainWindow(QMainWindow):
         # Conectar señales de cambio de fecha para activar filtro solo si cambian
         self.fecha_filtro_inicio_f.dateChanged.connect(self.activar_filtro_fecha)
         self.fecha_filtro_fin_f.dateChanged.connect(self.activar_filtro_fecha)
+
+        
+
+
         
                         
         #Configuracion botones pagina Historial
@@ -170,6 +173,8 @@ class MainWindow(QMainWindow):
         self.estadistica_pelicula()
         self.estadisticas_individual()
         self.cargar_funciones_tabla_estadisticas()
+        self.inicializar_tabla_estadisticas()
+
         
         
         
@@ -187,8 +192,22 @@ class MainWindow(QMainWindow):
         self.fecha_historial.dateChanged.connect(self.filtrar_por_fecha)
 
 
+        self.btn_todo_funciones.clicked.connect(self.mostrar_todas_las_funciones_estadisticas)
+        
+        self.btn_actualizar_estadisticas_f.clicked.connect(self.mostrar_todas_las_funciones_estadisticas)
+        self.filtro_fecha_funcion_esta.dateChanged.connect(self.activar_filtro_fecha_estadisticas) 
+        self.filtro_fecha_funcion_esta.setCalendarPopup(True)
+        self.filtro_fecha_funcion_esta.setDisplayFormat("dd/MM/yyyy")  
+        self.filtro_fecha_funcion_esta.setDate(QDate.currentDate())
+        self.tableWidget_estadisticas_funciones.itemClicked.connect(self.mostrar_resumen_funcion_seleccionada)
+        self.filtro_fecha_activado = False  
 
 
+
+
+
+
+        
 
         self.grafico_funciones(self.layout_grafico)
         
@@ -559,6 +578,7 @@ class MainWindow(QMainWindow):
     def actualizar_tabla_fecha(self):
         """Actualiza la tabla al confirmar la selección de una fecha."""
         self.cargar_Funciones_en_tabla()
+        self.grafico_funciones()
 
     def activar_filtro_fecha(self):
         """Activa el filtro de fecha cuando se cambia una fecha de filtro."""
@@ -665,98 +685,97 @@ class MainWindow(QMainWindow):
     #==============================================================================================================
     # Configuracion Estadisticas Funciones
 
+    def inicializar_tabla_estadisticas(self):
+        """Inicializa la tabla de estadísticas desactivando el filtro de fecha y mostrando todas las funciones."""
+        self.filtro_fecha_activado = False  # Desactivar el filtro al inicio
+        self.filtro_fecha_funcion_esta.setDate(QDate.currentDate())  # Configurar la fecha actual en el filtro
+        self.cargar_funciones_tabla_estadisticas()  # Cargar todas las funciones sin filtros
+    
+    def activar_filtro_fecha_estadisticas(self):
+        """Activa el filtro de fecha cuando se cambia la fecha en el filtro."""
+        self.filtro_fecha_activado = True
+        self.cargar_funciones_tabla_estadisticas()  # Cargar funciones con el filtro activado
+
+    def mostrar_todas_las_funciones_estadisticas(self):
+        self.filtro_fecha_activado = False
+        self.cargar_funciones_tabla_estadisticas()
+        print("Filtro desactivado. Mostrando todas las funciones.")
+
     def cargar_funciones_tabla_estadisticas(self):
-        """Carga las funciones en la tabla de estadísticas de funciones."""
+        """Carga las funciones en la tabla de estadísticas, aplicando o no los filtros según corresponda."""
         try:
             if not self.db:
                 print("No se encontró la conexión a la base de datos.")
                 return
 
-            funciones = self.db.obtener_funciones_con_nombre_peliculas()  # Datos de la BD
+            # Obtener todas las funciones de la base de datos
+            funciones = self.db.obtener_funciones_con_nombre_peliculas()
 
+            # Si no hay funciones, limpiar la tabla y salir
             if not funciones:
                 print("No se encontraron funciones para cargar.")
-                QMessageBox.warning(self, "Advertencia", "No hay funciones disponibles para mostrar.")
+                self.tableWidget_estadisticas_funciones.setRowCount(0)
                 return
 
-            # Limpiar la tabla
+            # Filtrar las funciones si el filtro de fecha está activado
+            if self.filtro_fecha_activado:
+                fecha_seleccionada = self.filtro_fecha_funcion_esta.date().toPyDate()
+                funciones = [funcion for funcion in funciones if funcion[2].date() == fecha_seleccionada]
+
+            # Limpiar la tabla antes de cargar datos
             self.tableWidget_estadisticas_funciones.setRowCount(0)
 
-            # Insertar datos en la tabla
-            for row_number, row_data in enumerate(funciones):
-                print(f"Procesando fila {row_number}: {row_data}")  # Depuración
+            # Si no hay funciones después del filtro, dejar la tabla vacía
+            if not funciones:
+                print("No hay funciones para mostrar después del filtro.")
+                return
 
+            # Insertar funciones en la tabla
+            for row_number, row_data in enumerate(funciones):
                 self.tableWidget_estadisticas_funciones.insertRow(row_number)
 
-                try:
-                    # Validar que los datos tengan al menos 3 elementos
-                    if len(row_data) < 3:
-                        print(f"Datos incompletos en la fila {row_number}: {row_data}")
-                        continue
+                id_funcion = row_data[0]
+                nombre_pelicula = row_data[1]
+                fecha_hora = row_data[2]
 
-                    id_funcion = row_data[0]  # ID de la función
-                    nombre_pelicula = row_data[1]
-                    fecha_hora = row_data[2]
+                # Crear los items de la tabla
+                item_nombre_pelicula = QTableWidgetItem(str(nombre_pelicula))
+                item_fecha_hora = QTableWidgetItem(str(fecha_hora))
+                item_id_funcion = QTableWidgetItem()
 
-                    # Validar que el ID no esté vacío
-                    if not id_funcion:
-                        print(f"ID vacío en la fila {row_number}: {row_data}")
-                        continue
+                # Guardar el ID como dato interno usando UserRole
+                item_nombre_pelicula.setData(Qt.UserRole, id_funcion)
 
-                    # Insertar datos en las columnas correspondientes
-                    item_nombre_pelicula = QTableWidgetItem(str(nombre_pelicula))
-                    item_fecha_hora = QTableWidgetItem(str(fecha_hora))
-                    item_id_funcion = QTableWidgetItem()  # Ocultar este dato en la tabla
+                # Insertar los items en las columnas respectivas
+                self.tableWidget_estadisticas_funciones.setItem(row_number, 0, item_nombre_pelicula)
+                self.tableWidget_estadisticas_funciones.setItem(row_number, 1, item_fecha_hora)
+                self.tableWidget_estadisticas_funciones.setItem(row_number, 2, item_id_funcion)
 
-                    # Guardar el ID como dato interno usando UserRole
-                    item_nombre_pelicula.setData(Qt.UserRole, id_funcion)
-
-                    # Añadir a la tabla
-                    self.tableWidget_estadisticas_funciones.setItem(row_number, 0, item_nombre_pelicula)
-                    self.tableWidget_estadisticas_funciones.setItem(row_number, 1, item_fecha_hora)
-                    self.tableWidget_estadisticas_funciones.setItem(row_number, 2, item_id_funcion)
-
-                    print(f"ID {id_funcion} almacenado correctamente.")  # Depuración
-
-                except Exception as e:
-                    print(f"Error procesando la fila {row_number}: {e}")
-                    continue
-
-            # Ocultar la columna del ID de la función para que no sea visible
+            # Ocultar la columna del ID de la función
             self.tableWidget_estadisticas_funciones.setColumnHidden(2, True)
 
-            # Ajustar el ancho de las columnas al contenido
+            # Ajustar el ancho de las columnas
             self.tableWidget_estadisticas_funciones.resizeColumnsToContents()
 
+            print(f"Se cargaron {len(funciones)} funciones en la tabla.")
+
         except Exception as e:
-            log(e, "error")
+            print(f"Error general al cargar la tabla: {e}")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
 
-    def mostrar_resumen_funcion_seleccionada(self):
-        """Muestra el resumen de la función seleccionada en la tabla."""
+    def mostrar_resumen_funcion_seleccionada(self, item):
+        """Muestra un resumen de la función seleccionada en la tabla."""
         try:
-            selected_items = self.tableWidget_estadisticas_funciones.selectedItems()
-            if not selected_items:
-                QMessageBox.warning(self, "Advertencia", "Por favor, selecciona una función en la tabla primero.")
-                return
-
-            selected_row = selected_items[0].row()
-            # Recuperar el ID desde el UserRole de la primera columna
-            id_funcion = self.tableWidget_estadisticas_funciones.item(selected_row, 0).data(Qt.UserRole)
-
-            if not id_funcion:
-                QMessageBox.warning(self, "Advertencia", "No se pudo obtener el ID de la función seleccionada.")
-                return
-
-            print(f"ID de la función seleccionada: {id_funcion}")  # Depuración
-            self.mostrar_informacion_funcion(int(id_funcion))  # Asegurarse de que sea entero
-
+            row = item.row()
+            funcion_id = self.tableWidget_estadisticas_funciones.item(row, 0).data(Qt.UserRole)
+            print(f"Función seleccionada, ID: {funcion_id}")  # Depuración
+            self.mostrar_informacion_funcion(funcion_id)
         except Exception as e:
-            log(e, "error")
-            QMessageBox.critical(self, "Error", f"Ocurrió un error al intentar mostrar la función seleccionada: {e}")
+            print(f"Error al mostrar el resumen: {e}")  # Depuración
+            QMessageBox.critical(self, "Error", f"Ocurrió un error al mostrar el resumen: {e}")
 
     def mostrar_informacion_funcion(self, funcion_id):
-        """Muestra un QMessageBox con la información de una función específica, incluyendo su ID."""
+        """Muestra un QMessageBox con la información de una función específica."""
         try:
             asientos_reservados = self.db.obtener_asientos_reservados(funcion_id)
             butacas_vendidas = len(asientos_reservados)
@@ -790,7 +809,7 @@ class MainWindow(QMainWindow):
                 QMessageBox.warning(self, "Advertencia", "No se encontró información para la función seleccionada.")
 
         except Exception as e:
-            log(e, "error")
+            print(f"Error al mostrar información de la función: {e}")  # Depuración
             QMessageBox.critical(self, 'Error', f'No se pudo obtener la información de la función: {e}')
 
     def grafico_funciones(self, layout):
@@ -995,7 +1014,6 @@ class MainWindow(QMainWindow):
         except Exception as e:
             print(f"Ocurrió un error al cargar estadísticas individuales: {str(e)}")
 
-
     def calcular_estadisticas_pelicula(self):
         """Calcula y actualiza las estadísticas de la película seleccionada en la tabla."""
         try:
@@ -1037,7 +1055,6 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             print(f"Ocurrió un error al calcular las estadísticas: {str(e)}")
-
 
     def filtrar_peliculas(self):
         """Filtra las películas por nombre basado en el texto ingresado en filtro_nombre_estadistica."""
@@ -1111,8 +1128,6 @@ class MainWindow(QMainWindow):
             print(f"Ocurrió un error al obtener la película seleccionada: {str(e)}")
             return None
 
-
-    
     #==============================================================================================================
     #                         Configuracion - [] X
 

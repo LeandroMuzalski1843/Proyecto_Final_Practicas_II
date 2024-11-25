@@ -632,7 +632,7 @@ QPushButton:hover {
              <number>0</number>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>5</number>
             </property>
             <widget class="QWidget" name="page">
              <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -1793,7 +1793,7 @@ QPushButton:hover {
                         <item>
                          <layout class="QHBoxLayout" name="horizontalLayout_21">
                           <item>
-                           <widget class="QDateEdit" name="filtro_fecha_funcion"/>
+                           <widget class="QDateEdit" name="filtro_fecha_funcion_esta"/>
                           </item>
                           <item>
                            <widget class="QPushButton" name="btn_todo_funciones">
@@ -1822,13 +1822,6 @@ QPushButton:hover {
                             <string>Fecha y Hora</string>
                            </property>
                           </column>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QPushButton" name="btn_mostrar_funciones">
-                          <property name="text">
-                           <string>Mostrar</string>
-                          </property>
                          </widget>
                         </item>
                        </layout>

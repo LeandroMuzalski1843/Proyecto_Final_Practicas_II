@@ -577,3 +577,11 @@
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'cargar_Historial_en_tabla'", "severity": "ERROR", "timestamp": "2024-11-22T13:32:13Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'filtrar_por_usuario'", "severity": "ERROR", "timestamp": "2024-11-24T17:19:10Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'depurar_seleccion'", "severity": "ERROR", "timestamp": "2024-11-24T18:41:35Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'cargar_todo_sin_filtro'", "severity": "ERROR", "timestamp": "2024-11-24T20:20:02Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'mostrar_resumen_funcion_seleccionada'", "severity": "ERROR", "timestamp": "2024-11-25T10:44:18Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'mostrar_resumen_funcion_seleccionada'", "severity": "ERROR", "timestamp": "2024-11-25T10:49:33Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'mostrar_resumen_funcion_seleccionada'", "severity": "ERROR", "timestamp": "2024-11-25T10:51:09Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'activar_filtro_fecha_estadisticas'", "severity": "ERROR", "timestamp": "2024-11-25T11:58:40Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'activar_filtro_fecha_estadisticas'", "severity": "ERROR", "timestamp": "2024-11-25T11:59:32Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'activar_filtro_fecha_estadisticas'", "severity": "ERROR", "timestamp": "2024-11-25T12:02:18Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'btn_mostrar_funciones'", "severity": "ERROR", "timestamp": "2024-11-25T12:06:19Z"}
