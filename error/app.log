@@ -585,3 +585,8 @@
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'activar_filtro_fecha_estadisticas'", "severity": "ERROR", "timestamp": "2024-11-25T11:59:32Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'activar_filtro_fecha_estadisticas'", "severity": "ERROR", "timestamp": "2024-11-25T12:02:18Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'btn_mostrar_funciones'", "severity": "ERROR", "timestamp": "2024-11-25T12:06:19Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'btn_buscar_pelicula'", "severity": "ERROR", "timestamp": "2024-11-26T12:47:18Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'aplicar_filtros_pelicula'", "severity": "ERROR", "timestamp": "2024-11-26T12:56:54Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'fecha_inicio'", "severity": "ERROR", "timestamp": "2024-11-26T12:59:52Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'btn_todo_peliculas'", "severity": "ERROR", "timestamp": "2024-11-26T13:05:46Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'btn_todo_peliculas'", "severity": "ERROR", "timestamp": "2024-11-26T13:06:42Z"}

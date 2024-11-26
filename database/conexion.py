@@ -92,7 +92,39 @@ class Database:
             raise Exception(f"Error durante la consulta: {e}")
         finally:
             self.desconeccion()
-    
+    def obtener_usuarios(self, filtros=None):
+        """
+        Obtiene usuarios de la base de datos aplicando filtros opcionales.
+        """
+        try:
+            self.conneccion()
+
+            # Construir consulta base
+            consulta = "SELECT * FROM usuarios WHERE 1=1"
+            parametros = []
+
+            # Agregar filtros dinámicamente
+            if filtros:
+                if "nombre" in filtros and filtros["nombre"]:
+                    consulta += " AND NombreUsuario LIKE %s"
+                    parametros.append(f"%{filtros['nombre']}%")
+                elif "grupo" in filtros and filtros["grupo"]:
+                    consulta += " AND Grupo = %s"
+                    parametros.append(filtros["grupo"])
+                elif "fecha_creacion" in filtros and filtros["fecha_creacion"]:
+                    consulta += " AND DATE(FechaCreacion) = %s"
+                    parametros.append(filtros["fecha_creacion"])
+
+            # Ejecutar consulta
+            self.cursor.execute(consulta, parametros)
+            return self.cursor.fetchall()
+        except Error as e:
+            log(e, "error")
+            raise Exception(f"Error durante la consulta: {e}")
+        finally:
+            self.desconeccion()
+
+
     def insertar_usuario(self, nombre, contrasena, rol,feha_creacion):
         """Inserta un nuevo usuario con un rol en la base de datos."""
         try:

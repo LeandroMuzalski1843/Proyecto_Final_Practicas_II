@@ -110,6 +110,24 @@ class MainWindow(QMainWindow):
         self.btn_informacion_pelicula.clicked.connect(self.mostrar_informacion_pelicula)
         self.btn_calcular_peliculas.clicked.connect(self.calcular_estadisticas_pelicula)
 
+        # Conectar el botón al método
+        # self.btn_buscar_pelicula.clicked.connect(self.aplicar_filtros_pelicula)
+        # Conectar el campo de texto al método para actualizar el filtro de nombre
+        self.filtro_nombre_pelicula.textChanged.connect(self.cargar_peliculas_en_tabla)
+
+        # Conectar los cambios en las fechas al método para activar el filtro de fechas
+        self.fecha_inicio_pelicula.dateChanged.connect(self.activar_filtro_fecha_peliculas)
+        self.fecha_fin_pelicula.dateChanged.connect(self.activar_filtro_fecha_peliculas)
+
+        self.btn_todo_peliculas.clicked.connect(self.mostrar_todas_las_peliculas)
+
+        self.fecha_inicio_pelicula.setCalendarPopup(True)
+        self.fecha_inicio_pelicula.setDisplayFormat("dd/MM/yyyy")  
+        self.fecha_inicio_pelicula.setDate(QDate.currentDate())
+
+        self.fecha_fin_pelicula.setCalendarPopup(True)
+        self.fecha_fin_pelicula.setDisplayFormat("dd/MM/yyyy")  
+        self.fecha_fin_pelicula.setDate(QDate.currentDate())
 
         #Configuracion botones pagina funciones
         self.filtro_fecha_activado = False  # Configuración inicial del filtro de fecha
@@ -197,6 +215,7 @@ class MainWindow(QMainWindow):
         
         # Conectar el botón de actualizar con el método cargar_usuarios_en_tabla
         self.btn_actualizarUsuario.clicked.connect(self.cargar_usuarios_en_tabla)
+        self.btn_todo_filtro_usuario.clicked.connect(self.cargar_usuarios_en_tabla)
         # Conectar el botón de actualizar con el método cargar_pelis_en_tabla
         self.btn_actualizar_pelicula.clicked.connect(self.cargar_peliculas_en_tabla)
         # Conectar el botón de actualizar con el método cargar_datos_historial
@@ -410,30 +429,16 @@ class MainWindow(QMainWindow):
     def cargar_usuarios_en_tabla(self, filtros=None):
         """
         Carga los usuarios de la base de datos con filtros opcionales.
-        Cada filtro se aplica de forma independiente.
+        El filtro de nombre tiene la mayor prioridad.
         """
         try:
-            # Obtener todos los usuarios de la base de datos
-            usuarios = self.db.obtener_usuarios()
+            # Consultar usuarios con filtros
+            usuarios = self.db.obtener_usuarios(filtros)
 
-            # Aplicar filtros, pero de manera independiente
-            if filtros:
-                # Filtro por nombre (si no está vacío)
-                if "nombre" in filtros and filtros["nombre"]:
-                    usuarios = [u for u in usuarios if filtros["nombre"].lower() in u[1].lower()]
-
-                # Filtro por grupo (rol), si está definido
-                if "grupo" in filtros and filtros["grupo"]:
-                    usuarios = [u for u in usuarios if u[3] == filtros["grupo"]]
-
-                # Filtro por fecha de creación
-                if "fecha_creacion" in filtros and filtros["fecha_creacion"]:
-                    usuarios = [u for u in usuarios if str(u[4]).startswith(filtros["fecha_creacion"])]
-
-            # Limpiar la tabla
+            # Limpiar la tabla antes de cargar nuevos datos
             self.tableWidget_usuarios.setRowCount(0)
 
-            # Llenar la tabla con los datos filtrados
+            # Llenar la tabla con los datos obtenidos
             for row_number, row_data in enumerate(usuarios):
                 self.tableWidget_usuarios.insertRow(row_number)
 
@@ -454,9 +459,6 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             QMessageBox.critical(self, 'Error', f'Error al cargar usuarios: {str(e)}')
-
-
-
 
     def cargar_rol_filtro(self):
         """
@@ -479,34 +481,33 @@ class MainWindow(QMainWindow):
 
     def aplicar_filtros(self):
         """
-        Aplica los filtros de nombre, fecha de creación y rol en la tabla.
-        Cada filtro se procesa por separado.
+        Aplica los filtros a la tabla. Prioriza el filtro por nombre sobre los demás.
+        Los filtros solo se aplican al presionar el botón 'btn_buscar_usuario'.
         """
-        # Obtener el texto del comboBox
-        grupo = self.comboBox_filtro_usuario.currentText()
+        # Obtener el texto del campo de nombre
+        nombre = self.nombre_filtro_usuario.text().strip()
 
-        # Si el comboBox está en la opción predeterminada, no filtrar por grupo
-        if grupo == "Todas las Categorias":
-            grupo = None
+        # Verificar si el filtro por nombre tiene prioridad
+        if nombre:  
+            # Si hay un nombre, se desactivan los otros filtros
+            filtros = {"nombre": nombre}
+        else:
+            # Si no hay filtro por nombre, considerar grupo y fecha
+            grupo = self.comboBox_filtro_usuario.currentText()
+            if grupo == "Seleccionar Categoría":  # Si no se seleccionó un grupo específico
+                grupo = None
 
-        # Obtener la fecha de creación en el formato correcto
-        fecha_creacion = self.fecha_creacion_filtro_usuario.date().toString("yyyy-MM-dd") \
-            if self.fecha_creacion_filtro_usuario.date().isValid() else None
+            fecha_creacion = self.fecha_creacion_filtro_usuario.date().toString("yyyy-MM-dd") \
+                if self.fecha_creacion_filtro_usuario.date().isValid() else None
 
-        # Crear el diccionario de filtros
-        filtros = {
-            "nombre": self.nombre_filtro_usuario.text().strip(),
-            "fecha_creacion": fecha_creacion,  # Fecha formateada
-            "grupo": grupo,  # Usar el valor seleccionado del comboBox
-        }
+            # Crear diccionario de filtros sin nombre
+            filtros = {
+                "fecha_creacion": fecha_creacion,
+                "grupo": grupo,
+            }
 
         # Recargar la tabla con los filtros aplicados
         self.cargar_usuarios_en_tabla(filtros=filtros)
-
-
-
-
-
 
 
     #==============================================================================================================
@@ -943,38 +944,91 @@ class MainWindow(QMainWindow):
     #==============================================================================================================
     # Configuracion Pagina Pelis
 
+    def inicializar_tabla_peliculas(self):
+        """Inicializa la tabla de películas mostrando todas las películas sin filtros."""
+        self.filtro_fecha_activado = False  # Desactiva el filtro de fechas al inicio
+        hoy = QDate.currentDate() 
+        self.fecha_inicio_pelicula.setDate(hoy)  # Fecha mínima inicial
+        self.fecha_fin_pelicula.setDate(QDate.currentDate())  # Fecha actual como límite
+        self.filtro_nombre_pelicula.clear()  # Limpia el filtro de nombre
+        self.cargar_peliculas_en_tabla()  # Cargar todas las películas sin filtros
+
     def cargar_peliculas_en_tabla(self):
+        """Carga las películas en la tabla aplicando los filtros automáticamente."""
         try:
-            peliculas = self.db.obtener_peliculas()  # Obtiene todas las películas
+            if not self.db:
+                QMessageBox.critical(self, "Error", "No se encontró la conexión a la base de datos.")
+                return
+
+            # Obtener todas las películas desde la base de datos
+            peliculas = self.db.obtener_peliculas()
+
+            # Prioridad: Si hay un filtro por nombre, desactivar el filtro de fechas
+            filtro_nombre = self.filtro_nombre_pelicula.text().strip()
+            if filtro_nombre:
+                self.filtro_fecha_activado = False  # Desactiva el filtro de fechas
+                peliculas = [
+                    p for p in peliculas if filtro_nombre.lower() in p[1].lower()
+                ]
+            elif getattr(self, "filtro_fecha_activado", False):
+                # Filtrar por rango de fechas si no hay filtro por nombre
+                fecha_inicio_pelicula = self.fecha_inicio_pelicula.date().toPyDate()
+                fecha_fin_pelicula = self.fecha_fin_pelicula.date().toPyDate()
+                peliculas = [
+                    p for p in peliculas if fecha_inicio_pelicula <= p[6] <= fecha_fin_pelicula
+                ]
+
+            # Limpiar la tabla antes de cargar los datos
             self.tableWidget_pelis.setRowCount(0)
 
-            # Filas de la tabla: NombrePelicula, FechaInicio, FechaFin, Duracion, Clasificacion
+            # Insertar las películas en la tabla
             for row_number, pelicula in enumerate(peliculas):
-                # Asigna cada campo de la base de datos a una columna específica
-                id_pelicula = pelicula[0]  # ID de la película
+                id_pelicula = pelicula[0]
                 nombre = pelicula[1]
-                fecha_inicio = pelicula[6]
-                fecha_fin = pelicula[7]
+                fecha_inicio_pelicula = pelicula[6]
+                fecha_fin_pelicula = pelicula[7]
                 duracion = pelicula[8]
                 clasificacion = pelicula[9]
 
-                # Insertamos los datos en la tabla, sin incluir el ID en la columna visible
+                # Insertar cada dato en su respectiva columna
                 self.tableWidget_pelis.insertRow(row_number)
                 self.tableWidget_pelis.setItem(row_number, 0, QTableWidgetItem(str(nombre)))
-                self.tableWidget_pelis.setItem(row_number, 1, QTableWidgetItem(str(fecha_inicio)))
-                self.tableWidget_pelis.setItem(row_number, 2, QTableWidgetItem(str(fecha_fin)))
+                self.tableWidget_pelis.setItem(row_number, 1, QTableWidgetItem(str(fecha_inicio_pelicula)))
+                self.tableWidget_pelis.setItem(row_number, 2, QTableWidgetItem(str(fecha_fin_pelicula)))
                 self.tableWidget_pelis.setItem(row_number, 3, QTableWidgetItem(str(duracion)))
                 self.tableWidget_pelis.setItem(row_number, 4, QTableWidgetItem(str(clasificacion)))
 
-                # Almacenar el ID de la película como "UserRole" en el primer elemento de la fila
+                # Guardar el ID de la película en UserRole
                 self.tableWidget_pelis.item(row_number, 0).setData(Qt.UserRole, id_pelicula)
 
-            # Ajusta el ancho de las columnas al contenido
+            # Ajustar el tamaño de las columnas al contenido
             self.tableWidget_pelis.resizeColumnsToContents()
-            self.estadistica_pelicula()
 
         except Exception as e:
-            log(e, "error")
+            QMessageBox.critical(self, "Error", f"No se pudo cargar la tabla: {str(e)}")
+
+    def activar_filtro_fecha_peliculas(self):
+        """Activa el filtro de fechas al cambiar las fechas si no hay un filtro por nombre."""
+        if not self.filtro_nombre_pelicula.text().strip():  # Solo activar si no hay filtro de nombre
+            self.filtro_fecha_activado = True
+            self.cargar_peliculas_en_tabla()
+
+    def desactivar_filtros(self):
+        """Desactiva todos los filtros y muestra todas las películas."""
+        self.filtro_fecha_activado = False
+        self.filtro_nombre_pelicula.clear()
+        self.inicializar_tabla_peliculas()
+
+    def mostrar_todas_las_peliculas(self):
+        """Muestra todas las películas sin aplicar ningún filtro (botón 'Ver todo')."""
+        self.filtro_nombre_pelicula.clear()  # Limpia el filtro de nombre
+        self.filtro_fecha_activado = False  # Desactiva el filtro de fechas
+        self.inicializar_tabla_peliculas()
+
+
+
+
+
 
     def mostrar_informacion_pelicula(self):
         # Verificar si hay una película seleccionada
@@ -1009,6 +1063,7 @@ class MainWindow(QMainWindow):
 
         # Mostrar el mensaje en un QMessageBox
         QMessageBox.information(self, "Información de la Película", mensaje)
+        
     #==============================================================================================================
     # Configuracion Estadisticas Pelis
 
