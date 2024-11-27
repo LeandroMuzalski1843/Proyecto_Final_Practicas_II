@@ -210,7 +210,7 @@ class MainWindow(QMainWindow):
         self.inicializar_tabla_estadisticas()
 
         
-        
+        self.btn_actualizar_estadisticas_peliculas.clicked.connect(self.estadistica_pelicula)
         
         
         # Conectar el botón de actualizar con el método cargar_usuarios_en_tabla
@@ -229,7 +229,7 @@ class MainWindow(QMainWindow):
 
         self.btn_todo_funciones.clicked.connect(self.mostrar_todas_las_funciones_estadisticas)
         
-        self.btn_actualizar_estadisticas_f.clicked.connect(self.mostrar_todas_las_funciones_estadisticas)
+        self.btn_actualizar_estadisticas_f.clicked.connect(self.actualizar_funciones_estadisticas)
         self.filtro_fecha_funcion_esta.dateChanged.connect(self.activar_filtro_fecha_estadisticas) 
         self.filtro_fecha_funcion_esta.setCalendarPopup(True)
         self.filtro_fecha_funcion_esta.setDisplayFormat("dd/MM/yyyy")  
@@ -353,7 +353,6 @@ class MainWindow(QMainWindow):
             self.lineEdit_nombre.clear()
             self.textEdit_descripcion.clear()
             self.Butacas_disponibles.clear()
-
 
     def resizeEvent(self, event):
         """Se llama cada vez que la ventana o el QLabel cambia de tamaño."""
@@ -667,7 +666,7 @@ class MainWindow(QMainWindow):
     def actualizar_tabla_fecha(self):
         """Actualiza la tabla al confirmar la selección de una fecha."""
         self.cargar_Funciones_en_tabla()
-        self.grafico_funciones()
+
 
     def activar_filtro_fecha(self):
         """Activa el filtro de fecha cuando se cambia una fecha de filtro."""
@@ -901,40 +900,58 @@ class MainWindow(QMainWindow):
             print(f"Error al mostrar información de la función: {e}")  # Depuración
             QMessageBox.critical(self, 'Error', f'No se pudo obtener la información de la función: {e}')
 
-    def grafico_funciones(self, layout):
+    def grafico_funciones(self, layout=None):
         """
         Genera un gráfico de barras con la recaudación total por día y lo agrega al layout especificado.
+        Si no se especifica un layout, se utiliza el layout predeterminado `self.layout_grafico`.
 
         :param layout: Layout de PyQt donde se agregará el gráfico.
         """
-        datos = self.db.obtener_recaudacion_por_dia()
+        if layout is None:
+            layout = self.layout_grafico  
 
-        # Verificar si hay datos
-        if not datos:
-            print("No hay datos disponibles para la recaudación.")
-            return
+        # Limpiar el layout antes de agregar un nuevo gráfico
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
 
-        # Separar fechas y recaudaciones
-        fechas = [dato[0].strftime('%Y-%m-%d') for dato in datos]
-        recaudaciones = [dato[1] for dato in datos]
+        try:
+            # Obtener datos de la base de datos
+            datos = self.db.obtener_recaudacion_por_dia()
+            if not datos:
+                print("No hay datos disponibles para la recaudación.")
+                return
 
-        # Crear la figura 
-        fig, ax = plt.subplots(dpi=100, figsize=(3.8, 2.5), tight_layout=True, facecolor='white')
+            # Procesar datos
+            fechas = [dato[0].strftime('%Y-%m-%d') for dato in datos]
+            recaudaciones = [dato[1] for dato in datos]
 
-        # Crear el gráfico de barras
-        ax.bar(fechas, recaudaciones, color='blue')
-        ax.set_title('Recaudación Total por Día', fontsize=8)
-        ax.set_xlabel('Fecha', fontsize=7)
-        ax.set_ylabel('Recaudación ($)', fontsize=7)
-        ax.tick_params(axis='x', labelsize=6, rotation=45)
-        ax.tick_params(axis='y', labelsize=6)
+            # Crear la figura del gráfico
+            fig, ax = plt.subplots(dpi=100, figsize=(3.8, 2.5), tight_layout=True, facecolor='white')
+            ax.bar(fechas, recaudaciones, color='blue')
+            ax.set_title('Recaudación Total por Día', fontsize=8)
+            ax.set_xlabel('Fecha', fontsize=7)
+            ax.set_ylabel('Recaudación ($)', fontsize=7)
+            ax.tick_params(axis='x', labelsize=6, rotation=45)
+            ax.tick_params(axis='y', labelsize=6)
 
-        # Ajustar márgenes
-        plt.subplots_adjust(bottom=0.35)
+            # Ajustar márgenes
+            plt.subplots_adjust(bottom=0.35)
 
-        # Crear el canvas de matplotlib y agregarlo al layout
-        canvas = FigureCanvas(fig)
-        layout.addWidget(canvas)
+            # Crear el canvas de matplotlib y agregarlo al layout
+            canvas = FigureCanvas(fig)
+            layout.addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error al generar el gráfico: {e}")
+
+    def actualizar_funciones_estadisticas(self):
+        """
+        Actualiza las estadísticas y gráficos relacionados con las funciones.
+        """
+        self.mostrar_todas_las_funciones_estadisticas()  # Actualiza otras estadísticas
+        self.grafico_funciones()  # Genera y muestra el gráfico
 
 
 
@@ -1024,10 +1041,6 @@ class MainWindow(QMainWindow):
         self.filtro_nombre_pelicula.clear()  # Limpia el filtro de nombre
         self.filtro_fecha_activado = False  # Desactiva el filtro de fechas
         self.inicializar_tabla_peliculas()
-
-
-
-
 
 
     def mostrar_informacion_pelicula(self):

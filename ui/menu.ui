@@ -632,7 +632,7 @@ QPushButton:hover {
              <number>0</number>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page">
              <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -709,19 +709,6 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item>
-                       <spacer name="horizontalSpacer_8">
-                        <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>40</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                       </spacer>
-                      </item>
-                      <item>
                        <widget class="QDateEdit" name="fecha_filtro_inicio_f">
                         <property name="minimumSize">
                          <size>
@@ -732,19 +719,6 @@ QPushButton:hover {
                        </widget>
                       </item>
                       <item>
-                       <spacer name="horizontalSpacer_9">
-                        <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>18</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                       </spacer>
-                      </item>
-                      <item>
                        <widget class="QDateEdit" name="fecha_filtro_fin_f">
                         <property name="minimumSize">
                          <size>
@@ -753,19 +727,6 @@ QPushButton:hover {
                          </size>
                         </property>
                        </widget>
-                      </item>
-                      <item>
-                       <spacer name="horizontalSpacer_11">
-                        <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>40</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                       </spacer>
                       </item>
                       <item>
                        <widget class="QPushButton" name="btn_mostrar_todo_funcion">
@@ -779,19 +740,6 @@ QPushButton:hover {
                          <string>Todos</string>
                         </property>
                        </widget>
-                      </item>
-                      <item>
-                       <spacer name="horizontalSpacer_10">
-                        <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>38</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                       </spacer>
                       </item>
                      </layout>
                     </item>
@@ -1435,19 +1383,6 @@ QPushButton:hover {
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="btn_buscar_pelicula">
-                     <property name="maximumSize">
-                      <size>
-                       <width>50</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>bb</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
                     <widget class="QDateEdit" name="fecha_inicio_pelicula"/>
                    </item>
                    <item>
@@ -1845,7 +1780,7 @@ QPushButton:hover {
                  <item>
                   <widget class="QTabWidget" name="Peliculas">
                    <property name="currentIndex">
-                    <number>0</number>
+                    <number>1</number>
                    </property>
                    <widget class="QWidget" name="tab">
                     <attribute name="title">
@@ -2286,6 +2221,13 @@ p, li { white-space: pre-wrap; }
                         </item>
                         <item>
                          <widget class="QTextEdit" name="textEdit_top5_generos"/>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="btn_actualizar_estadisticas_peliculas">
+                          <property name="text">
+                           <string>Actualizar</string>
+                          </property>
+                         </widget>
                         </item>
                        </layout>
                       </widget>

@@ -38,7 +38,19 @@ class Database:
             raise Exception(f"Error durante la consulta: {e}")
         finally:
             self.desconeccion()
-    
+    def obtener_historial_usuario(self, user_id):
+        """Obtiene el historial filtrado por el usuario de la sesión actual."""
+        try:
+            self.conneccion()
+            consulta = "SELECT * FROM historial WHERE IdUsuario = %s"
+            self.cursor.execute(consulta, (user_id,))
+            return self.cursor.fetchall()
+        except Error as e:
+            log(e, "error")
+            raise Exception(f"Error durante la consulta: {e}")
+        finally:
+            self.desconeccion()
+
     def registrar_historial_usuario(self, id_usuario, accion):
         """Registra una acción general realizada por el usuario."""
         try:
@@ -65,6 +77,20 @@ class Database:
         except Error as e:
             log(e, "error")
             raise Exception(f"Error durante la consulta: {e}")
+        finally:
+            self.desconeccion()
+
+    def usuario_existe(self, nombre_usuario):
+        """Verifica si un usuario ya existe en la base de datos."""
+        try:
+            self.conneccion()
+            query = "SELECT COUNT(*) FROM usuarios WHERE NombreUsuario = %s"
+            self.cursor.execute(query, (nombre_usuario,))
+            resultado = self.cursor.fetchone()
+            return resultado[0] > 0  # Retorna True si el usuario existe
+        except Error as e:
+            log(e, "error")
+            raise Exception(f"Error al verificar la existencia del usuario: {e}")
         finally:
             self.desconeccion()
 
@@ -192,6 +218,26 @@ class Database:
             raise Exception(f"Error durante la consulta de películas: {e}")
         finally:
             self.desconeccion()
+    
+    def pelicula_existe(self, nombre_pelicula):
+        """
+        Verifica si una película con el nombre dado ya existe en la base de datos.
+
+        :param nombre_pelicula: Nombre de la película a verificar.
+        :return: True si la película existe, False en caso contrario.
+        """
+        try:
+            self.conneccion()
+            query = "SELECT COUNT(*) FROM peliculas WHERE NombrePelicula = %s"
+            self.cursor.execute(query, (nombre_pelicula,))
+            resultado = self.cursor.fetchone()
+            return resultado[0] > 0  # Retorna True si el conteo es mayor a 0
+        except Error as e:
+            log(e, "error")
+            raise Exception(f"Error al verificar si la película existe: {e}")
+        finally:
+            self.desconeccion()
+
     
     def obtener_funciones_con_nombre_peliculas(self):
         """Obtiene las funciones con los nombres de las películas, incluyendo funciones sin película asociada."""

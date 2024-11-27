@@ -590,3 +590,10 @@
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'fecha_inicio'", "severity": "ERROR", "timestamp": "2024-11-26T12:59:52Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'btn_todo_peliculas'", "severity": "ERROR", "timestamp": "2024-11-26T13:05:46Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'btn_todo_peliculas'", "severity": "ERROR", "timestamp": "2024-11-26T13:06:42Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "set_user() missing 1 required positional argument: 'grupo'", "severity": "ERROR", "timestamp": "2024-11-27T09:51:36Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MenuUser' object has no attribute 'mostrar_todos_los_datos_historial'", "severity": "ERROR", "timestamp": "2024-11-27T10:32:50Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MenuUser' object has no attribute 'comboBox_historial_usuario'", "severity": "ERROR", "timestamp": "2024-11-27T10:36:28Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MenuUser' object has no attribute 'comboBox_historial_usuario'", "severity": "ERROR", "timestamp": "2024-11-27T10:37:49Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MenuUser' object has no attribute 'cargar_datos_historial'", "severity": "ERROR", "timestamp": "2024-11-27T10:53:47Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MenuUser' object has no attribute 'btn_eliminar_usuario'", "severity": "ERROR", "timestamp": "2024-11-27T11:17:44Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MenuUser' object has no attribute 'cargar_rol_filtro'", "severity": "ERROR", "timestamp": "2024-11-27T11:18:15Z"}

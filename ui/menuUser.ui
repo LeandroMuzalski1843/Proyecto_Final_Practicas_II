@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>937</width>
-    <height>569</height>
+    <width>785</width>
+    <height>624</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -176,7 +176,7 @@ background-color:#ffff00;
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../icons/minimizar.png</normaloff>../icons/minimizar.png</iconset>
+           <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/minimizar.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/minimizar.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -215,7 +215,7 @@ background-color:#55ff00;
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../icons/restaurar.png</normaloff>../icons/restaurar.png</iconset>
+           <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/restaurar.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/restaurar.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -251,7 +251,7 @@ background-color:#55ff00;
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../icons/maximizar.png</normaloff>../icons/maximizar.png</iconset>
+           <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/maximizar.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/maximizar.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -287,7 +287,7 @@ background-color:red;
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../icons/cerrar.png</normaloff>../icons/cerrar.png</iconset>
+           <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/cerrar.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/cerrar.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -303,7 +303,7 @@ background-color:red;
     <item>
      <widget class="QFrame" name="frame_inferior">
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -384,6 +384,9 @@ QPushButton:hover {
           <property name="leftMargin">
            <number>0</number>
           </property>
+          <property name="topMargin">
+           <number>9</number>
+          </property>
           <property name="rightMargin">
            <number>0</number>
           </property>
@@ -405,11 +408,11 @@ QPushButton:hover {
              <enum>Qt::LeftToRight</enum>
             </property>
             <property name="text">
-             <string>       INICIO             </string>
+             <string>FUNCIONES</string>
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../icons/inteligencia-artificial.png</normaloff>../icons/inteligencia-artificial.png</iconset>
+              <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/inteligencia-artificial.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/inteligencia-artificial.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -460,7 +463,7 @@ QPushButton:hover {
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>PELICULAS</string>
+             <string>VENTA</string>
             </property>
             <property name="icon">
              <iconset>
@@ -486,37 +489,11 @@ QPushButton:hover {
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>FUNCIONES</string>
+             <string>PELICULAS</string>
             </property>
             <property name="icon">
              <iconset>
               <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/moto.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/moto.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="bt_cuatro">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string>HISTORIAL</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/encriptado.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/encriptado.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -553,6 +530,32 @@ QPushButton:hover {
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="bt_cuatro">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>HISTORIAL</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/encriptado.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/encriptado.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -566,7 +569,7 @@ QPushButton:hover {
            </spacer>
           </item>
           <item>
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="label_bienvenida">
             <property name="styleSheet">
              <string notr="true"/>
             </property>
@@ -579,264 +582,6 @@ QPushButton:hover {
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QStackedWidget" name="stackedWidget">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Plain</enum>
-         </property>
-         <property name="lineWidth">
-          <number>0</number>
-         </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="page">
-          <layout class="QVBoxLayout" name="verticalLayout_9">
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap>../icons/download.jpg</pixmap>
-             </property>
-             <property name="scaledContents">
-              <bool>false</bool>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="indent">
-              <number>0</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="page_uno">
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QWidget" name="widget_2" native="true">
-             <layout class="QVBoxLayout" name="verticalLayout_5">
-              <item>
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>Usuarios</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
-                 <widget class="QLineEdit" name="lineEdit"/>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_5">
-                  <property name="text">
-                   <string>PushButton</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_8">
-                  <property name="text">
-                   <string>Modificar</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QTableWidget" name="tableWidget">
-                <row>
-                 <property name="text">
-                  <string>1</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>2</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>3</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>4</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>5</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>6</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>7</string>
-                 </property>
-                </row>
-                <column>
-                 <property name="text">
-                  <string>IdUsuario</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Contraseña</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Grupo</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Fecha_Creacion</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>ETC</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>etc</string>
-                 </property>
-                </column>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="page_dos">
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);</string>
-          </property>
-          <widget class="QPushButton" name="pushButton_4">
-           <property name="geometry">
-            <rect>
-             <x>9</x>
-             <y>246</y>
-             <width>75</width>
-             <height>76</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(255, 0, 127);
-font: 87 36pt &quot;Arial Black&quot;;</string>
-           </property>
-           <property name="text">
-            <string>2</string>
-           </property>
-          </widget>
-         </widget>
-         <widget class="QWidget" name="page_tres">
-          <widget class="QPushButton" name="pushButton_3">
-           <property name="geometry">
-            <rect>
-             <x>9</x>
-             <y>246</y>
-             <width>75</width>
-             <height>76</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(255, 255, 0);
-font: 87 36pt &quot;Arial Black&quot;;</string>
-           </property>
-           <property name="text">
-            <string>3</string>
-           </property>
-          </widget>
-         </widget>
-         <widget class="QWidget" name="page_cuatro">
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);</string>
-          </property>
-          <widget class="QPushButton" name="pushButton_2">
-           <property name="geometry">
-            <rect>
-             <x>9</x>
-             <y>246</y>
-             <width>75</width>
-             <height>76</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(85, 255, 0);
-font: 87 36pt &quot;Arial Black&quot;;</string>
-           </property>
-           <property name="text">
-            <string>4</string>
-           </property>
-          </widget>
-         </widget>
-         <widget class="QWidget" name="page_cinco">
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);</string>
-          </property>
-          <widget class="QPushButton" name="pushButton">
-           <property name="geometry">
-            <rect>
-             <x>9</x>
-             <y>228</y>
-             <width>75</width>
-             <height>76</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(0, 170, 255);
-font: 87 36pt &quot;Arial Black&quot;;</string>
-           </property>
-           <property name="text">
-            <string>5</string>
-           </property>
-          </widget>
-         </widget>
         </widget>
        </item>
        <item>
@@ -869,6 +614,1433 @@ font: 87 36pt &quot;Arial Black&quot;;</string>
           <property name="bottomMargin">
            <number>0</number>
           </property>
+          <item>
+           <widget class="QStackedWidget" name="stackedWidget">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
+            </property>
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <widget class="QWidget" name="page">
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="widget_12" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_38">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QWidget" name="widget_40" native="true">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>100</height>
+                    </size>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_16">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_15">
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QComboBox" name="comboBox_idfunciones">
+                        <property name="minimumSize">
+                         <size>
+                          <width>120</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QDateEdit" name="fecha_filtro_inicio_f">
+                        <property name="minimumSize">
+                         <size>
+                          <width>120</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QDateEdit" name="fecha_filtro_fin_f">
+                        <property name="minimumSize">
+                         <size>
+                          <width>120</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_mostrar_todo_funcion">
+                        <property name="minimumSize">
+                         <size>
+                          <width>120</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Todos</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widget_41" native="true">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>550</height>
+                    </size>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_39">
+                    <item>
+                     <widget class="QTableWidget" name="tableWidget_funciones">
+                      <column>
+                       <property name="text">
+                        <string>Id Funcion</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Id Pelicula</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Fecha y Hora</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Sala</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Precio</string>
+                       </property>
+                      </column>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget_13" native="true">
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_37">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <spacer name="verticalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>88</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_agregar_funcion">
+                   <property name="text">
+                    <string>Agregar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>88</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_modificar_funcion">
+                   <property name="text">
+                    <string>Modificar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_4">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>87</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_actualizar_funcion">
+                   <property name="text">
+                    <string>Actualizar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_5">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>88</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_6">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>88</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_uno">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(255, 255, 255);</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="widget_2" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <item>
+                  <widget class="QWidget" name="widget" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_10">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="label_3">
+                      <property name="text">
+                       <string>Usuario</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_3">
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QPushButton" name="btn_actualizarUsuario">
+                        <property name="text">
+                         <string>Actualizar</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_modificar_usuario">
+                        <property name="text">
+                         <string>Modificar</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="QTableWidget" name="tableWidget_usuarios">
+                      <column>
+                       <property name="text">
+                        <string>Nombre</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Rol</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Fecha de Creación</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Fecha de Modificación</string>
+                       </property>
+                      </column>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_dos">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(255, 255, 255);</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QWidget" name="widget_5" native="true">
+                <property name="minimumSize">
+                 <size>
+                  <width>350</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_11">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QWidget" name="widget_6" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>500</height>
+                    </size>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_8">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QWidget" name="widget_8" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_12">
+                       <item>
+                        <widget class="QLabel" name="Imagen_cartelera">
+                         <property name="minimumSize">
+                          <size>
+                           <width>400</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">background-color:rgb(191, 191, 191)</string>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <layout class="QVBoxLayout" name="verticalLayout_9">
+                         <property name="spacing">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="label">
+                           <property name="text">
+                            <string>Nombre</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="lineEdit_nombre"/>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_2">
+                           <property name="text">
+                            <string>Infromacion General</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QTextEdit" name="textEdit_descripion"/>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="btn_actualizar">
+                           <property name="text">
+                            <string>Actualizar</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_14" native="true">
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_12">
+                       <property name="spacing">
+                        <number>0</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_4">
+                         <property name="spacing">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <widget class="QPushButton" name="btn_anterior">
+                           <property name="text">
+                            <string>&lt;---------------------------------------</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="btn_siguiente">
+                           <property name="text">
+                            <string>------------------------------------------------&gt;</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widget_7" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_14">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_13">
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="label_12">
+                        <property name="text">
+                         <string>Butacas Disponibles: </string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="Butacas_disponibles"/>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btn_comprar">
+                        <property name="minimumSize">
+                         <size>
+                          <width>200</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Comprar</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_tres">
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="widget_4" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_7">
+                 <item>
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string>Peliculas</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_6">
+                   <item>
+                    <widget class="QLineEdit" name="filtro_nombre_pelicula">
+                     <property name="placeholderText">
+                      <string>Nombre de la Pelicula</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QDateEdit" name="fecha_inicio_pelicula"/>
+                   </item>
+                   <item>
+                    <widget class="QDateEdit" name="fecha_fin_pelicula"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QTableWidget" name="tableWidget_pelis">
+                   <column>
+                    <property name="text">
+                     <string>Nombre</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Fecha de Inicio</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Fecha de Fin</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Duración</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Clasifiacion</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget_3" native="true">
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_6">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <spacer name="verticalSpacer_8">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>66</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_todo_peliculas">
+                   <property name="text">
+                    <string>Todo</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_9">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>66</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_agregar_pelicula">
+                   <property name="text">
+                    <string>Agregar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_10">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>66</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_informacion_pelicula">
+                   <property name="text">
+                    <string>Informacion</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_11">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>66</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_actualizar_pelicula">
+                   <property name="text">
+                    <string>Actiualizar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_12">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>66</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_cuatro">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(255, 255, 255);</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_13">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="widget_10" native="true">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>60</height>
+                 </size>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_14">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_10">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QDateEdit" name="fecha_historial">
+                     <property name="minimumSize">
+                      <size>
+                       <width>120</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="btn_actualizarH">
+                     <property name="minimumSize">
+                      <size>
+                       <width>120</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Actualizar/Todo</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget_11" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_15">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QTableWidget" name="tableWidget_historial">
+                   <column>
+                    <property name="text">
+                     <string>Fecha y Hora</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Accion</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_cinco">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(255, 255, 255);</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_17">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QWidget" name="widget_15" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_16">
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QTabWidget" name="Peliculas">
+                   <property name="currentIndex">
+                    <number>1</number>
+                   </property>
+                   <widget class="QWidget" name="tab">
+                    <attribute name="title">
+                     <string>Funciones</string>
+                    </attribute>
+                    <layout class="QHBoxLayout" name="horizontalLayout_20">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QWidget" name="widget_20" native="true">
+                       <layout class="QVBoxLayout" name="verticalLayout_20">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <layout class="QHBoxLayout" name="horizontalLayout_21">
+                          <item>
+                           <widget class="QDateEdit" name="filtro_fecha_funcion_esta"/>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="btn_todo_funciones">
+                            <property name="maximumSize">
+                             <size>
+                              <width>90</width>
+                              <height>16777215</height>
+                             </size>
+                            </property>
+                            <property name="text">
+                             <string>Todo</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
+                        <item>
+                         <widget class="QTableWidget" name="tableWidget_estadisticas_funciones">
+                          <column>
+                           <property name="text">
+                            <string>Nombre Pelicula</string>
+                           </property>
+                          </column>
+                          <column>
+                           <property name="text">
+                            <string>Fecha y Hora</string>
+                           </property>
+                          </column>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="widget_21" native="true">
+                       <property name="minimumSize">
+                        <size>
+                         <width>300</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <layout class="QVBoxLayout" name="verticalLayout_21">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QWidget" name="widget_22" native="true">
+                          <property name="maximumSize">
+                           <size>
+                            <width>16777215</width>
+                            <height>250</height>
+                           </size>
+                          </property>
+                          <layout class="QVBoxLayout" name="verticalLayout_22">
+                           <property name="spacing">
+                            <number>0</number>
+                           </property>
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <item>
+                            <widget class="QTextEdit" name="textEdit_info_funciones">
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>250</height>
+                              </size>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true">font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
+                             </property>
+                             <property name="html">
+                              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:16pt; font-weight:72; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QWidget" name="widget_23" native="true">
+                          <property name="styleSheet">
+                           <string notr="true">background-color:rgb(213, 213, 213)</string>
+                          </property>
+                          <layout class="QVBoxLayout" name="verticalLayout_24">
+                           <property name="spacing">
+                            <number>0</number>
+                           </property>
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <item>
+                            <layout class="QVBoxLayout" name="layout_grafico"/>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="btn_actualizar_estadisticas_f">
+                          <property name="text">
+                           <string>Actualizar</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="tab_2">
+                    <attribute name="title">
+                     <string>Peliculas</string>
+                    </attribute>
+                    <layout class="QHBoxLayout" name="horizontalLayout_17">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QWidget" name="widget_16" native="true">
+                       <layout class="QHBoxLayout" name="horizontalLayout_18">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QWidget" name="widget_19" native="true">
+                          <layout class="QVBoxLayout" name="verticalLayout_19">
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_19">
+                             <property name="spacing">
+                              <number>0</number>
+                             </property>
+                             <item>
+                              <widget class="QLineEdit" name="filtro_nombre_estadistica">
+                               <property name="placeholderText">
+                                <string>Nombre de la Pelicula</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QPushButton" name="btn_filtrar">
+                               <property name="text">
+                                <string>Filtrar</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </item>
+                           <item>
+                            <widget class="QTableWidget" name="tabla_estadistica_peli">
+                             <column>
+                              <property name="text">
+                               <string>N° de ID</string>
+                              </property>
+                             </column>
+                             <column>
+                              <property name="text">
+                               <string>Nombre de la Pelicula</string>
+                              </property>
+                             </column>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QPushButton" name="btn_calcular_peliculas">
+                             <property name="text">
+                              <string>Aceptar</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLabel" name="label_8">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                               <pointsize>18</pointsize>
+                               <weight>9</weight>
+                               <italic>false</italic>
+                               <bold>false</bold>
+                              </font>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                             </property>
+                             <property name="text">
+                              <string>Porcentaje de Asistencia:</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="lineEdit_porcentaje_asistencia"/>
+                           </item>
+                           <item>
+                            <widget class="QLabel" name="label_9">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                               <pointsize>18</pointsize>
+                               <weight>9</weight>
+                               <italic>false</italic>
+                               <bold>false</bold>
+                              </font>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                             </property>
+                             <property name="text">
+                              <string>Horario más Exitoso</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="lineEdit_horario_mas_exitoso"/>
+                           </item>
+                           <item>
+                            <widget class="QLabel" name="label_10">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                               <pointsize>18</pointsize>
+                               <weight>9</weight>
+                               <italic>false</italic>
+                               <bold>false</bold>
+                              </font>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                             </property>
+                             <property name="text">
+                              <string>Recaudación Historica</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="lineEdit_recaudadcion_historica"/>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QWidget" name="widget_18" native="true">
+                          <property name="maximumSize">
+                           <size>
+                            <width>10</width>
+                            <height>16777215</height>
+                           </size>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true"> background-color: #aa55ff;</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="widget_17" native="true">
+                       <property name="maximumSize">
+                        <size>
+                         <width>325</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="sizeIncrement">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <layout class="QVBoxLayout" name="verticalLayout_18">
+                        <property name="spacing">
+                         <number>0</number>
+                        </property>
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item>
+                         <widget class="QLabel" name="label_7">
+                          <property name="styleSheet">
+                           <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                          </property>
+                          <property name="text">
+                           <string>Total de Peliculas:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLineEdit" name="total_peliculas"/>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_5">
+                          <property name="font">
+                           <font>
+                            <family>MS Shell Dlg 2</family>
+                            <pointsize>18</pointsize>
+                            <weight>9</weight>
+                            <italic>false</italic>
+                            <bold>false</bold>
+                           </font>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true">font: 75 18pt &quot;MS Shell Dlg 2&quot;;</string>
+                          </property>
+                          <property name="text">
+                           <string>Top 10 Peliculas más Vistas:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QTextEdit" name="textEdit_top10_peliculas"/>
+                        </item>
+                        <item>
+                         <widget class="QLabel" name="label_6">
+                          <property name="font">
+                           <font>
+                            <family>MS Shell Dlg 2</family>
+                            <pointsize>17</pointsize>
+                            <weight>9</weight>
+                            <italic>false</italic>
+                            <bold>false</bold>
+                           </font>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true">font: 75 17pt &quot;MS Shell Dlg 2&quot;;</string>
+                          </property>
+                          <property name="text">
+                           <string>Top 5 Generos más Redituables:</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QTextEdit" name="textEdit_top5_generos"/>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="btn_actualizar_estadisticas_peliculas">
+                          <property name="text">
+                           <string>Actualizar</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

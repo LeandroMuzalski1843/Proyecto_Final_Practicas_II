@@ -95,12 +95,7 @@ class AgregarPeliculas(QtWidgets.QWidget):
         clasificacion = self.clasificacion.currentText()
         generos = self.lineEdit_generos.text().split(", ")  # Obtener géneros seleccionados como lista
 
-        # Validar que la fecha de inicio sea menor que la fecha de fin
-        if fecha_inicio >= fecha_fin:
-            self.mostrar_advertencia("La fecha de inicio debe ser menor que la fecha de fin.")
-            return
-
-        # Verificar si los campos están vacíos
+        # Validaciones iniciales
         if not nombre_pelicula:
             self.mostrar_advertencia("El campo 'Nombre de la película' está vacío.")
             return
@@ -114,13 +109,23 @@ class AgregarPeliculas(QtWidgets.QWidget):
             self.mostrar_advertencia("El campo 'Fecha de Estreno' está vacío.")
             return
         if duracion < 60:
-            self.mostrar_advertencia("La duración debe ser como mínimo 60.")
+            self.mostrar_advertencia("La duración debe ser como mínimo 60 minutos.")
             return
         if not self.imagen_seleccionada:
             self.mostrar_advertencia("No se ha seleccionado ninguna imagen.")
             return
         if not self.lineEdit_generos.text():
             self.mostrar_advertencia("No se ha seleccionado ningún género.")
+            return
+
+        # Validar que la fecha de inicio sea menor que la fecha de fin
+        if fecha_inicio >= fecha_fin:
+            self.mostrar_advertencia("La fecha de inicio debe ser menor que la fecha de fin.")
+            return
+
+        # Validar si la película ya existe
+        if self.db.pelicula_existe(nombre_pelicula):
+            self.mostrar_advertencia("La película ya existe en la base de datos.")
             return
 
         # Guardar la imagen seleccionada
@@ -139,9 +144,10 @@ class AgregarPeliculas(QtWidgets.QWidget):
         try:
             sesion = UserSession()
             id_user = sesion.get_user_id()
+
             # Insertar la película y obtener su ID
             id_pelicula = self.db.insertar_pelicula(
-                nombre_pelicula, resumen, pais_origen, fecha_estreno, duracion, clasificacion, nombre_archivo_guardado, 
+                nombre_pelicula, resumen, pais_origen, fecha_estreno, duracion, clasificacion, nombre_archivo_guardado,
                 fecha_inicio.toString("yyyy-MM-dd"), fecha_fin.toString("yyyy-MM-dd")
             )
 
@@ -159,7 +165,7 @@ class AgregarPeliculas(QtWidgets.QWidget):
             else:
                 log("Error: No se pudo obtener el ID de la película después de la inserción.", "error")
                 QMessageBox.critical(self, 'Error', 'No se pudo guardar la película correctamente.')
-            
+
             self.db.registrar_historial_usuario(id_user, self.accion)
 
         except Exception as e:
@@ -167,6 +173,7 @@ class AgregarPeliculas(QtWidgets.QWidget):
             QMessageBox.critical(self, 'Error', f'Ocurrió un error al guardar la película: {e}')
 
         self.close()
+
 
     def mostrar_advertencia(self, mensaje):
         msg_box = QMessageBox()

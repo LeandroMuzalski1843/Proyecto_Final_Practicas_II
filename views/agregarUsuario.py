@@ -29,11 +29,12 @@ class AgregarUsuario(QMainWindow):
     
     def agregar_usuario(self):
         """Obtiene los datos del formulario y los inserta en la base de datos."""
-        nombre = self.lineEdit_Nombre.text()
-        contrasena = self.lineEdit_Contrasenia.text()
-        rol = self.comboBoxUsuario.currentText() 
+        nombre = self.lineEdit_Nombre.text().strip()
+        contrasena = self.lineEdit_Contrasenia.text().strip()
+        rol = self.comboBoxUsuario.currentText()
         fecha_creacion = datetime.now()
 
+        # Validaciones iniciales
         if not nombre:
             QMessageBox.warning(self, 'Advertencia', 'El campo de nombre de usuario es obligatorio.')
             return
@@ -41,31 +42,40 @@ class AgregarUsuario(QMainWindow):
         if not contrasena:
             QMessageBox.warning(self, 'Advertencia', 'El campo de contraseña es obligatorio.')
             return
-        
+
         if not self.validar_contrasena(contrasena):
             QMessageBox.warning(self, 'Advertencia', 'La contraseña debe tener al menos 8 caracteres.')
             return
 
-        # Encriptar la contraseña
-        contrasena_encriptada = generar_password(contrasena)
-        
-        # Insertar usuario en la base de datos
+        # Validar si el usuario ya existe en la base de datos
         try:
             db = Database()
-            sesion= UserSession()
+            if db.usuario_existe(nombre):  # Supongamos que `usuario_existe` es un método en la clase Database
+                QMessageBox.warning(self, 'Advertencia', 'El nombre de usuario ya existe. Por favor, elija otro.')
+                return
+        except Exception as e:
+            log(e, "error")
+            QMessageBox.critical(self, 'Error', 'Hubo un error al verificar la existencia del usuario.')
+            return
+
+        # Encriptar la contraseña
+        contrasena_encriptada = generar_password(contrasena)
+
+        # Insertar usuario en la base de datos
+        try:
+            sesion = UserSession()
             id_user = sesion.get_user_id()
-            db.insertar_usuario(nombre, contrasena_encriptada, rol, fecha_creacion)
+            db.insertar_usuario(nombre, contrasena_encriptada, rol, fecha_creacion)  # Inserta el usuario
             QMessageBox.information(self, 'Éxito', 'Usuario agregado correctamente.')
-            db.registrar_historial_usuario(id_user,self.accion)
+
+            # Registrar la acción en el historial
+            db.registrar_historial_usuario(id_user, self.accion)
 
             self.close()
-            # Limpiar los campos después de guardar
-            # self.lineEdit_Nombre.clear()
-            # self.lineEdit_Contrasenia.clear()
-            # self.comboBoxUsuario.setCurrentText("Administrador")  # Resetear el ComboBox al valor por defecto
         except Exception as error:
-            log(error, "error")  
+            log(error, "error")
             QMessageBox.critical(self, 'Error', f"Hubo un error al agregar el usuario: {error}")
+
 
 def main():
     app = QApplication(sys.argv)

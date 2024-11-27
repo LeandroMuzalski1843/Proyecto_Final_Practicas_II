@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from views.principalAdmin import MainWindow  
-from views.principalUser import MainWindowUser
+from views.principalUser import MenuUser
 from PyQt5.QtCore import Qt
 from error.logger import log  
 from PyQt5.uic import loadUi 
@@ -66,13 +66,13 @@ class ClaseLogin(QMainWindow):
                     else:
                         # Si es un usuario normal, redirige a la ventana correspondiente
                         session = UserSession()
-                        session.set_user(user, grupo)
+                        session.set_user(id_user,user, grupo)
                         db.actualizar_ultimo_acceso(id_user)
                         db.registrar_historial_usuario(id_user,self.sesion)
 
                         self.hide()
-                        self.main_window = MainWindowUser()
-                        self.main_window.show()
+                        self.menu_user = MenuUser()
+                        self.menu_user.show()
                 else:
                     QMessageBox.warning(self, 'Error', 'Contraseña incorrecta.')
             else:
