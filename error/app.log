@@ -597,3 +597,4 @@
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MenuUser' object has no attribute 'cargar_datos_historial'", "severity": "ERROR", "timestamp": "2024-11-27T10:53:47Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MenuUser' object has no attribute 'btn_eliminar_usuario'", "severity": "ERROR", "timestamp": "2024-11-27T11:17:44Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MenuUser' object has no attribute 'cargar_rol_filtro'", "severity": "ERROR", "timestamp": "2024-11-27T11:18:15Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'ModificarPelicula' object has no attribute 'mostrar_advertencia'", "severity": "ERROR", "timestamp": "2024-11-27T11:47:04Z"}

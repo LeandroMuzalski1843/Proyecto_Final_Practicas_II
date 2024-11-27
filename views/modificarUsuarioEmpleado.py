@@ -11,24 +11,21 @@ class ModificarUsuarioE(QMainWindow):
         super(ModificarUsuarioE, self).__init__(parent)
         loadUi("ui\\modificarUsuario.ui", self)
 
-        # Inicializar base de datos
         self.db = Database()
-
-        # Conectar el botón de guardar a la función para modificar usuario
         self.btnCancelar_Modificar.clicked.connect(self.close)
         self.btnAceptar_Modificar.clicked.connect(self.modificar_usuario)
         self.accion = "Modifico un Usuario"
 
-        # Bloquear el comboBox para que no se pueda cambiar el rol
         self.comboBoxUsuario.setDisabled(True)
-
-        # Cargar datos del usuario en sesión
         self.cargar_datos_usuario_sesion()
+
+    def validar_contrasena(self, contrasena):
+        """Verifica si la contraseña cumple con los requisitos mínimos."""
+        return len(contrasena) >= 8
 
     def cargar_datos_usuario_sesion(self):
         """Carga los datos del usuario que está en sesión en los campos."""
         try:
-            # Obtener el usuario en sesión
             sesion = UserSession()
             user_id = sesion.get_user_id()
 
@@ -37,12 +34,11 @@ class ModificarUsuarioE(QMainWindow):
                 self.close()
                 return
 
-            # Consultar datos del usuario en sesión
             usuario = self.db.obtener_usuario_por_id(user_id)
 
             if usuario:
-                self.lineEdit_Nombre.setText(usuario[1])  # Nombre de usuario
-                self.lineEdit_Contrasenia.setText(usuario[2])  # Contraseña
+                self.lineEdit_Nombre.setText(usuario[1])
+                # self.lineEdit_Contrasenia.setText(usuario[2])
                 rol = usuario[3]
                 if rol == 'Administrador':
                     self.comboBoxUsuario.setCurrentIndex(0)
@@ -57,26 +53,43 @@ class ModificarUsuarioE(QMainWindow):
     def modificar_usuario(self):
         """Modifica los datos del usuario en sesión."""
         sesion = UserSession()
-        user_id = sesion.get_user_id()  # ID del usuario en sesión
-        nuevo_nombre = self.lineEdit_Nombre.text()
-        nueva_contrasena = self.lineEdit_Contrasenia.text()
-        rol = self.comboBoxUsuario.currentText()  # Rol del usuario (bloqueado, no editable)
+        user_id = sesion.get_user_id()
+        nuevo_nombre = self.lineEdit_Nombre.text().strip()
+        nueva_contrasena = self.lineEdit_Contrasenia.text().strip()
+        rol = self.comboBoxUsuario.currentText()
         fecha_modificacion = datetime.now()
 
-        if not nuevo_nombre or not nueva_contrasena:
-            QMessageBox.warning(self, 'Advertencia', 'Todos los campos son obligatorios.')
+        if not nuevo_nombre:
+            QMessageBox.warning(self, 'Advertencia', 'El campo de nombre de usuario es obligatorio.')
             return
 
+        if not nueva_contrasena:
+            QMessageBox.warning(self, 'Advertencia', 'El campo de contraseña es obligatorio.')
+            return
+
+        if not self.validar_contrasena(nueva_contrasena):
+            QMessageBox.warning(self, 'Advertencia', 'La contraseña debe tener al menos 8 caracteres.')
+            return
+
+        # Validar si el nuevo nombre de usuario ya está en uso por otro usuario
         try:
-            # Encriptar la nueva contraseña
+            # Obtener los datos actuales del usuario
+            usuario_actual = self.db.obtener_usuario_por_id(user_id)
+
+            if usuario_actual and usuario_actual[1] != nuevo_nombre:  # El nombre está siendo modificado
+                if self.db.usuario_existe(nuevo_nombre):
+                    QMessageBox.warning(self, 'Advertencia', 'El nombre de usuario ya está en uso. Por favor, elija otro.')
+                    return
+        except Exception as e:
+            log(e, "error")
+            QMessageBox.critical(self, 'Error', 'Error al verificar el nombre de usuario.')
+            return
+
+        # Proceder con la modificación
+        try:
             contrasenia_encriptada = generar_password(nueva_contrasena)
-
-            # Modificar usuario en la base de datos
             self.db.modificar_usuario(user_id, nuevo_nombre, contrasenia_encriptada, rol, fecha_modificacion)
-
-            # Registrar historial
             self.db.registrar_historial_usuario(user_id, self.accion)
-
             QMessageBox.information(self, 'Éxito', 'Datos del usuario modificados correctamente.')
             self.close()
         except Exception as e:

@@ -144,12 +144,8 @@ class ModificarPelicula(QtWidgets.QWidget):
 
     def aceptar(self):
         try:
+            # Obtener los datos del formulario
             id_pelicula = self.comboBox_peliculas.currentData()
-
-            if not id_pelicula:
-                QMessageBox.warning(self, 'Advertencia', 'Selecciona una película válida.')
-                return
-
             nombre = self.nombre_pelicula.text()
             resumen = self.textEdit_Resumen.toPlainText()
             pais = self.lineEdit_pais_origen.text()
@@ -160,19 +156,42 @@ class ModificarPelicula(QtWidgets.QWidget):
             clasificacion = self.clasificacion.currentText()
             generos = self.lineEdit_generos.text().split(", ")
 
-            # Verificación de que todos los campos obligatorios están completos
-            if not nombre or not resumen or not pais or not generos or duracion <= 60:
-                QMessageBox.warning(self, 'Advertencia', 'Por favor completa todos los campos obligatorios.')
+            # Validaciones iniciales
+            if not id_pelicula:
+                self.mostrar_advertencia("Selecciona una película válida.")
+                return
+            if not nombre:
+                self.mostrar_advertencia("El campo 'Nombre de la película' está vacío.")
+                return
+            if not resumen:
+                self.mostrar_advertencia("El campo 'Resumen' está vacío.")
+                return
+            if not pais:
+                self.mostrar_advertencia("El campo 'País de Origen' está vacío.")
+                return
+            if not estreno:
+                self.mostrar_advertencia("El campo 'Fecha de Estreno' está vacío.")
+                return
+            if duracion < 60:
+                self.mostrar_advertencia("La duración debe ser como mínimo 60 minutos.")
+                return
+            if not self.lineEdit_generos.text():
+                self.mostrar_advertencia("No se ha seleccionado ningún género.")
                 return
 
-            # Verificación de que la fecha de inicio es menor que la fecha de fin
+            # Validar que la fecha de inicio sea menor que la fecha de fin
             fecha_inicio = self.dateEdit_fecha_inicio.date()
             fecha_fin = self.dateEdit_fecha_fin.date()
             if fecha_inicio >= fecha_fin:
-                QMessageBox.warning(self, 'Advertencia', 'La fecha de inicio debe ser menor que la fecha de fin.')
+                self.mostrar_advertencia("La fecha de inicio debe ser menor que la fecha de fin.")
                 return
 
-            # Manejo de imagen seleccionada
+            # Validar si ya existe otra película con el mismo nombre
+            if nombre != self.datos_originales.get("nombre") and self.db.pelicula_existe(nombre):
+                self.mostrar_advertencia("Otra película con el mismo nombre ya existe en la base de datos.")
+                return
+
+            # Manejo de la imagen seleccionada
             if self.imagen_seleccionada:
                 nombre_imagen = os.path.basename(self.imagen_seleccionada)
                 nueva_ruta = os.path.join(self.imagenes_dir, nombre_imagen)
@@ -180,17 +199,18 @@ class ModificarPelicula(QtWidgets.QWidget):
             else:
                 nombre_imagen = self.datos_originales.get('imagen')
 
-            # Intentar modificar la película
-            sesion= UserSession()
+            # Modificar la película en la base de datos
+            sesion = UserSession()
             id_user = sesion.get_user_id()
+
             if self.db.modificar_pelicula(id_pelicula, nombre, resumen, pais, estreno, duracion,
                                         clasificacion, nombre_imagen, inicio, fin):
                 print(f"Película modificada exitosamente con ID: {id_pelicula}")
 
-                # Actualizar los géneros incluso si no se cambian otros datos
+                # Actualizar géneros
                 self.actualizar_generos(id_pelicula, generos)
-                QMessageBox.information(self, 'Éxito', 'Película y géneros actualizados correctamente.')
-                self.db.registrar_historial_usuario(id_user,self.accion)
+                QMessageBox.information(self, 'Éxito', 'Película modificada correctamente.')
+                self.db.registrar_historial_usuario(id_user, self.accion)
                 self.close()
             else:
                 QMessageBox.warning(self, 'Advertencia', 'No se realizaron cambios en la película.')
@@ -199,6 +219,12 @@ class ModificarPelicula(QtWidgets.QWidget):
             log(e, "error")
             QMessageBox.critical(self, 'Error', f'Ocurrió un error: {e}')
 
+
+    def mostrar_advertencia(self, mensaje):
+        """
+        Muestra un cuadro de advertencia con el mensaje proporcionado.
+        """
+        QMessageBox.warning(self, 'Advertencia', mensaje)
 
 
     def actualizar_generos(self, id_pelicula, generos):
