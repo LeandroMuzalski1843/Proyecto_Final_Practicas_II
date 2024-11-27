@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>785</width>
-    <height>624</height>
+    <height>615</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -412,7 +412,7 @@ QPushButton:hover {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/inteligencia-artificial.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/inteligencia-artificial.png</iconset>
+              <normaloff>../icons/tiempo-de-la-funcion.png</normaloff>../icons/tiempo-de-la-funcion.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -441,7 +441,7 @@ QPushButton:hover {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../icons/base-de-datos.png</normaloff>../icons/base-de-datos.png</iconset>
+              <normaloff>../icons/contacto.png</normaloff>../icons/contacto.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -467,7 +467,7 @@ QPushButton:hover {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../icons/chip.png</normaloff>../icons/chip.png</iconset>
+              <normaloff>../icons/ventas.png</normaloff>../icons/ventas.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -493,7 +493,7 @@ QPushButton:hover {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/moto.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/moto.png</iconset>
+              <normaloff>../icons/camara-de-video-antigua.png</normaloff>../icons/camara-de-video-antigua.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -519,7 +519,7 @@ QPushButton:hover {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/videojuego.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/videojuego.png</iconset>
+              <normaloff>../icons/grafico-de-barras.png</normaloff>../icons/grafico-de-barras.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -545,7 +545,7 @@ QPushButton:hover {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/encriptado.png</normaloff>../../Pruebas_para_Proyecto_Practicas/Menu_Lateral_desplegable_1/PyQt5-main/PyQt5-main/Menu Lateral desplegable/encriptado.png</iconset>
+              <normaloff>../icons/historial-medico.png</normaloff>../icons/historial-medico.png</iconset>
             </property>
             <property name="iconSize">
              <size>
