@@ -644,20 +644,22 @@ class MainWindow(QMainWindow):
     # Configuracion Pagina Funciones
 
     def _mapa_nombres_de_peliculas(self):
-        """Construye un diccionario IdFunciones -> NombrePelicula (o 'Película eliminada')."""
+        """Construye un diccionario IdFunciones -> NombrePelicula (solo las no eliminadas)."""
         nombre_map = {}
         try:
             funciones_nombres = self.db.obtener_funciones_con_nombre_peliculas()
             for fila in funciones_nombres:
                 id_funcion = fila[0]
-                nombre_pelicula = fila[1] if fila[1] is not None else "Película eliminada"
+                nombre_pelicula = fila[1]
+                if nombre_pelicula is None or nombre_pelicula == "Película eliminada":
+                    continue  # saltar las funciones con película eliminada
                 nombre_map[id_funcion] = nombre_pelicula
         except Exception as e:
             log(e, "warning")
         return nombre_map
 
     def cargar_id_funciones_en_comboBox(self):
-        """Carga todos los IDs de funciones en el comboBox_idfunciones con formato: Función: "x" - Película: "x"."""
+        """Carga todos los IDs de funciones en el comboBox con formato: Función: "x" - Película: "x", excluyendo películas eliminadas."""
         try:
             funciones = self.db.obtener_funciones()
             nombre_map = self._mapa_nombres_de_peliculas()
@@ -667,14 +669,15 @@ class MainWindow(QMainWindow):
 
             for funcion in funciones:
                 id_funcion = funcion[0]
-                nombre_pelicula = nombre_map.get(id_funcion, "Película eliminada")
+                nombre_pelicula = nombre_map.get(id_funcion)
+                if not nombre_pelicula:
+                    continue  # excluye funciones con película eliminada o sin mapeo válido
                 texto_mostrado = f'Función: "{id_funcion}" - Película: "{nombre_pelicula}"'
                 self.comboBox_idfunciones.addItem(texto_mostrado, id_funcion)
 
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar los IDs de funciones en el comboBox.')
-
 
 
     def actualizar_tabla_comboBox(self):
@@ -692,7 +695,7 @@ class MainWindow(QMainWindow):
         self.cargar_Funciones_en_tabla()
 
     def cargar_Funciones_en_tabla(self):
-        """Carga las funciones en la tabla aplicando filtros de ID y fechas solo si están activados."""
+        """Carga las funciones en la tabla aplicando filtros de ID y fechas solo si están activados. Excluye funciones cuya película fue eliminada."""
         try:
             if not self.db:
                 return
@@ -710,6 +713,9 @@ class MainWindow(QMainWindow):
                 fecha_inicio = self.fecha_filtro_inicio_f.date().toPyDate()
                 fecha_fin = self.fecha_filtro_fin_f.date().toPyDate()
                 funciones = [funcion for funcion in funciones if fecha_inicio <= funcion[2].date() <= fecha_fin]
+
+            # Excluir funciones cuya película está eliminada (no está en nombre_map)
+            funciones = [f for f in funciones if f[0] in nombre_map]
 
             self.tableWidget_funciones.setRowCount(0)  # Limpiar la tabla
 
@@ -731,8 +737,7 @@ class MainWindow(QMainWindow):
                 else:
                     color = QColor("darkgreen")
 
-                # Usar el nombre desde el mapa (fallback a lo que ya tenías)
-                pelicula = nombre_map.get(id_funcion, row_data[1] if row_data[1] is not None else "Película eliminada")
+                pelicula = nombre_map.get(id_funcion, "Película eliminada")  # seguro está en el mapa
 
                 datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], row_data[4], butacas_vendidas]
 
@@ -751,11 +756,15 @@ class MainWindow(QMainWindow):
                 log(e, "error")
                 QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
 
+
     def mostrar_todas_las_funciones(self):
-        """Muestra todas las funciones en la tabla sin aplicar filtros."""
+        """Muestra todas las funciones en la tabla sin aplicar filtros, excluyendo las de películas eliminadas."""
         try:
             funciones = self.db.obtener_funciones()
             nombre_map = self._mapa_nombres_de_peliculas()
+
+            # Filtrar para quitar las funciones con película eliminada
+            funciones = [f for f in funciones if f[0] in nombre_map]
 
             self.tableWidget_funciones.setRowCount(0)
 
@@ -777,7 +786,7 @@ class MainWindow(QMainWindow):
                 else:
                     color = QColor("darkgreen")
 
-                pelicula = nombre_map.get(id_funcion, row_data[1] if row_data[1] is not None else "Película eliminada")
+                pelicula = nombre_map.get(id_funcion, "Película eliminada")
 
                 datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], row_data[4], butacas_vendidas]
 
