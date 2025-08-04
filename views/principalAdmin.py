@@ -643,23 +643,38 @@ class MainWindow(QMainWindow):
     #==============================================================================================================
     # Configuracion Pagina Funciones
 
+    def _mapa_nombres_de_peliculas(self):
+        """Construye un diccionario IdFunciones -> NombrePelicula (o 'Película eliminada')."""
+        nombre_map = {}
+        try:
+            funciones_nombres = self.db.obtener_funciones_con_nombre_peliculas()
+            for fila in funciones_nombres:
+                id_funcion = fila[0]
+                nombre_pelicula = fila[1] if fila[1] is not None else "Película eliminada"
+                nombre_map[id_funcion] = nombre_pelicula
+        except Exception as e:
+            log(e, "warning")
+        return nombre_map
+
     def cargar_id_funciones_en_comboBox(self):
-        """Carga todos los IDs de funciones en el comboBox_idfunciones con nombre de película (o mensaje si fue eliminada)."""
+        """Carga todos los IDs de funciones en el comboBox_idfunciones con formato: Función: "x" - Película: "x"."""
         try:
             funciones = self.db.obtener_funciones()
+            nombre_map = self._mapa_nombres_de_peliculas()
 
             self.comboBox_idfunciones.clear()
             self.comboBox_idfunciones.addItem("Todas las funciones", None)  # Opción general
 
             for funcion in funciones:
                 id_funcion = funcion[0]
-                nombre_pelicula = funcion[1] if funcion[1] is not None else "Película eliminada"
-                texto_mostrado = f"{id_funcion} - {nombre_pelicula}"
+                nombre_pelicula = nombre_map.get(id_funcion, "Película eliminada")
+                texto_mostrado = f'Función: "{id_funcion}" - Película: "{nombre_pelicula}"'
                 self.comboBox_idfunciones.addItem(texto_mostrado, id_funcion)
 
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar los IDs de funciones en el comboBox.')
+
 
 
     def actualizar_tabla_comboBox(self):
@@ -683,6 +698,7 @@ class MainWindow(QMainWindow):
                 return
 
             funciones = self.db.obtener_funciones()  # Obtener funciones desde la base de datos
+            nombre_map = self._mapa_nombres_de_peliculas()
 
             # Filtrar por ID si hay uno seleccionado
             id_funcion_seleccionado = self.comboBox_idfunciones.currentData()
@@ -706,10 +722,17 @@ class MainWindow(QMainWindow):
                 butacas_vendidas = len(asientos_reservados)
                 porcentaje_vendido = (butacas_vendidas / total_butacas) * 100
 
-                color = QColor("red") if porcentaje_vendido <= 40 else QColor("orange") if porcentaje_vendido <= 60 else QColor("lightgreen") if porcentaje_vendido <= 80 else QColor("darkgreen")
+                if porcentaje_vendido <= 40:
+                    color = QColor("red")
+                elif porcentaje_vendido <= 60:
+                    color = QColor("orange")
+                elif porcentaje_vendido <= 80:
+                    color = QColor("lightgreen")
+                else:
+                    color = QColor("darkgreen")
 
-                # Verificar si la película fue eliminada
-                pelicula = row_data[1] if row_data[1] is not None else "Película eliminada"
+                # Usar el nombre desde el mapa (fallback a lo que ya tenías)
+                pelicula = nombre_map.get(id_funcion, row_data[1] if row_data[1] is not None else "Película eliminada")
 
                 datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], row_data[4], butacas_vendidas]
 
@@ -732,6 +755,8 @@ class MainWindow(QMainWindow):
         """Muestra todas las funciones en la tabla sin aplicar filtros."""
         try:
             funciones = self.db.obtener_funciones()
+            nombre_map = self._mapa_nombres_de_peliculas()
+
             self.tableWidget_funciones.setRowCount(0)
 
             for row_number, row_data in enumerate(funciones):
@@ -743,10 +768,16 @@ class MainWindow(QMainWindow):
                 butacas_vendidas = len(asientos_reservados)
                 porcentaje_vendido = (butacas_vendidas / total_butacas) * 100
 
-                color = QColor("red") if porcentaje_vendido <= 40 else QColor("orange") if porcentaje_vendido <= 60 else QColor("lightgreen") if porcentaje_vendido <= 80 else QColor("darkgreen")
+                if porcentaje_vendido <= 40:
+                    color = QColor("red")
+                elif porcentaje_vendido <= 60:
+                    color = QColor("orange")
+                elif porcentaje_vendido <= 80:
+                    color = QColor("lightgreen")
+                else:
+                    color = QColor("darkgreen")
 
-                # Verificar si la película fue eliminada
-                pelicula = row_data[1] if row_data[1] is not None else "Película eliminada"
+                pelicula = nombre_map.get(id_funcion, row_data[1] if row_data[1] is not None else "Película eliminada")
 
                 datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], row_data[4], butacas_vendidas]
 
