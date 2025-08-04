@@ -294,7 +294,7 @@ class MainWindow(QMainWindow):
 
             self.indice_pelicula = 0
         else:
-            print("No hay funciones programadas a partir de hoy.")
+            # print("No hay funciones programadas a partir de hoy.")
             self.funciones_detalladas = []
             self.indice_pelicula = -1
             self.Imagen_cartelera.setText("No hay funciones programadas.")
@@ -624,12 +624,12 @@ class MainWindow(QMainWindow):
 
     def filtrar_por_usuario(self):
         """Filtra los registros del historial según el usuario seleccionado."""
-        print("Método filtrar_por_usuario llamado")
+        # print("Método filtrar_por_usuario llamado")
         self.cargar_datos_historial()
 
     def filtrar_por_fecha(self):
         """Filtra los registros del historial según la fecha seleccionada."""
-        print("Método filtrar_por_fecha llamado")
+        # print("Método filtrar_por_fecha llamado")
         self.filtro_fecha_activado = True
         self.cargar_datos_historial()
 
@@ -644,20 +644,23 @@ class MainWindow(QMainWindow):
     # Configuracion Pagina Funciones
 
     def cargar_id_funciones_en_comboBox(self):
-        """Carga todos los IDs de funciones en el comboBox_idfunciones."""
+        """Carga todos los IDs de funciones en el comboBox_idfunciones con nombre de película (o mensaje si fue eliminada)."""
         try:
-            funciones = self.db.obtener_funciones()  # Obtener todas las funciones
+            funciones = self.db.obtener_funciones()
 
             self.comboBox_idfunciones.clear()
-            self.comboBox_idfunciones.addItem("Todas las funciones", None)  # Opción de selección general
+            self.comboBox_idfunciones.addItem("Todas las funciones", None)  # Opción general
 
             for funcion in funciones:
                 id_funcion = funcion[0]
-                self.comboBox_idfunciones.addItem(str(id_funcion), id_funcion)
+                nombre_pelicula = funcion[1] if funcion[1] is not None else "Película eliminada"
+                texto_mostrado = f"{id_funcion} - {nombre_pelicula}"
+                self.comboBox_idfunciones.addItem(texto_mostrado, id_funcion)
 
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar los IDs de funciones en el comboBox.')
+
 
     def actualizar_tabla_comboBox(self):
         """Actualiza la tabla según la selección del comboBox de funciones."""
@@ -694,7 +697,6 @@ class MainWindow(QMainWindow):
 
             self.tableWidget_funciones.setRowCount(0)  # Limpiar la tabla
 
-            # Insertar datos en la tabla (incluyendo el ID de la función, pero ocultándolo)
             for row_number, row_data in enumerate(funciones):
                 self.tableWidget_funciones.insertRow(row_number)
 
@@ -704,23 +706,21 @@ class MainWindow(QMainWindow):
                 butacas_vendidas = len(asientos_reservados)
                 porcentaje_vendido = (butacas_vendidas / total_butacas) * 100
 
-                # Seleccionar color según porcentaje de butacas vendidas
                 color = QColor("red") if porcentaje_vendido <= 40 else QColor("orange") if porcentaje_vendido <= 60 else QColor("lightgreen") if porcentaje_vendido <= 80 else QColor("darkgreen")
 
-                # Agregar datos a la tabla (incluyendo el ID, pero ocultándolo visualmente)
-                datos_visibles = [row_data[0], row_data[1], row_data[2], row_data[3], row_data[4], butacas_vendidas]
+                # Verificar si la película fue eliminada
+                pelicula = row_data[1] if row_data[1] is not None else "Película eliminada"
+
+                datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], row_data[4], butacas_vendidas]
 
                 for column_number, data in enumerate(datos_visibles):
                     item = QTableWidgetItem(str(data))
                     if column_number == 0:
-                        item.setData(Qt.UserRole, id_funcion)  # Guardar el ID en UserRole
+                        item.setData(Qt.UserRole, id_funcion)
                     item.setBackground(color)
                     self.tableWidget_funciones.setItem(row_number, column_number, item)
 
-            # Ocultar la columna del ID de la función para que no sea visible
             self.tableWidget_funciones.setColumnHidden(0, True)
-
-            # Ajustar el ancho de las columnas al contenido
             self.tableWidget_funciones.resizeColumnsToContents()
 
         except Exception as e:
@@ -732,10 +732,8 @@ class MainWindow(QMainWindow):
         """Muestra todas las funciones en la tabla sin aplicar filtros."""
         try:
             funciones = self.db.obtener_funciones()
-
             self.tableWidget_funciones.setRowCount(0)
 
-            # Insertar funciones en la tabla (incluyendo el ID de la función, pero ocultándolo visualmente)
             for row_number, row_data in enumerate(funciones):
                 self.tableWidget_funciones.insertRow(row_number)
 
@@ -745,30 +743,27 @@ class MainWindow(QMainWindow):
                 butacas_vendidas = len(asientos_reservados)
                 porcentaje_vendido = (butacas_vendidas / total_butacas) * 100
 
-                # Seleccionar color según porcentaje de butacas vendidas
                 color = QColor("red") if porcentaje_vendido <= 40 else QColor("orange") if porcentaje_vendido <= 60 else QColor("lightgreen") if porcentaje_vendido <= 80 else QColor("darkgreen")
 
-                # Agregar datos a la tabla (incluyendo el ID, pero ocultándolo visualmente)
-                datos_visibles = [row_data[0], row_data[1], row_data[2], row_data[3], row_data[4], butacas_vendidas]
+                # Verificar si la película fue eliminada
+                pelicula = row_data[1] if row_data[1] is not None else "Película eliminada"
+
+                datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], row_data[4], butacas_vendidas]
 
                 for column_number, data in enumerate(datos_visibles):
                     item = QTableWidgetItem(str(data))
                     if column_number == 0:
-                        item.setData(Qt.UserRole, id_funcion)  # Guardar el ID en UserRole
+                        item.setData(Qt.UserRole, id_funcion)
                     item.setBackground(color)
                     self.tableWidget_funciones.setItem(row_number, column_number, item)
 
-            # Ocultar la columna del ID de la función para que no sea visible
             self.tableWidget_funciones.setColumnHidden(0, True)
-
-            # Ajustar el ancho de las columnas al contenido
             self.tableWidget_funciones.resizeColumnsToContents()
 
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo mostrar todas las funciones en la tabla.')
 
-    
 
     #==============================================================================================================
     # Configuracion Estadisticas Funciones
@@ -787,13 +782,13 @@ class MainWindow(QMainWindow):
     def mostrar_todas_las_funciones_estadisticas(self):
         self.filtro_fecha_activado = False
         self.cargar_funciones_tabla_estadisticas()
-        print("Filtro desactivado. Mostrando todas las funciones.")
+        # print("Filtro desactivado. Mostrando todas las funciones.")
 
     def cargar_funciones_tabla_estadisticas(self):
         """Carga las funciones en la tabla de estadísticas, aplicando o no los filtros según corresponda."""
         try:
             if not self.db:
-                print("No se encontró la conexión a la base de datos.")
+                # print("No se encontró la conexión a la base de datos.")
                 return
 
             # Obtener todas las funciones de la base de datos
@@ -801,7 +796,7 @@ class MainWindow(QMainWindow):
 
             # Si no hay funciones, limpiar la tabla y salir
             if not funciones:
-                print("No se encontraron funciones para cargar.")
+                # print("No se encontraron funciones para cargar.")
                 self.tableWidget_estadisticas_funciones.setRowCount(0)
                 return
 
@@ -815,7 +810,7 @@ class MainWindow(QMainWindow):
 
             # Si no hay funciones después del filtro, dejar la tabla vacía
             if not funciones:
-                print("No hay funciones para mostrar después del filtro.")
+                # print("No hay funciones para mostrar después del filtro.")
                 return
 
             # Insertar funciones en la tabla
@@ -845,10 +840,10 @@ class MainWindow(QMainWindow):
             # Ajustar el ancho de las columnas
             self.tableWidget_estadisticas_funciones.resizeColumnsToContents()
 
-            print(f"Se cargaron {len(funciones)} funciones en la tabla.")
+            # print(f"Se cargaron {len(funciones)} funciones en la tabla.")
 
         except Exception as e:
-            print(f"Error general al cargar la tabla: {e}")
+            # print(f"Error general al cargar la tabla: {e}")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
 
     def mostrar_resumen_funcion_seleccionada(self, item):
@@ -856,10 +851,10 @@ class MainWindow(QMainWindow):
         try:
             row = item.row()
             funcion_id = self.tableWidget_estadisticas_funciones.item(row, 0).data(Qt.UserRole)
-            print(f"Función seleccionada, ID: {funcion_id}")  # Depuración
+            # print(f"Función seleccionada, ID: {funcion_id}")  # Depuración
             self.mostrar_informacion_funcion(funcion_id)
         except Exception as e:
-            print(f"Error al mostrar el resumen: {e}")  # Depuración
+            # print(f"Error al mostrar el resumen: {e}")  # Depuración
             QMessageBox.critical(self, "Error", f"Ocurrió un error al mostrar el resumen: {e}")
 
     def mostrar_informacion_funcion(self, funcion_id):
@@ -897,7 +892,7 @@ class MainWindow(QMainWindow):
                 QMessageBox.warning(self, "Advertencia", "No se encontró información para la función seleccionada.")
 
         except Exception as e:
-            print(f"Error al mostrar información de la función: {e}")  # Depuración
+            # print(f"Error al mostrar información de la función: {e}")  # Depuración
             QMessageBox.critical(self, 'Error', f'No se pudo obtener la información de la función: {e}')
 
     def grafico_funciones(self, layout=None):
@@ -920,7 +915,7 @@ class MainWindow(QMainWindow):
             # Obtener datos de la base de datos
             datos = self.db.obtener_recaudacion_por_dia()
             if not datos:
-                print("No hay datos disponibles para la recaudación.")
+                # print("No hay datos disponibles para la recaudación.")
                 return
 
             # Procesar datos
@@ -1086,15 +1081,15 @@ class MainWindow(QMainWindow):
             porcentaje_asistencia, capacidad_total, total_vendidos = self.db.calcular_porcentaje_asistencia(id_pelicula)
 
             # Imprimir resultados para depuración
-            print(f"ID Película: {id_pelicula}")
-            print(f"Capacidad Total: {capacidad_total}, Total Vendidos: {total_vendidos}")
+            # print(f"ID Película: {id_pelicula}")
+            # print(f"Capacidad Total: {capacidad_total}, Total Vendidos: {total_vendidos}")
 
             # Actualizar los elementos de la interfaz con los datos calculados
             self.lineEdit_porcentaje_asistencia.setText(f"{porcentaje_asistencia:.2f}%")
             self.lineEdit_capacidad_total.setText(str(capacidad_total))
             self.lineEdit_total_vendidos.setText(str(total_vendidos))
 
-            print(f"Porcentaje calculado: {porcentaje_asistencia:.2f}%")
+            # print(f"Porcentaje calculado: {porcentaje_asistencia:.2f}%")
         except Exception as e:
             print(f"Error al actualizar estadísticas: {e}")
 
