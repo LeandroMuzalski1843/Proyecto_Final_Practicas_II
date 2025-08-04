@@ -437,7 +437,7 @@ QPushButton:hover {
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>USUARIOS</string>
+             <string>USUARIO</string>
             </property>
             <property name="icon">
              <iconset>

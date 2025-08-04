@@ -446,11 +446,17 @@ class MainWindow(QMainWindow):
                 fecha_creacion = row_data[4]       # FechaCreacion
                 fecha_modificacion = row_data[5]   # FechaModificacion
 
+                # Normalizar fecha de modificación
+                if fecha_modificacion is None or (isinstance(fecha_modificacion, str) and fecha_modificacion.strip() == ""):
+                    texto_modificacion = "Sin modificaciones registradas"
+                else:
+                    texto_modificacion = str(fecha_modificacion)
+
                 # Insertar datos en la tabla
                 self.tableWidget_usuarios.setItem(row_number, 0, QTableWidgetItem(str(nombre_usuario)))
                 self.tableWidget_usuarios.setItem(row_number, 1, QTableWidgetItem(str(grupo)))
                 self.tableWidget_usuarios.setItem(row_number, 2, QTableWidgetItem(str(fecha_creacion)))
-                self.tableWidget_usuarios.setItem(row_number, 3, QTableWidgetItem(str(fecha_modificacion)))
+                self.tableWidget_usuarios.setItem(row_number, 3, QTableWidgetItem(texto_modificacion))
 
             # Ajustar el tamaño de las columnas
             self.tableWidget_usuarios.resizeColumnsToContents()
@@ -458,6 +464,7 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             QMessageBox.critical(self, 'Error', f'Error al cargar usuarios: {str(e)}')
+
 
     def cargar_rol_filtro(self):
         """
