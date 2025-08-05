@@ -252,7 +252,7 @@ class MainWindow(QMainWindow):
 
 
 #==============================================================================================================
-#Venta de Entradas
+#Venta de Entradas TODO
 
     def actualizar_cartelera(self):
         """Carga las funciones desde hoy en adelante y actualiza las imágenes de la cartelera."""
@@ -374,7 +374,7 @@ class MainWindow(QMainWindow):
 
     #==============================================================================================================
     
-    # Configuracion Pagina Usuario
+    # Configuracion Pagina Usuario TODO
     def abrir_agregar_usuario(self):
         self.agregar_usuario = AgregarUsuario(self)
         self.agregar_usuario.show()
@@ -423,7 +423,7 @@ class MainWindow(QMainWindow):
         
 
     #==============================================================================================================
-    # Configuracion Pagina Usuarios 
+    # Configuracion Pagina Usuarios TODO
 
     def cargar_usuarios_en_tabla(self, filtros=None):
         """
@@ -517,7 +517,7 @@ class MainWindow(QMainWindow):
 
 
     #==============================================================================================================
-    # Configuracion Pagina Historial
+    # Configuracion Pagina Historial TODO
     
     def cargar_usuarios_en_comboBox(self):
         """Carga todos los usuarios en el comboBox_historial_usuario."""
@@ -648,7 +648,7 @@ class MainWindow(QMainWindow):
 
     
     #==============================================================================================================
-    # Configuracion Pagina Funciones
+    # Configuracion Pagina Funciones TODO
 
     def _mapa_nombres_de_peliculas(self):
         """Construye un diccionario IdFunciones -> NombrePelicula (solo las no eliminadas)."""
@@ -813,7 +813,7 @@ class MainWindow(QMainWindow):
 
 
     #==============================================================================================================
-    # Configuracion Estadisticas Funciones
+    # Configuracion Estadisticas Funciones TODO
 
     def inicializar_tabla_estadisticas(self):
         """Inicializa la tabla de estadísticas desactivando el filtro de fecha y mostrando todas las funciones."""
@@ -923,11 +923,15 @@ class MainWindow(QMainWindow):
                 butacas_restantes = total_butacas - butacas_vendidas
                 dinero_recaudado = precio_funcion * butacas_vendidas
 
+                # Formatear con puntos como separadores de miles
+                def formatear(valor):
+                    return format(valor, ",").replace(",", ".")
+
                 mensaje = (
                     f"ID de la función: {funcion_id}\n"
-                    f"Butacas vendidas: {butacas_vendidas}\n"
-                    f"Butacas restantes: {butacas_restantes}\n"
-                    f"Dinero recaudado: ${dinero_recaudado:.2f}\n"
+                    f"Butacas vendidas: {formatear(butacas_vendidas)}\n"
+                    f"Butacas restantes: {formatear(butacas_restantes)}\n"
+                    f"Dinero recaudado: ${formatear(round(dinero_recaudado, 2))}\n"
                 )
 
                 if fecha_hora_funcion < datetime.now():
@@ -939,7 +943,6 @@ class MainWindow(QMainWindow):
                 QMessageBox.warning(self, "Advertencia", "No se encontró información para la función seleccionada.")
 
         except Exception as e:
-            # print(f"Error al mostrar información de la función: {e}")  # Depuración
             QMessageBox.critical(self, 'Error', f'No se pudo obtener la información de la función: {e}')
 
     def grafico_funciones(self, layout=None):
@@ -1001,7 +1004,7 @@ class MainWindow(QMainWindow):
 
 
     #==============================================================================================================
-    # Configuracion Pagina Pelis
+    # Configuracion Pagina Pelis TODO
 
     def inicializar_tabla_peliculas(self):
         """Inicializa la tabla de películas mostrando todas las películas sin filtros."""
@@ -1120,7 +1123,7 @@ class MainWindow(QMainWindow):
         QMessageBox.information(self, "Información de la Película", mensaje)
         
     #==============================================================================================================
-    # Configuracion Estadisticas Pelis
+    # Configuracion Estadisticas Pelis TODO
 
     def actualizar_estadisticas(self, id_pelicula):
         try:
@@ -1327,7 +1330,7 @@ class MainWindow(QMainWindow):
             return None
 
     #==============================================================================================================
-    #                         Configuracion - [] X
+    #        TODO                Configuracion - [] X
 
     # Método para minimizar la ventana
     def control_bt_minimizar(self):
@@ -1393,4 +1396,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
