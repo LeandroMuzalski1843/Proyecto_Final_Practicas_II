@@ -603,3 +603,4 @@
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "argument 1 has unexpected type 'QLineEdit'", "severity": "ERROR", "timestamp": "2025-08-05T10:51:30Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'aplicar_filtros'", "severity": "ERROR", "timestamp": "2025-08-05T10:51:49Z"}
 {"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'aplicar_filtros_en_memoria'", "severity": "ERROR", "timestamp": "2025-08-05T10:59:59Z"}
+{"name": "error.logger", "filename": "logger.py", "lineno": 33, "message": "'MainWindow' object has no attribute 'estadistica_pelicula'", "severity": "ERROR", "timestamp": "2025-08-06T06:07:01Z"}
