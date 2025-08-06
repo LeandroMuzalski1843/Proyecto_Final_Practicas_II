@@ -831,7 +831,6 @@ class MenuUser(QMainWindow):
         """Carga las funciones en la tabla de estadísticas, aplicando o no los filtros según corresponda."""
         try:
             if not self.db:
-                # print("No se encontró la conexión a la base de datos.")
                 return
 
             # Obtener todas las funciones de la base de datos
@@ -839,7 +838,6 @@ class MenuUser(QMainWindow):
 
             # Si no hay funciones, limpiar la tabla y salir
             if not funciones:
-                # print("No se encontraron funciones para cargar.")
                 self.tableWidget_estadisticas_funciones.setRowCount(0)
                 return
 
@@ -848,12 +846,14 @@ class MenuUser(QMainWindow):
                 fecha_seleccionada = self.filtro_fecha_funcion_esta.date().toPyDate()
                 funciones = [funcion for funcion in funciones if funcion[2].date() == fecha_seleccionada]
 
+            # ✅ Ordenar funciones por fecha y hora (descendente: más recientes primero)
+            funciones.sort(key=lambda x: x[2], reverse=True)
+
             # Limpiar la tabla antes de cargar datos
             self.tableWidget_estadisticas_funciones.setRowCount(0)
 
             # Si no hay funciones después del filtro, dejar la tabla vacía
             if not funciones:
-                # print("No hay funciones para mostrar después del filtro.")
                 return
 
             # Insertar funciones en la tabla
@@ -883,10 +883,7 @@ class MenuUser(QMainWindow):
             # Ajustar el ancho de las columnas
             self.tableWidget_estadisticas_funciones.resizeColumnsToContents()
 
-            # print(f"Se cargaron {len(funciones)} funciones en la tabla.")
-
         except Exception as e:
-            # print(f"Error general al cargar la tabla: {e}")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
 
     def mostrar_resumen_funcion_seleccionada(self, item):
@@ -993,6 +990,9 @@ class MenuUser(QMainWindow):
         """
         self.mostrar_todas_las_funciones_estadisticas()  # Actualiza otras estadísticas
         self.grafico_funciones()  # Genera y muestra el gráfico
+
+
+
 
 
 
