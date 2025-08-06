@@ -489,33 +489,54 @@ class MainWindow(QMainWindow):
 
     def aplicar_filtros(self):
         """
-        Aplica los filtros a la tabla. Prioriza el filtro por nombre sobre los demás.
-        Los filtros solo se aplican al presionar el botón 'btn_buscar_usuario'.
+        Aplica los filtros en orden de prioridad:
+        1. Nombre (si hay texto)
+        2. Grupo + Fecha (si están activos)
+        3. Todos los usuarios si no hay filtros activos o resultado vacío
         """
-        # Obtener el texto del campo de nombre
         nombre = self.nombre_filtro_usuario.text().strip()
+        grupo = self.comboBox_filtro_usuario.currentText()
+        fecha_creacion = self.fecha_creacion_filtro_usuario.date().toString("yyyy-MM-dd") \
+            if self.fecha_creacion_filtro_usuario.date().isValid() else None
 
-        # Verificar si el filtro por nombre tiene prioridad
-        if nombre:  
-            # Si hay un nombre, se desactivan los otros filtros
+        filtros = None
+
+        # --- PRIORIDAD 1: FILTRO POR NOMBRE ---
+        if nombre:
             filtros = {"nombre": nombre}
+
+        # --- PRIORIDAD 2: FILTRO POR GRUPO Y/O FECHA ---
+        elif (grupo and grupo != "Seleccionar Categoría") or (fecha_creacion and fecha_creacion != ""):
+            filtros = {}
+            if grupo and grupo != "Seleccionar Categoría":
+                filtros["grupo"] = grupo
+            if fecha_creacion:
+                filtros["fecha_creacion"] = fecha_creacion
+
+        # --- PRIORIDAD 3: SIN FILTROS → TODOS LOS USUARIOS ---
         else:
-            # Si no hay filtro por nombre, considerar grupo y fecha
-            grupo = self.comboBox_filtro_usuario.currentText()
-            if grupo == "Seleccionar Categoría":  # Si no se seleccionó un grupo específico
-                grupo = None
+            filtros = None
 
-            fecha_creacion = self.fecha_creacion_filtro_usuario.date().toString("yyyy-MM-dd") \
-                if self.fecha_creacion_filtro_usuario.date().isValid() else None
+        # Cargar la tabla
+        usuarios = self.db.obtener_usuarios(filtros)
 
-            # Crear diccionario de filtros sin nombre
-            filtros = {
-                "fecha_creacion": fecha_creacion,
-                "grupo": grupo,
-            }
+        # --- FALLBACK: SI NO HAY RESULTADOS CON FILTROS, MOSTRAR TODOS ---
+        if not usuarios and not nombre:
+            usuarios = self.db.obtener_usuarios(None)
 
-        # Recargar la tabla con los filtros aplicados
-        self.cargar_usuarios_en_tabla(filtros=filtros)
+        # Llenar la tabla
+        self.tableWidget_usuarios.setRowCount(0)
+        for row_number, row_data in enumerate(usuarios):
+            self.tableWidget_usuarios.insertRow(row_number)
+            self.tableWidget_usuarios.setItem(row_number, 0, QTableWidgetItem(str(row_data[1])))  # NombreUsuario
+            self.tableWidget_usuarios.setItem(row_number, 1, QTableWidgetItem(str(row_data[3])))  # Grupo
+            self.tableWidget_usuarios.setItem(row_number, 2, QTableWidgetItem(str(row_data[4])))  # Fecha Creación
+            fecha_modificacion = row_data[5] or "Sin modificaciones registradas"
+            self.tableWidget_usuarios.setItem(row_number, 3, QTableWidgetItem(str(fecha_modificacion)))
+
+        self.tableWidget_usuarios.resizeColumnsToContents()
+        self.tableWidget_usuarios.resizeRowsToContents()
+
 
 
     #==============================================================================================================
