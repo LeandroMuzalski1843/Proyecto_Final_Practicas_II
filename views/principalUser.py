@@ -825,13 +825,13 @@ class MenuUser(QMainWindow):
     def mostrar_todas_las_funciones_estadisticas(self):
         self.filtro_fecha_activado = False
         self.cargar_funciones_tabla_estadisticas()
-        print("Filtro desactivado. Mostrando todas las funciones.")
+        # print("Filtro desactivado. Mostrando todas las funciones.")
 
     def cargar_funciones_tabla_estadisticas(self):
         """Carga las funciones en la tabla de estadísticas, aplicando o no los filtros según corresponda."""
         try:
             if not self.db:
-                print("No se encontró la conexión a la base de datos.")
+                # print("No se encontró la conexión a la base de datos.")
                 return
 
             # Obtener todas las funciones de la base de datos
@@ -839,7 +839,7 @@ class MenuUser(QMainWindow):
 
             # Si no hay funciones, limpiar la tabla y salir
             if not funciones:
-                print("No se encontraron funciones para cargar.")
+                # print("No se encontraron funciones para cargar.")
                 self.tableWidget_estadisticas_funciones.setRowCount(0)
                 return
 
@@ -853,7 +853,7 @@ class MenuUser(QMainWindow):
 
             # Si no hay funciones después del filtro, dejar la tabla vacía
             if not funciones:
-                print("No hay funciones para mostrar después del filtro.")
+                # print("No hay funciones para mostrar después del filtro.")
                 return
 
             # Insertar funciones en la tabla
@@ -883,10 +883,10 @@ class MenuUser(QMainWindow):
             # Ajustar el ancho de las columnas
             self.tableWidget_estadisticas_funciones.resizeColumnsToContents()
 
-            print(f"Se cargaron {len(funciones)} funciones en la tabla.")
+            # print(f"Se cargaron {len(funciones)} funciones en la tabla.")
 
         except Exception as e:
-            print(f"Error general al cargar la tabla: {e}")
+            # print(f"Error general al cargar la tabla: {e}")
             QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
 
     def mostrar_resumen_funcion_seleccionada(self, item):
@@ -894,10 +894,10 @@ class MenuUser(QMainWindow):
         try:
             row = item.row()
             funcion_id = self.tableWidget_estadisticas_funciones.item(row, 0).data(Qt.UserRole)
-            print(f"Función seleccionada, ID: {funcion_id}")  # Depuración
+            # print(f"Función seleccionada, ID: {funcion_id}")  # Depuración
             self.mostrar_informacion_funcion(funcion_id)
         except Exception as e:
-            print(f"Error al mostrar el resumen: {e}")  # Depuración
+            # print(f"Error al mostrar el resumen: {e}")  # Depuración
             QMessageBox.critical(self, "Error", f"Ocurrió un error al mostrar el resumen: {e}")
 
     def mostrar_informacion_funcion(self, funcion_id):
@@ -919,11 +919,15 @@ class MenuUser(QMainWindow):
                 butacas_restantes = total_butacas - butacas_vendidas
                 dinero_recaudado = precio_funcion * butacas_vendidas
 
+                # Formatear con puntos como separadores de miles
+                def formatear(valor):
+                    return format(valor, ",").replace(",", ".")
+
                 mensaje = (
                     f"ID de la función: {funcion_id}\n"
-                    f"Butacas vendidas: {butacas_vendidas}\n"
-                    f"Butacas restantes: {butacas_restantes}\n"
-                    f"Dinero recaudado: ${dinero_recaudado:.2f}\n"
+                    f"Butacas vendidas: {formatear(butacas_vendidas)}\n"
+                    f"Butacas restantes: {formatear(butacas_restantes)}\n"
+                    f"Dinero recaudado: ${formatear(round(dinero_recaudado, 2))}\n"
                 )
 
                 if fecha_hora_funcion < datetime.now():
@@ -935,7 +939,6 @@ class MenuUser(QMainWindow):
                 QMessageBox.warning(self, "Advertencia", "No se encontró información para la función seleccionada.")
 
         except Exception as e:
-            print(f"Error al mostrar información de la función: {e}")  # Depuración
             QMessageBox.critical(self, 'Error', f'No se pudo obtener la información de la función: {e}')
 
     def grafico_funciones(self, layout=None):
@@ -958,7 +961,7 @@ class MenuUser(QMainWindow):
             # Obtener datos de la base de datos
             datos = self.db.obtener_recaudacion_por_dia()
             if not datos:
-                print("No hay datos disponibles para la recaudación.")
+                # print("No hay datos disponibles para la recaudación.")
                 return
 
             # Procesar datos
@@ -990,7 +993,6 @@ class MenuUser(QMainWindow):
         """
         self.mostrar_todas_las_funciones_estadisticas()  # Actualiza otras estadísticas
         self.grafico_funciones()  # Genera y muestra el gráfico
-
 
 
 
@@ -1120,19 +1122,18 @@ class MenuUser(QMainWindow):
 
     def actualizar_estadisticas(self, id_pelicula):
         try:
-            # Obtener datos desde la base de datos considerando todas las funciones
             porcentaje_asistencia, capacidad_total, total_vendidos = self.db.calcular_porcentaje_asistencia(id_pelicula)
 
-            # Imprimir resultados para depuración
-            print(f"ID Película: {id_pelicula}")
-            print(f"Capacidad Total: {capacidad_total}, Total Vendidos: {total_vendidos}")
+            # Forzar formato numérico con punto
+            porcentaje_texto = "{:.2f}%".format(float(porcentaje_asistencia)).replace(",", ".")
+            capacidad_texto = "{:,.0f}".format(float(capacidad_total)).replace(",", ".")
+            vendidos_texto = "{:,.0f}".format(float(total_vendidos)).replace(",", ".")
 
-            # Actualizar los elementos de la interfaz con los datos calculados
-            self.lineEdit_porcentaje_asistencia.setText(f"{porcentaje_asistencia:.2f}%")
-            self.lineEdit_capacidad_total.setText(str(capacidad_total))
-            self.lineEdit_total_vendidos.setText(str(total_vendidos))
+            # Actualizar interfaz
+            self.lineEdit_porcentaje_asistencia.setText(porcentaje_texto)
+            self.lineEdit_capacidad_total.setText(capacidad_texto)
+            self.lineEdit_total_vendidos.setText(vendidos_texto)
 
-            print(f"Porcentaje calculado: {porcentaje_asistencia:.2f}%")
         except Exception as e:
             print(f"Error al actualizar estadísticas: {e}")
 
@@ -1143,31 +1144,31 @@ class MenuUser(QMainWindow):
             peliculas = self.db.obtener_peliculas()
             total_peliculas = len(peliculas)
             
-            # Top 10 de películas más vistas
+            # Top 10 películas más vistas
             peliculas_mas_vistas = self.db.obtener_peliculas_mas_vistas()
             peliculas_vistas_texto = "\n".join(
-                [f"{pelicula['NombrePelicula']} (ID: {pelicula['IdPelicula']}), Ventas: {pelicula['CantidadVentas']}" 
+                [f"{pelicula['NombrePelicula']} (ID: {pelicula['IdPelicula']}), Ventas: {pelicula['CantidadVentas']:,.0f}".replace(",", ".") 
                 for pelicula in peliculas_mas_vistas]
             )
             
             # Top 5 géneros más rentables
             generos_mas_rentables = self.db.obtener_generos_mas_rentables()
             generos_rentables_texto = "\n".join(
-                [f"{genero['Genero']}, Ingresos Totales: ${genero['IngresosTotales']}" 
+                [f"{genero['Genero']}, Ingresos Totales: ${genero['IngresosTotales']:,.2f}".replace(",", ".") 
                 for genero in generos_mas_rentables]
             )
             
-            # Crear el mensaje completo
+            # Crear mensaje completo
             mensaje1 = f"{total_peliculas}\n\n"
             mensaje2 = f"{peliculas_vistas_texto}\n\n"
             mensaje3 = f"{generos_rentables_texto}"
 
-            # Mostrar mensajes
-            self.total_peliculas.setText(mensaje1)  # LineEdit
-            self.textEdit_top10_peliculas.setText(mensaje2)  # TextEdit
-            self.textEdit_top5_generos.setText(mensaje3)  # TextEdit
+            # Mostrar en interfaz
+            self.total_peliculas.setText(mensaje1)
+            self.textEdit_top10_peliculas.setText(mensaje2)
+            self.textEdit_top5_generos.setText(mensaje3)
             
-            # Bloquear edición en TextEdit
+            # Bloquear edición
             self.textEdit_top10_peliculas.setReadOnly(True)
             self.textEdit_top5_generos.setReadOnly(True)
 
@@ -1181,28 +1182,21 @@ class MenuUser(QMainWindow):
         """Carga las estadísticas de todas las películas en la tabla."""
         try:
             peliculas = self.db.obtener_peliculas()
-            self.tabla_estadistica_peli.setRowCount(0)  # Limpia la tabla antes de insertar datos
+            self.tabla_estadistica_peli.setRowCount(0)
 
             for row_number, pelicula in enumerate(peliculas):
-                id_pelicula = pelicula[0]  # ID de la película
-                nombre = pelicula[1]       # Nombre de la película
+                id_pelicula = pelicula[0]
+                nombre = pelicula[1]
 
-                # Insertar una nueva fila en la tabla
                 self.tabla_estadistica_peli.insertRow(row_number)
 
-                # Crear un QTableWidgetItem para la columna de ID
                 item_id = QTableWidgetItem(str(id_pelicula))
-                item_id.setData(Qt.UserRole, id_pelicula)  # Almacena el ID en UserRole
+                item_id.setData(Qt.UserRole, id_pelicula)
                 self.tabla_estadistica_peli.setItem(row_number, 0, item_id)
 
-                # Crear un QTableWidgetItem para el nombre de la película
                 item_nombre = QTableWidgetItem(str(nombre))
                 self.tabla_estadistica_peli.setItem(row_number, 1, item_nombre)
 
-                # Verificar que el ID esté correctamente almacenado
-                almacenado_id = self.tabla_estadistica_peli.item(row_number, 0).data(Qt.UserRole)
-
-            # Ajustar el ancho de las columnas al contenido
             self.tabla_estadistica_peli.resizeColumnsToContents()
 
         except Exception as e:
@@ -1211,44 +1205,33 @@ class MenuUser(QMainWindow):
     def calcular_estadisticas_pelicula(self):
         """Calcula y actualiza las estadísticas de la película seleccionada en la tabla."""
         try:
-            # Obtener la fila seleccionada
             row = self.tabla_estadistica_peli.currentRow()
-
             if row == -1:
                 return
 
-            # Validar que la celda contenga un elemento válido
             item = self.tabla_estadistica_peli.item(row, 0)
             if not item:
                 return
 
-            # Recuperar el ID de la película desde el UserRole
             id_pelicula = item.data(Qt.UserRole)
-
             if not id_pelicula:
                 return
 
-            # Realizar consultas y cálculos
             porcentaje_asistencia, _, _ = self.db.calcular_porcentaje_asistencia(id_pelicula)
             horario_mas_exitoso, max_butacas = self.db.obtener_horario_mas_exitoso(id_pelicula)
             recaudacion_total = self.db.obtener_recaudacion_total(id_pelicula)
 
-            # Formatear los resultados
-            porcentaje = f"{porcentaje_asistencia:.2f}%" if porcentaje_asistencia > 0 else "0.00%"
-            horario = (
-                f"{horario_mas_exitoso} (Butacas llenas: {max_butacas})"
-                if max_butacas > 0
-                else "No disponible"
-            )
-            recaudacion = f"${recaudacion_total:.2f}" if recaudacion_total > 0 else "$0.00"
+            # Formatear resultados
+            porcentaje = "{:.2f}%".format(float(porcentaje_asistencia)).replace(",", ".") if porcentaje_asistencia > 0 else "0.00%"
+            horario = f"{horario_mas_exitoso} (Butacas llenas: {max_butacas})" if max_butacas > 0 else "No disponible"
+            recaudacion = "${:,.2f}".format(float(recaudacion_total)).replace(",", ".") if recaudacion_total > 0 else "$0.00"
 
-            # Actualizar los campos de la interfaz
             self.lineEdit_porcentaje_asistencia.setText(porcentaje)
             self.lineEdit_horario_mas_exitoso.setText(horario)
             self.lineEdit_recaudadcion_historica.setText(recaudacion)
 
         except Exception as e:
-            print(f"Ocurrió un error al calcular las estadísticas: {str(e)}")
+            print(f"Ocurrió un error al calcular las estadísticas: {e}")
 
     def filtrar_peliculas(self):
         """Filtra las películas por nombre basado en el texto ingresado en filtro_nombre_estadistica."""
