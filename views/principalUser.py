@@ -341,19 +341,21 @@ class MenuUser(QMainWindow):
             self.lineEdit_nombre.setText(funcion_actual["titulo"])
             self.lineEdit_nombre.setReadOnly(True)  # Hacer el campo de solo lectura
 
+            #Formatear el precio con separador de miles y punto decimal
+            precio_formateado = "${:,.2f}".format(float(funcion_actual['precio'])).replace(",", ".")
+
             # Construir el texto descriptivo
             detalles = (
-                # f"Descripción: {funcion_actual['descripcion']}\n"
                 f"Fecha y Hora: {funcion_actual['fecha_hora']}\n"
                 f"Sala: {funcion_actual['sala']}\n"
-                f"Precio: ${funcion_actual['precio']}"
+                f"Precio: {precio_formateado}"
             )
             self.textEdit_descripion.setPlainText(detalles)
-            self.textEdit_descripion.setReadOnly(True)  # Hacer el campo de solo lectura
+            self.textEdit_descripion.setReadOnly(True)
 
             # Actualizar las butacas disponibles
             self.Butacas_disponibles.setText(f"Butacas disponibles: {funcion_actual['butacas_disponibles']}")
-            self.Butacas_disponibles.setReadOnly(True)  # Hacer el campo de solo lectura
+            self.Butacas_disponibles.setReadOnly(True)
         else:
             # Limpiar la interfaz si no hay funciones disponibles o índice no válido
             self.Imagen_cartelera.clear()
@@ -365,7 +367,6 @@ class MenuUser(QMainWindow):
             self.lineEdit_nombre.clear()
             self.textEdit_descripcion.clear()
             self.Butacas_disponibles.clear()
-
 
     def resizeEvent(self, event):
         """Se llama cada vez que la ventana o el QLabel cambia de tamaño."""
@@ -701,70 +702,18 @@ class MenuUser(QMainWindow):
             if not self.db:
                 return
 
-            funciones = self.db.obtener_funciones()  # Obtener funciones desde la base de datos
+            funciones = self.db.obtener_funciones()
             nombre_map = self._mapa_nombres_de_peliculas()
 
-            # Filtrar por ID si hay uno seleccionado
             id_funcion_seleccionado = self.comboBox_idfunciones.currentData()
             if id_funcion_seleccionado:
                 funciones = [funcion for funcion in funciones if funcion[0] == id_funcion_seleccionado]
 
-            # Aplicar filtro de fecha solo si está activado
             if getattr(self, 'filtro_fecha_activado', False):
                 fecha_inicio = self.fecha_filtro_inicio_f.date().toPyDate()
                 fecha_fin = self.fecha_filtro_fin_f.date().toPyDate()
                 funciones = [funcion for funcion in funciones if fecha_inicio <= funcion[2].date() <= fecha_fin]
 
-            # Excluir funciones cuya película está eliminada (no está en nombre_map)
-            funciones = [f for f in funciones if f[0] in nombre_map]
-
-            self.tableWidget_funciones.setRowCount(0)  # Limpiar la tabla
-
-            for row_number, row_data in enumerate(funciones):
-                self.tableWidget_funciones.insertRow(row_number)
-
-                id_funcion = row_data[0]
-                asientos_reservados = self.db.obtener_asientos_reservados(id_funcion)
-                total_butacas = 30
-                butacas_vendidas = len(asientos_reservados)
-                porcentaje_vendido = (butacas_vendidas / total_butacas) * 100
-
-                if porcentaje_vendido <= 40:
-                    color = QColor("red")
-                elif porcentaje_vendido <= 60:
-                    color = QColor("orange")
-                elif porcentaje_vendido <= 80:
-                    color = QColor("lightgreen")
-                else:
-                    color = QColor("darkgreen")
-
-                pelicula = nombre_map.get(id_funcion, "Película eliminada")  # seguro está en el mapa
-
-                datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], row_data[4], butacas_vendidas]
-
-                for column_number, data in enumerate(datos_visibles):
-                    item = QTableWidgetItem(str(data))
-                    if column_number == 0:
-                        item.setData(Qt.UserRole, id_funcion)
-                    item.setBackground(color)
-                    self.tableWidget_funciones.setItem(row_number, column_number, item)
-
-            self.tableWidget_funciones.setColumnHidden(0, True)
-            self.tableWidget_funciones.resizeColumnsToContents()
-
-        except Exception as e:
-            if getattr(self, 'filtro_fecha_activado', False) or id_funcion_seleccionado:
-                log(e, "error")
-                QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
-
-
-    def mostrar_todas_las_funciones(self):
-        """Muestra todas las funciones en la tabla sin aplicar filtros, excluyendo las de películas eliminadas."""
-        try:
-            funciones = self.db.obtener_funciones()
-            nombre_map = self._mapa_nombres_de_peliculas()
-
-            # Filtrar para quitar las funciones con película eliminada
             funciones = [f for f in funciones if f[0] in nombre_map]
 
             self.tableWidget_funciones.setRowCount(0)
@@ -789,7 +738,59 @@ class MenuUser(QMainWindow):
 
                 pelicula = nombre_map.get(id_funcion, "Película eliminada")
 
-                datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], row_data[4], butacas_vendidas]
+                # Formatear el precio (columna 4 → row_data[4])
+                precio_formateado = "{:,.2f}".format(float(row_data[4])).replace(",", ".")
+
+                datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], precio_formateado, butacas_vendidas]
+
+                for column_number, data in enumerate(datos_visibles):
+                    item = QTableWidgetItem(str(data))
+                    if column_number == 0:
+                        item.setData(Qt.UserRole, id_funcion)
+                    item.setBackground(color)
+                    self.tableWidget_funciones.setItem(row_number, column_number, item)
+
+            self.tableWidget_funciones.setColumnHidden(0, True)
+            self.tableWidget_funciones.resizeColumnsToContents()
+
+        except Exception as e:
+            if getattr(self, 'filtro_fecha_activado', False) or id_funcion_seleccionado:
+                log(e, "error")
+                QMessageBox.critical(self, 'Error', 'No se pudo cargar la tabla de funciones.')
+
+    def mostrar_todas_las_funciones(self):
+        """Muestra todas las funciones en la tabla sin aplicar filtros, excluyendo las de películas eliminadas."""
+        try:
+            funciones = self.db.obtener_funciones()
+            nombre_map = self._mapa_nombres_de_peliculas()
+
+            funciones = [f for f in funciones if f[0] in nombre_map]
+            self.tableWidget_funciones.setRowCount(0)
+
+            for row_number, row_data in enumerate(funciones):
+                self.tableWidget_funciones.insertRow(row_number)
+
+                id_funcion = row_data[0]
+                asientos_reservados = self.db.obtener_asientos_reservados(id_funcion)
+                total_butacas = 30
+                butacas_vendidas = len(asientos_reservados)
+                porcentaje_vendido = (butacas_vendidas / total_butacas) * 100
+
+                if porcentaje_vendido <= 40:
+                    color = QColor("red")
+                elif porcentaje_vendido <= 60:
+                    color = QColor("orange")
+                elif porcentaje_vendido <= 80:
+                    color = QColor("lightgreen")
+                else:
+                    color = QColor("darkgreen")
+
+                pelicula = nombre_map.get(id_funcion, "Película eliminada")
+
+                #Formatear el precio
+                precio_formateado = "{:,.2f}".format(float(row_data[4])).replace(",", ".")
+
+                datos_visibles = [row_data[0], pelicula, row_data[2], row_data[3], precio_formateado, butacas_vendidas]
 
                 for column_number, data in enumerate(datos_visibles):
                     item = QTableWidgetItem(str(data))
@@ -804,7 +805,6 @@ class MenuUser(QMainWindow):
         except Exception as e:
             log(e, "error")
             QMessageBox.critical(self, 'Error', 'No se pudo mostrar todas las funciones en la tabla.')
-
 
     
 
